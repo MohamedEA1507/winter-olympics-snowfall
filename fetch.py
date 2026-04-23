@@ -33,7 +33,7 @@ import xarray as xr
 
 START_YEAR    = 1992
 RAW_DIR       = Path("data/raw")
-NC_FILE       = r"E:\ae0a85222114609e694b93e2ea4d1e41\data_stream-moda.nc"
+NC_FILE       = Path('Data/data_stream-moda.nc')
 OLYMPICS_FILE = Path("data/olympicDataset/athlete_events.csv")
 
 EARTH_RADIUS_KM = 6371.0
