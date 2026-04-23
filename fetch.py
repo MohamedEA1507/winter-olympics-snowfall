@@ -1,20 +1,20 @@
 """
-Collection Pipeline
-====================
-Fetches raw data from all three sources and saves to raw/ as CSV.
-No cleaning, no merging — that happens in preprocessing.py.
+Collection Pipeline — Raw Data Only
+=====================================
+Fetches raw data from all sources. No filtering, no cleaning, no merging.
+All refinement happens in clean.py.
 
-Sources:
-  1. World Bank API  → raw/worldbank_gdp.csv
-                     → raw/worldbank_population.csv
-  2. ERA5 NetCDF     → raw/snowfall_raw.csv
-  3. Olympics CSV    → raw/olympics_participants.csv  (ALL participants, not just medalists)
-                     → raw/olympics_medals.csv        (medal counts per country per year)
+Output files in data/raw/:
+  worldbank_gdp.csv            — GDP + GDP per capita, ALL countries, 1992–2024
+  worldbank_population.csv     — Population total, ALL countries, 1992–2024
+  snowfall_raw.csv             — Snowfall, ALL countries, 1992–2025
+  olympics_participants.csv    — All Winter Olympic participants (NOC x Year), no filtering
+  olympics_medals.csv          — All NOC x Year combinations, medals = 0 if none won
 
 Usage:
-  python collection.py               # fetch all
-  python collection.py --refresh     # force re-fetch (ignore cache)
-  python collection.py --skip-snow   # skip the slow ERA5 step
+  python fetch.py               # fetch all
+  python fetch.py --refresh     # force re-fetch (ignore cache)
+  python fetch.py --skip-snow   # skip the slow ERA5 step
 """
 
 import argparse
@@ -39,18 +39,10 @@ OLYMPICS_FILE = Path("data/olympicDataset/athlete_events.csv")
 EARTH_RADIUS_KM = 6371.0
 CELL_DEG        = 0.1
 
-# GDP: two indicators side by side in one file
 GDP_INDICATORS = {
     "gdp_usd":            "NY.GDP.MKTP.CD",
     "gdp_per_capita_usd": "NY.GDP.PCAP.CD",
 }
-
-# Population: total only
-POPULATION_INDICATORS = {
-    "population_total": "SP.POP.TOTL",
-}
-
-EXCLUDED_NOCS = {"URS", "EUN", "TCH", "YUG", "FRG", "GDR"}
 
 OLYMPIC_HOSTS = {
     1992: "FRA", 1994: "NOR", 1998: "JPN", 2002: "USA",
@@ -102,7 +94,7 @@ def compute_cell_area_km2(latitudes: np.ndarray) -> xr.DataArray:
     return xr.DataArray(area_km2, coords={"latitude": latitudes}, dims=["latitude"])
 
 def fetch_wb_indicator(code: str) -> pd.DataFrame:
-    """Fetch a single World Bank indicator, return raw DataFrame with (iso3, country_name, year, value)."""
+    """Fetch a single World Bank indicator for ALL countries, no filtering."""
     url    = f"https://api.worldbank.org/v2/country/all/indicator/{code}"
     params = {"format": "json", "per_page": 1000, "date": f"{START_YEAR}:2024"}
     rows, page, total_pages = [], 1, None
@@ -137,7 +129,7 @@ def save(df: pd.DataFrame, path: Path) -> None:
     print(f"  [saved] {len(df):,} rows → {path}")
 
 # ---------------------------------------------------------------------------
-# 1. World Bank GDP  (gdp_usd + gdp_per_capita_usd side by side)
+# 1. World Bank GDP  (all countries, gdp + gdp per capita side by side)
 # ---------------------------------------------------------------------------
 
 def fetch_gdp(refresh: bool = False) -> None:
@@ -146,13 +138,12 @@ def fetch_gdp(refresh: bool = False) -> None:
         print("  [cache] worldbank_gdp.csv")
         return
 
-    print("\n[WORLD BANK — GDP]")
+    print("\n[WORLD BANK — GDP] Fetching all countries…")
     frames = {}
     for col_name, code in GDP_INDICATORS.items():
         df = fetch_wb_indicator(code).rename(columns={"value": col_name})
         frames[col_name] = df
 
-    # Merge side by side on (iso3, country_name, year)
     df = frames["gdp_usd"].merge(
         frames["gdp_per_capita_usd"][["iso3", "year", "gdp_per_capita_usd"]],
         on=["iso3", "year"],
@@ -161,7 +152,7 @@ def fetch_gdp(refresh: bool = False) -> None:
     save(df, out_path)
 
 # ---------------------------------------------------------------------------
-# 2. World Bank Population  (total only)
+# 2. World Bank Population  (all countries, total only)
 # ---------------------------------------------------------------------------
 
 def fetch_population(refresh: bool = False) -> None:
@@ -170,12 +161,12 @@ def fetch_population(refresh: bool = False) -> None:
         print("  [cache] worldbank_population.csv")
         return
 
-    print("\n[WORLD BANK — Population]")
+    print("\n[WORLD BANK — Population] Fetching all countries…")
     df = fetch_wb_indicator("SP.POP.TOTL").rename(columns={"value": "population_total"})
     save(df, out_path)
 
 # ---------------------------------------------------------------------------
-# 3. ERA5 Snowfall
+# 3. ERA5 Snowfall  (all countries)
 # ---------------------------------------------------------------------------
 
 def fetch_snowfall(refresh: bool = False) -> None:
@@ -184,7 +175,7 @@ def fetch_snowfall(refresh: bool = False) -> None:
         print("\n[SNOWFALL] Using cached data.")
         return
 
-    print("\n[SNOWFALL] Processing ERA5 NetCDF…")
+    print("\n[SNOWFALL] Processing ERA5 NetCDF — all countries…")
     t0 = time.time()
 
     print("  Opening dataset…")
@@ -243,7 +234,7 @@ def fetch_snowfall(refresh: bool = False) -> None:
     print(f"  Total time: {time.time() - t0:.0f}s")
 
 # ---------------------------------------------------------------------------
-# 4. Olympics — ALL participants + medals
+# 4. Olympics — participants + complete medals table (0 for non-winners)
 # ---------------------------------------------------------------------------
 
 def fetch_olympics(refresh: bool = False) -> None:
@@ -257,45 +248,54 @@ def fetch_olympics(refresh: bool = False) -> None:
     print("\n[OLYMPICS] Processing athlete_events.csv…")
     df = pd.read_csv(OLYMPICS_FILE)
 
-    # Filter: winter only + year range + exclude defunct NOCs
+    # Filter winter only + year range — NO filtering on NOC, keep everything
     df = df[
         (df["Season"] == "Winter") &
         (df["Year"] >= START_YEAR) &
-        (df["Year"] <= 2026) &
-        (~df["NOC"].isin(EXCLUDED_NOCS))
+        (df["Year"] <= 2026)
     ].copy()
 
-    # ── Participants: one row per (NOC, Year) — all countries that took part
+    # ── Participants: one row per (NOC, Year) — every country that showed up
     participants = (
         df.groupby(["NOC", "Year"])
-        .agg(team_name=("Team", lambda x: x.value_counts().index[0]),
-             n_athletes=("Name", "nunique"))
+        .agg(
+            team_name=("Team",  lambda x: x.value_counts().index[0]),
+            n_athletes=("Name", "nunique"),
+        )
         .reset_index()
         .rename(columns={"NOC": "noc_code", "Year": "year"})
     )
     participants["host_flag"] = participants.apply(
         lambda r: 1 if OLYMPIC_HOSTS.get(r["year"]) == r["noc_code"] else 0, axis=1
     )
-    participants["iso3"] = participants["noc_code"]
 
     save(participants.sort_values(["year", "noc_code"]), out_participants)
     print(f"  {participants['noc_code'].nunique()} NOC codes · "
-          f"{participants['year'].min()}–{participants['year'].max()}")
+          f"years: {sorted(participants['year'].unique()).pop(0)}–"
+          f"{sorted(participants['year'].unique()).pop()}")
 
-    # ── Medals: only rows with a medal, aggregated to (NOC, Year)
+    # ── Medals: start from ALL (NOC, Year) combinations from participants
+    #    then left-join actual medal counts → countries with no medals get 0
     medal_df = df[df["Medal"].notna()].copy()
     medal_df["gold"]   = (medal_df["Medal"] == "Gold").astype(int)
     medal_df["silver"] = (medal_df["Medal"] == "Silver").astype(int)
     medal_df["bronze"] = (medal_df["Medal"] == "Bronze").astype(int)
 
-    medals = (
+    medal_counts = (
         medal_df.groupby(["NOC", "Year"])
         .agg(gold=("gold", "sum"), silver=("silver", "sum"), bronze=("bronze", "sum"))
         .reset_index()
+        .rename(columns={"NOC": "noc_code", "Year": "year"})
     )
+
+    # Merge onto full participant list so every country appears
+    medals = participants[["noc_code", "year"]].merge(
+        medal_counts,
+        on=["noc_code", "year"],
+        how="left",
+    )
+    medals[["gold", "silver", "bronze"]] = medals[["gold", "silver", "bronze"]].fillna(0).astype(int)
     medals["total_medals"] = medals["gold"] + medals["silver"] + medals["bronze"]
-    medals = medals.rename(columns={"NOC": "noc_code", "Year": "year"})
-    medals["iso3"] = medals["noc_code"]
 
     save(medals.sort_values(["year", "noc_code"]), out_medals)
 
@@ -304,12 +304,12 @@ def fetch_olympics(refresh: bool = False) -> None:
 # ---------------------------------------------------------------------------
 
 def main():
-    p = argparse.ArgumentParser(description="Fetch all raw data sources")
+    p = argparse.ArgumentParser(description="Fetch all raw data — no filtering")
     p.add_argument("--refresh",   action="store_true", help="Ignore cache, re-fetch everything")
     p.add_argument("--skip-snow", action="store_true", help="Skip the slow ERA5 snowfall step")
     args = p.parse_args()
 
-    RAW_DIR.mkdir(exist_ok=True)
+    RAW_DIR.mkdir(parents=True, exist_ok=True)
 
     fetch_gdp(refresh=args.refresh)
     fetch_population(refresh=args.refresh)
@@ -320,12 +320,12 @@ def main():
     else:
         print("\n[SNOWFALL] Skipped (--skip-snow)")
 
-    print("\n✓ All raw data collected → raw/")
-    print("  raw/worldbank_gdp.csv            (gdp_usd + gdp_per_capita_usd)")
-    print("  raw/worldbank_population.csv     (population_total)")
-    print("  raw/olympics_participants.csv    (all countries per edition)")
-    print("  raw/olympics_medals.csv          (medal counts per country per edition)")
-    print("  raw/snowfall_raw.csv             (snowfall per country per year)")
+    print("\n✓ All raw data collected → data/raw/")
+    print("  worldbank_gdp.csv         — all countries, gdp_usd + gdp_per_capita_usd")
+    print("  worldbank_population.csv  — all countries, population_total")
+    print("  olympics_participants.csv — all Winter Olympic participants per edition")
+    print("  olympics_medals.csv       — all participants, medals = 0 if none won")
+    print("  snowfall_raw.csv          — all countries, snowfall per year")
 
 if __name__ == "__main__":
     main()
