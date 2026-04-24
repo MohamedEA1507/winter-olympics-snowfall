@@ -112,14 +112,65 @@ def missing_report(df: pd.DataFrame, label: str) -> None:
             print(f"  {label} — {col}: {cnt} NULL ({cnt/len(df)*100:.1f}%)")
 
 # ---------------------------------------------------------------------------
-# Step 1 — Clean Olympics
+# Step 1 — Clean Olympics (Kaggle 1992–2014 + Wikipedia 2018–2026)
 # ---------------------------------------------------------------------------
 
-def clean_olympics() -> pd.DataFrame:
-    print("\n[1/5] Cleaning Olympics…")
+def load_participants() -> pd.DataFrame:
+    """Load and combine participant lists from Kaggle + Wikipedia."""
+    # ── Kaggle (1992–2014) ──
+    kaggle = pd.read_csv(RAW_DIR / "olympics_participants.csv")
+    kaggle_years = sorted(kaggle["year"].unique())
+    print(f"  Kaggle participants: {len(kaggle)} rows · years {kaggle_years}")
 
-    participants = pd.read_csv(RAW_DIR / "olympics_participants.csv")
-    medals       = pd.read_csv(RAW_DIR / "olympics_medals.csv")
+    # ── Wikipedia (2018–2026) ──
+    wiki_path = RAW_DIR / "olympics_participants_wikipedia.csv"
+    if wiki_path.exists():
+        wiki = pd.read_csv(wiki_path)
+        # Wikipedia participants don't have n_athletes — fill with 0 (unknown)
+        if "n_athletes" not in wiki.columns:
+            wiki["n_athletes"] = 0
+        if "team_name" not in wiki.columns:
+            wiki["team_name"] = wiki["noc_code"]
+        wiki_years = sorted(wiki["year"].unique())
+        print(f"  Wikipedia participants: {len(wiki)} rows · years {wiki_years}")
+    else:
+        print("  [WARNING] olympics_participants_wikipedia.csv not found — run scrape.py first")
+        wiki = pd.DataFrame(columns=kaggle.columns)
+
+    # ── Combine — no overlapping years so simple concat ──
+    combined = pd.concat([kaggle, wiki], ignore_index=True)
+
+    # Drop duplicates just in case (same noc_code + year from both sources)
+    combined = combined.drop_duplicates(subset=["noc_code", "year"], keep="first")
+    return combined
+
+
+def load_medals() -> pd.DataFrame:
+    """Load and combine medal tables from Kaggle + Wikipedia."""
+    # ── Kaggle (1992–2014) ──
+    kaggle = pd.read_csv(RAW_DIR / "olympics_medals.csv")
+    print(f"  Kaggle medals: {len(kaggle)} rows · years {sorted(kaggle['year'].unique())}")
+
+    # ── Wikipedia (2018–2026) ──
+    wiki_path = RAW_DIR / "olympics_medals_wikipedia.csv"
+    if wiki_path.exists():
+        wiki = pd.read_csv(wiki_path)
+        print(f"  Wikipedia medals: {len(wiki)} rows · years {sorted(wiki['year'].unique())}")
+    else:
+        print("  [WARNING] olympics_medals_wikipedia.csv not found — run scrape.py first")
+        wiki = pd.DataFrame(columns=kaggle.columns)
+
+    # ── Combine ──
+    combined = pd.concat([kaggle, wiki], ignore_index=True)
+    combined = combined.drop_duplicates(subset=["noc_code", "year"], keep="first")
+    return combined
+
+
+def clean_olympics() -> pd.DataFrame:
+    print("\n[1/5] Cleaning Olympics (Kaggle 1992–2014 + Wikipedia 2018–2026)…")
+
+    participants = load_participants()
+    medals       = load_medals()
 
     # Drop non-countries
     participants = participants[~participants["noc_code"].isin(DROP_NOC)]
@@ -156,6 +207,7 @@ def clean_olympics() -> pd.DataFrame:
     df = df[["iso3","noc_code","team_name","year",
              "n_athletes","host_flag","gold","silver","bronze","total_medals"]]
 
+    print(f"  Combined: {len(df)} rows · years {sorted(df['year'].unique())}")
     missing_report(df, "olympics")
     save(df, CLEAN_DIR / "olympics.csv")
     print(f"  {df['iso3'].nunique()} countries · {df['year'].nunique()} editions")
