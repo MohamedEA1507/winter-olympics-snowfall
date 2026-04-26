@@ -19,6 +19,7 @@ Usage:
 
 import argparse
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import numpy as np
@@ -91,17 +92,41 @@ def compute_cell_area_km2(latitudes: np.ndarray) -> xr.DataArray:
     return xr.DataArray(area_km2, coords={"latitude": latitudes}, dims=["latitude"])
 
 def fetch_wb_indicator(code: str) -> pd.DataFrame:
-    """Fetch a single World Bank indicator for ALL countries, no filtering."""
+    """Fetch a single World Bank indicator for ALL countries, no filtering.
+
+    Uses per_page=32767 (API max) to minimise round trips, and retries
+    up to 3 times with exponential back-off on timeout or server errors.
+    """
     url    = f"https://api.worldbank.org/v2/country/all/indicator/{code}"
-    params = {"format": "json", "per_page": 1000, "date": f"{START_YEAR}:2024"}
+    params = {"format": "json", "per_page": 32767, "date": f"{START_YEAR}:2024"}
     rows, page, total_pages = [], 1, None
 
+    def _get_page(p: int) -> list:
+        for attempt in range(3):
+            try:
+                resp = requests.get(url, params={**params, "page": p}, timeout=90)
+                resp.raise_for_status()
+                data = resp.json()
+                if not isinstance(data, list) or len(data) < 2:
+                    raise ValueError(f"Unexpected response: {data}")
+                return data
+            except (requests.exceptions.ReadTimeout,
+                    requests.exceptions.ConnectionError,
+                    ValueError) as e:
+                if attempt == 2:
+                    raise
+                wait = 5 * (attempt + 1)
+                print(f"\n      [{code}] page {p} failed ({e}), retrying in {wait}s...")
+                time.sleep(wait)
+
     while True:
-        data = requests.get(url, params={**params, "page": page}, timeout=30).json()
+        data = _get_page(page)
         meta, records = data[0], data[1] or []
         if total_pages is None:
             total_pages = meta["pages"]
-            print(f"    {code}: {meta['total']} records, {total_pages} pages")
+            print(f"    {code}: {meta['total']} records, {total_pages} page(s)")
+        if total_pages == 0:
+            break
 
         for r in records:
             if r:
@@ -116,7 +141,6 @@ def fetch_wb_indicator(code: str) -> pd.DataFrame:
         if page >= total_pages:
             break
         page += 1
-        time.sleep(0.1)
 
     print()
     return pd.DataFrame(rows)
@@ -135,11 +159,14 @@ def fetch_gdp(refresh: bool = False) -> None:
         print("  [cache] worldbank_gdp.csv")
         return
 
-    print("\n[WORLD BANK — GDP] Fetching all countries…")
+    print("\n[WORLD BANK — GDP] Fetching all countries (parallel)...")
     frames = {}
-    for col_name, code in GDP_INDICATORS.items():
-        df = fetch_wb_indicator(code).rename(columns={"value": col_name})
-        frames[col_name] = df
+    with ThreadPoolExecutor(max_workers=2) as ex:
+        futures = {ex.submit(fetch_wb_indicator, code): col_name
+                   for col_name, code in GDP_INDICATORS.items()}
+        for future in as_completed(futures):
+            col_name = futures[future]
+            frames[col_name] = future.result().rename(columns={"value": col_name})
 
     df = frames["gdp_usd"].merge(
         frames["gdp_per_capita_usd"][["iso3", "year", "gdp_per_capita_usd"]],
@@ -204,30 +231,31 @@ def fetch_snowfall(refresh: bool = False) -> None:
         result_mean = sf_yearly.groupby(mask).mean().compute()
     print(f"  Groupby done in {time.time() - t_compute:.0f}s")
 
-    print("  Building DataFrame…")
+    print("  Building DataFrame...")
     country_ids = result_sum.coords["mask"].values.astype(int)
     valid_ids   = country_ids[country_ids >= 0]
     years       = result_sum.coords["valid_time"].dt.year.values
-    t_df        = time.time()
 
-    rows = []
-    for i, idx in enumerate(valid_ids):
+    records = []
+    for idx in valid_ids:
         region = countries[int(idx)]
         iso3   = to_iso3(region.abbrev, region.name)
-        progress(i + 1, len(valid_ids), f"{region.name[:25]:<25}", t_df)
-        for year, vol, mean in zip(years,
-                                   result_sum.sel(mask=idx).values,
-                                   result_mean.sel(mask=idx).values):
-            rows.append({
-                "iso3":         iso3,
-                "country_name": region.name,
-                "year":         int(year),
-                "snowfall_km3": float(vol)  if not np.isnan(vol)  else None,
-                "snowfall_mm":  float(mean) * 1000 if not np.isnan(mean) else None,
-            })
-    print()
+        vols   = result_sum.sel(mask=idx).values
+        means  = result_mean.sel(mask=idx).values
+        for year, vol, mean in zip(years, vols, means):
+            records.append((
+                iso3,
+                region.name,
+                int(year),
+                float(vol)  if not np.isnan(vol)  else None,
+                float(mean) * 1000 if not np.isnan(mean) else None,
+            ))
 
-    save(pd.DataFrame(rows), out_path)
+    df_snow = pd.DataFrame(records, columns=[
+        "iso3", "country_name", "year", "snowfall_km3", "snowfall_mm"
+    ])
+
+    save(df_snow, out_path)
     print(f"  Total time: {time.time() - t0:.0f}s")
 
 # ---------------------------------------------------------------------------
