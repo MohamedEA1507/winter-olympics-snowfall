@@ -19,6 +19,7 @@ Usage:
 
 import argparse
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import numpy as np
@@ -26,10 +27,7 @@ import pandas as pd
 import regionmask
 import requests
 import xarray as xr
-
-# ---------------------------------------------------------------------------
-# Config
-# ---------------------------------------------------------------------------
+from bs4 import BeautifulSoup
 
 START_YEAR    = 1992
 RAW_DIR       = Path("data/raw")
@@ -94,17 +92,41 @@ def compute_cell_area_km2(latitudes: np.ndarray) -> xr.DataArray:
     return xr.DataArray(area_km2, coords={"latitude": latitudes}, dims=["latitude"])
 
 def fetch_wb_indicator(code: str) -> pd.DataFrame:
-    """Fetch a single World Bank indicator for ALL countries, no filtering."""
+    """Fetch a single World Bank indicator for ALL countries, no filtering.
+
+    Uses per_page=32767 (API max) to minimise round trips, and retries
+    up to 3 times with exponential back-off on timeout or server errors.
+    """
     url    = f"https://api.worldbank.org/v2/country/all/indicator/{code}"
-    params = {"format": "json", "per_page": 1000, "date": f"{START_YEAR}:2024"}
+    params = {"format": "json", "per_page": 32767, "date": f"{START_YEAR}:2024"}
     rows, page, total_pages = [], 1, None
 
+    def _get_page(p: int) -> list:
+        for attempt in range(3):
+            try:
+                resp = requests.get(url, params={**params, "page": p}, timeout=90)
+                resp.raise_for_status()
+                data = resp.json()
+                if not isinstance(data, list) or len(data) < 2:
+                    raise ValueError(f"Unexpected response: {data}")
+                return data
+            except (requests.exceptions.ReadTimeout,
+                    requests.exceptions.ConnectionError,
+                    ValueError) as e:
+                if attempt == 2:
+                    raise
+                wait = 5 * (attempt + 1)
+                print(f"\n      [{code}] page {p} failed ({e}), retrying in {wait}s...")
+                time.sleep(wait)
+
     while True:
-        data = requests.get(url, params={**params, "page": page}, timeout=30).json()
+        data = _get_page(page)
         meta, records = data[0], data[1] or []
         if total_pages is None:
             total_pages = meta["pages"]
-            print(f"    {code}: {meta['total']} records, {total_pages} pages")
+            print(f"    {code}: {meta['total']} records, {total_pages} page(s)")
+        if total_pages == 0:
+            break
 
         for r in records:
             if r:
@@ -119,7 +141,6 @@ def fetch_wb_indicator(code: str) -> pd.DataFrame:
         if page >= total_pages:
             break
         page += 1
-        time.sleep(0.1)
 
     print()
     return pd.DataFrame(rows)
@@ -138,11 +159,14 @@ def fetch_gdp(refresh: bool = False) -> None:
         print("  [cache] worldbank_gdp.csv")
         return
 
-    print("\n[WORLD BANK — GDP] Fetching all countries…")
+    print("\n[WORLD BANK — GDP] Fetching all countries (parallel)...")
     frames = {}
-    for col_name, code in GDP_INDICATORS.items():
-        df = fetch_wb_indicator(code).rename(columns={"value": col_name})
-        frames[col_name] = df
+    with ThreadPoolExecutor(max_workers=2) as ex:
+        futures = {ex.submit(fetch_wb_indicator, code): col_name
+                   for col_name, code in GDP_INDICATORS.items()}
+        for future in as_completed(futures):
+            col_name = futures[future]
+            frames[col_name] = future.result().rename(columns={"value": col_name})
 
     df = frames["gdp_usd"].merge(
         frames["gdp_per_capita_usd"][["iso3", "year", "gdp_per_capita_usd"]],
@@ -207,30 +231,31 @@ def fetch_snowfall(refresh: bool = False) -> None:
         result_mean = sf_yearly.groupby(mask).mean().compute()
     print(f"  Groupby done in {time.time() - t_compute:.0f}s")
 
-    print("  Building DataFrame…")
+    print("  Building DataFrame...")
     country_ids = result_sum.coords["mask"].values.astype(int)
     valid_ids   = country_ids[country_ids >= 0]
     years       = result_sum.coords["valid_time"].dt.year.values
-    t_df        = time.time()
 
-    rows = []
-    for i, idx in enumerate(valid_ids):
+    records = []
+    for idx in valid_ids:
         region = countries[int(idx)]
         iso3   = to_iso3(region.abbrev, region.name)
-        progress(i + 1, len(valid_ids), f"{region.name[:25]:<25}", t_df)
-        for year, vol, mean in zip(years,
-                                   result_sum.sel(mask=idx).values,
-                                   result_mean.sel(mask=idx).values):
-            rows.append({
-                "iso3":         iso3,
-                "country_name": region.name,
-                "year":         int(year),
-                "snowfall_km3": float(vol)  if not np.isnan(vol)  else None,
-                "snowfall_mm":  float(mean) * 1000 if not np.isnan(mean) else None,
-            })
-    print()
+        vols   = result_sum.sel(mask=idx).values
+        means  = result_mean.sel(mask=idx).values
+        for year, vol, mean in zip(years, vols, means):
+            records.append((
+                iso3,
+                region.name,
+                int(year),
+                float(vol)  if not np.isnan(vol)  else None,
+                float(mean) * 1000 if not np.isnan(mean) else None,
+            ))
 
-    save(pd.DataFrame(rows), out_path)
+    df_snow = pd.DataFrame(records, columns=[
+        "iso3", "country_name", "year", "snowfall_km3", "snowfall_mm"
+    ])
+
+    save(df_snow, out_path)
     print(f"  Total time: {time.time() - t0:.0f}s")
 
 # ---------------------------------------------------------------------------
@@ -299,6 +324,281 @@ def fetch_olympics(refresh: bool = False) -> None:
 
     save(medals.sort_values(["year", "noc_code"]), out_medals)
 
+
+# ---------------------------------------------------------------------------
+# 5. Wikipedia — medal tables + participants 2018, 2022, 2026
+# ---------------------------------------------------------------------------
+
+# English Wikipedia
+GAMES_URLS = {
+    2018: "https://en.wikipedia.org/wiki/2018_Winter_Olympics",
+    2022: "https://en.wikipedia.org/wiki/2022_Winter_Olympics",
+    2026: "https://en.wikipedia.org/wiki/2026_Winter_Olympics",
+}
+# 2018: medal table is on the main games page
+# 2022/2026: medal table has its own dedicated URL
+MEDAL_URLS = {
+    2018: "https://en.wikipedia.org/wiki/2018_Winter_Olympics_medal_table",
+    2022: "https://en.wikipedia.org/wiki/2022_Winter_Olympics_medal_table",
+    2026: "https://en.wikipedia.org/wiki/2026_Winter_Olympics_medal_table",
+}
+WIKI_HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+WIKI_NOC_TO_ISO3 = {
+    "NOR": "NOR", "GER": "DEU", "CAN": "CAN", "USA": "USA", "NED": "NLD",
+    "SWE": "SWE", "KOR": "KOR", "SUI": "CHE", "FRA": "FRA", "AUT": "AUT",
+    "JPN": "JPN", "ITA": "ITA", "OAR": "RUS", "ROC": "RUS", "AIN": "RUS",
+    "CZE": "CZE", "BLR": "BLR", "CHN": "CHN", "SVK": "SVK", "FIN": "FIN",
+    "GBR": "GBR", "POL": "POL", "HUN": "HUN", "UKR": "UKR", "AUS": "AUS",
+    "SLO": "SVN", "BEL": "BEL", "NZL": "NZL", "ESP": "ESP", "KAZ": "KAZ",
+    "LAT": "LVA", "LIE": "LIE", "EST": "EST", "GEO": "GEO", "BUL": "BGR",
+    "DEN": "DNK", "BRA": "BRA", "ARM": "ARM", "ROU": "ROU", "CRO": "HRV",
+    "SRB": "SRB", "MEX": "MEX", "NIG": "NGA", "GRE": "GRC", "ISL": "ISL",
+    "MKD": "MKD", "MNE": "MNE", "POR": "PRT", "RSA": "ZAF", "TUR": "TUR",
+    "LTU": "LTU",
+}
+
+
+def _fetch_page(url: str) -> BeautifulSoup:
+    resp = requests.get(url, headers=WIKI_HEADERS, timeout=15)
+    resp.raise_for_status()
+    time.sleep(1)
+    return BeautifulSoup(resp.text, "html.parser")
+
+
+
+def _country_name_to_noc(name: str) -> str | None:
+    """Map English country name to NOC code."""
+    ENGLISH_NAME_TO_NOC = {
+        "Albania": "ALB", "Andorra": "AND", "Argentina": "ARG",
+        "Armenia": "ARM", "Australia": "AUS", "Austria": "AUT",
+        "Azerbaijan": "AZE", "Belarus": "BLR", "Belgium": "BEL",
+        "Bermuda": "BER", "Bolivia": "BOL", "Bosnia and Herzegovina": "BIH",
+        "Brazil": "BRA", "Bulgaria": "BUL", "Canada": "CAN",
+        "Chile": "CHI", "China": "CHN", "Chinese Taipei": "TPE",
+        "Colombia": "COL", "Croatia": "CRO", "Cyprus": "CYP",
+        "Czech Republic": "CZE", "Czechia": "CZE", "Denmark": "DEN",
+        "Ecuador": "ECU", "Eritrea": "ERI", "Estonia": "EST",
+        "Finland": "FIN", "France": "FRA", "Georgia": "GEO",
+        "Germany": "GER", "Ghana": "GHA", "Great Britain": "GBR",
+        "Greece": "GRE", "Hong Kong": "HKG", "Hungary": "HUN",
+        "Iceland": "ISL", "India": "IND", "Iran": "IRI",
+        "Ireland": "IRL", "Israel": "ISR", "Italy": "ITA",
+        "Jamaica": "JAM", "Japan": "JPN", "Kazakhstan": "KAZ",
+        "Kenya": "KEN", "Kosovo": "KOS", "Kyrgyzstan": "KGZ",
+        "Latvia": "LAT", "Lebanon": "LIB", "Liechtenstein": "LIE",
+        "Lithuania": "LTU", "Luxembourg": "LUX", "North Macedonia": "MKD",
+        "Macedonia": "MKD", "Madagascar": "MAD", "Malaysia": "MAS",
+        "Malta": "MLT", "Mexico": "MEX", "Moldova": "MDA",
+        "Monaco": "MON", "Mongolia": "MGL", "Montenegro": "MNE",
+        "Morocco": "MAR", "Netherlands": "NED", "New Zealand": "NZL",
+        "Nigeria": "NGR", "North Korea": "PRK", "Norway": "NOR",
+        "Olympic Athletes from Russia": "OAR", "ROC": "ROC",
+        "Individual Neutral Athletes": "AIN", "Pakistan": "PAK",
+        "Philippines": "PHI", "Poland": "POL", "Portugal": "POR",
+        "Puerto Rico": "PUR", "Romania": "ROU", "Russia": "RUS",
+        "San Marino": "SMR", "Serbia": "SRB", "Singapore": "SGP",
+        "Slovakia": "SVK", "Slovenia": "SLO", "South Africa": "RSA",
+        "South Korea": "KOR", "Korea": "KOR", "Spain": "ESP",
+        "Sweden": "SWE", "Switzerland": "SUI", "Thailand": "THA",
+        "Timor-Leste": "TLS", "Togo": "TOG", "Tonga": "TGA",
+        "Turkey": "TUR", "Ukraine": "UKR", "United States": "USA",
+        "Uzbekistan": "UZB", "Tajikistan": "TJK", "Peru": "PER",
+        "American Samoa": "ASA", "Virgin Islands": "ISV",
+        "United Arab Emirates": "UAE", "Uruguay": "URU",
+        "Venezuela": "VEN", "Zimbabwe": "ZIM", "Nepal": "NEP",
+        "Paraguay": "PAR", "British Virgin Islands": "IVB",
+        "Cayman Islands": "CAY", "Dominica": "DMA", "Indonesia": "INA",
+        "Guatemala": "GUA", "Haiti": "HAI", "El Salvador": "ESA",
+        "Trinidad and Tobago": "TTO", "Saudi Arabia": "KSA",
+        "Benin": "BEN", "Guinea-Bissau": "GBS", "Senegal": "SEN",
+        "Tunisia": "TUN", "Ethiopia": "ETH", "Tanzania": "TAN",
+        "Uganda": "UGA", "Namibia": "NAM", "Cameroon": "CMR",
+        "Egypt": "EGY", "Algeria": "ALG", "Fiji": "FIJ",
+        "Samoa": "SAM", "Guam": "GUM", "Kosovo": "KOS",
+        "Israel": "ISR", "Liechtenstein": "LIE", "Jamaica": "JAM",
+    }
+    return ENGLISH_NAME_TO_NOC.get(name)
+
+def _scrape_medal_table(year: int, soup: BeautifulSoup) -> pd.DataFrame:
+    """
+    Parse the medal table — first wikitable with Gold/Silver/Bronze headers.
+    Rows: Rank | Country (link) | Gold | Silver | Bronze | Total
+    """
+    # Find the medal table: first row must have Rank/NOC + Gold/Silver/Bronze/Total
+    table = None
+    for t in soup.find_all("table", class_="wikitable"):
+        first_row = t.find("tr")
+        if not first_row:
+            continue
+        hdrs = [th.get_text(strip=True) for th in first_row.find_all("th")]
+        if "Gold" in hdrs and "Silver" in hdrs and "Bronze" in hdrs and "Total" in hdrs:
+            table = t
+            break
+    if table is None:
+        return pd.DataFrame()
+
+    rows = []
+    for tr in table.find_all("tr"):
+        cells = tr.find_all(["td", "th"])
+        if len(cells) < 4:
+            continue
+
+        # Country name from the first anchor tag in the row
+        country_name = next(
+            (a.get_text(strip=True).replace("*","").strip()
+             for cell in cells for a in [cell.find("a")] if a
+             and len(a.get_text(strip=True)) > 2),
+            None
+        )
+        if not country_name:
+            continue
+
+        noc = _country_name_to_noc(country_name)
+        if not noc:
+            continue
+
+        numbers = []
+        for cell in cells:
+            try:
+                numbers.append(int(cell.get_text(strip=True).replace("*","").replace("\xa0","")))
+            except ValueError:
+                pass
+
+        if len(numbers) < 3:
+            continue
+
+        gold, silver, bronze = numbers[-4], numbers[-3], numbers[-2]
+        total = numbers[-1] if len(numbers) >= 4 else gold + silver + bronze
+
+        if total > 200:
+            continue
+
+        rows.append({
+            "noc_code":     noc,
+            "country_name": country_name,
+            "year":         year,
+            "gold":         gold,
+            "silver":       silver,
+            "bronze":       bronze,
+            "total_medals": total,
+            "iso3":         WIKI_NOC_TO_ISO3.get(noc, noc),
+            "host_flag":    1 if noc == OLYMPIC_HOSTS.get(year, "") else 0,
+        })
+
+    return pd.DataFrame(rows)
+
+
+def _scrape_participants(year: int, soup: BeautifulSoup, medal_nocs: set) -> pd.DataFrame:
+    """
+    Parse the participant list from the "Participating National Olympic Committees"
+    section. Entries look like: Albania (2), Andorra (5), ...
+    We find the heading then collect all li items until the next heading.
+    """
+    import re
+
+    # Find the "Participating" section heading
+    heading = next(
+        (h for h in soup.find_all(["h2", "h3"])
+         if "Participating" in h.get_text() or "National Olympic" in h.get_text()),
+        None
+    )
+
+    found = {}  # noc_code -> {name, n_athletes}
+
+    if heading:
+        for el in heading.find_all_next(["li", "h2", "h3"]):
+            if el.name in ["h2", "h3"]:
+                break
+            text = el.get_text(strip=True)
+            m = re.match(r"^(.+?)\s*\((\d+)\)", text)
+            if not m or not (1 <= int(m.group(2)) <= 500):
+                continue
+            name = m.group(1).strip().rstrip("*†[").strip()
+            n    = int(m.group(2))
+            noc  = _country_name_to_noc(name)
+            if noc:
+                found[noc] = {"name": name, "n_athletes": n}
+
+    # Always include medal countries
+    for noc in medal_nocs:
+        if noc not in found:
+            found[noc] = {"name": noc, "n_athletes": 0}
+
+    return pd.DataFrame([{
+        "noc_code":   noc,
+        "year":       year,
+        "team_name":  info["name"],
+        "n_athletes": info["n_athletes"],
+        "iso3":       WIKI_NOC_TO_ISO3.get(noc, noc),
+        "host_flag":  1 if noc == OLYMPIC_HOSTS.get(year, "") else 0,
+    } for noc, info in sorted(found.items())])
+
+
+def fetch_wikipedia(refresh: bool = False) -> None:
+    out_medals = RAW_DIR / "olympics_medals_wikipedia.csv"
+    out_parts  = RAW_DIR / "olympics_participants_wikipedia.csv"
+    if out_medals.exists() and out_parts.exists() and not refresh:
+        print("\n[WIKIPEDIA] Using cached data.")
+        return
+    print("\n[WIKIPEDIA] Scraping 2018 / 2022 / 2026...")
+    all_medals, all_parts = [], []
+    for year in [2018, 2022, 2026]:
+
+        # ── Medal table ──
+        print(f"\n  [{year}] Medal table ({MEDAL_URLS[year].split('/')[-1]})...")
+        df_m = pd.DataFrame()
+        try:
+            soup_m = _fetch_page(MEDAL_URLS[year])
+            df_m   = _scrape_medal_table(year, soup_m)
+            if not df_m.empty:
+                print(f"    -> {len(df_m)} countries with medals")
+                all_medals.append(df_m)
+            else:
+                print(f"    [WARNING] No medals found for {year}")
+        except Exception as e:
+            print(f"    [ERROR] medals: {e}")
+
+        # ── Participants (always from main games page) ──
+        print(f"  [{year}] Participants ({GAMES_URLS[year].split('/')[-1]})...")
+        try:
+            # For 2018 the games page == medal page, avoid double fetch
+            if GAMES_URLS[year] == MEDAL_URLS[year] and not df_m.empty:
+                soup_g = soup_m
+            else:
+                soup_g = _fetch_page(GAMES_URLS[year])
+
+            medal_nocs = set(df_m["noc_code"].tolist()) if not df_m.empty else set()
+            df_p       = _scrape_participants(year, soup_g, medal_nocs)
+            print(f"    -> {len(df_p)} countries")
+            all_parts.append(df_p)
+        except Exception as e:
+            print(f"    [ERROR] participants: {e}")
+
+    if all_parts:
+        parts = pd.concat(all_parts, ignore_index=True).drop_duplicates(subset=["noc_code", "year"])
+        save(parts, out_parts)
+    else:
+        parts = pd.DataFrame()
+
+    if all_medals:
+        medals = pd.concat(all_medals, ignore_index=True)
+
+        # Expand to ALL participants — non-winners get 0 medals
+        if not parts.empty:
+            medals = parts[["noc_code", "year", "iso3"]].merge(
+                medals.drop(columns=["iso3"], errors="ignore"),
+                on=["noc_code", "year"],
+                how="left",
+            )
+            medals[["gold", "silver", "bronze", "total_medals"]] = (
+                medals[["gold", "silver", "bronze", "total_medals"]].fillna(0).astype(int)
+            )
+            medals["country_name"] = medals["country_name"].fillna(medals["noc_code"])
+            medals["host_flag"]    = medals["host_flag"].fillna(0).astype(int)
+
+        save(medals, out_medals)
+
+
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
@@ -307,6 +607,7 @@ def main():
     p = argparse.ArgumentParser(description="Fetch all raw data — no filtering")
     p.add_argument("--refresh",   action="store_true", help="Ignore cache, re-fetch everything")
     p.add_argument("--skip-snow", action="store_true", help="Skip the slow ERA5 snowfall step")
+    p.add_argument("--skip-wiki", action="store_true", help="Skip Wikipedia scraping")
     args = p.parse_args()
 
     RAW_DIR.mkdir(parents=True, exist_ok=True)
@@ -315,17 +616,24 @@ def main():
     fetch_population(refresh=args.refresh)
     fetch_olympics(refresh=args.refresh)
 
+    if not args.skip_wiki:
+        fetch_wikipedia(refresh=args.refresh)
+    else:
+        print("\n[WIKIPEDIA] Skipped (--skip-wiki)")
+
     if not args.skip_snow:
         fetch_snowfall(refresh=args.refresh)
     else:
         print("\n[SNOWFALL] Skipped (--skip-snow)")
 
-    print("\n✓ All raw data collected → data/raw/")
-    print("  worldbank_gdp.csv         — all countries, gdp_usd + gdp_per_capita_usd")
-    print("  worldbank_population.csv  — all countries, population_total")
-    print("  olympics_participants.csv — all Winter Olympic participants per edition")
-    print("  olympics_medals.csv       — all participants, medals = 0 if none won")
-    print("  snowfall_raw.csv          — all countries, snowfall per year")
+    print("\n✓ All raw data collected -> data/raw/")
+    print("  worldbank_gdp.csv                  — gdp_usd + gdp_per_capita_usd")
+    print("  worldbank_population.csv            — population_total")
+    print("  olympics_participants.csv           — Kaggle: 1992-2014")
+    print("  olympics_medals.csv                 — Kaggle: 1992-2014")
+    print("  olympics_participants_wikipedia.csv — Wikipedia: 2018-2026")
+    print("  olympics_medals_wikipedia.csv       — Wikipedia: 2018-2026")
+    print("  snowfall_raw.csv                    — all countries, snowfall per year")
 
 if __name__ == "__main__":
     main()
