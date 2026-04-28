@@ -35,7 +35,8 @@ import regionmask   # Provides country polygon masks aligned to grid coordinates
 import requests
 import xarray as xr   # Used to open and process the ERA5 NetCDF climate dataset
 from bs4 import BeautifulSoup  # HTML parser for Wikipedia scraping
-from Country_mapping import REGIONMASK_TO_ISO3, ENGLISH_NAME_TO_NOC
+from Country_mapping import ENGLISH_NAME_TO_NOC
+import pycountry
 
 START_YEAR    = 1992 # Earliest year of data we want across all data sources
 RAW_DIR       = Path("data/raw") # Where all raw output CSVs are written
@@ -54,28 +55,23 @@ GDP_INDICATORS = { # World Bank API indicator codes for the two GDP metrics we w
 # ---------------------------------------------------------------------------
 # Helper functions
 # ---------------------------------------------------------------------------
-def to_iso3(abbrev: str, name: str) -> str:
-    """"
-    Convert a regionmask country abbreviation to an ISO 3166-1 alpha-3 code.
-
-    Resolution order:
-      1. Check the manual REGIONMASK_TO_ISO3 lookup table (handles ambiguous short codes)
-      2. If the abbreviation is already 3 letters, assume it's a valid ISO3 and return it
-      3. Try a fuzzy name search using the pycountry library as a last resort
-      4. If all else fails, return the abbreviation uppercased (so it's at least consistent)
+def to_iso3(name: str) -> str:
     """
-    if abbrev in REGIONMASK_TO_ISO3:
-        return REGIONMASK_TO_ISO3[abbrev]
-    if len(abbrev) == 3:
-        return abbrev.upper()
+    Convert a regionmask country name to an ISO 3166-1 alpha-3 code.
+    Uses pycountry fuzzy search, with a small manual table for the
+    abbreviated names that regionmask uses which pycountry can't resolve.
+    """
+    MANUAL = {
+        "Bosnia and Herz.": "BIH",
+        "Turkey":           "TUR",  # pycountry knows it as Türkiye
+        "Kosovo": "XKX",  # not ISO recognised; pycountry wrongly returns SRB
+    }
+    if name in MANUAL:
+        return MANUAL[name]
     try:
-        import pycountry
-        match = pycountry.countries.search_fuzzy(name)
-        if match:
-            return match[0].alpha_3
+        return pycountry.countries.search_fuzzy(name)[0].alpha_3
     except Exception:
-        pass
-    return abbrev.upper()
+        return None
 
 def compute_cell_area_km2(latitudes: np.ndarray) -> xr.DataArray:
     """
@@ -167,7 +163,6 @@ def save(df: pd.DataFrame, path: Path) -> None:
        """
     df.to_csv(path, index=False)
     print(f"  [saved] {len(df):,} rows → {path}")
-
 
 # ---------------------------------------------------------------------------
 # 1. World Bank GDP  (all countries, gdp + gdp per capita side by side)
@@ -315,7 +310,7 @@ def fetch_snowfall(refresh: bool = False) -> None:
     records = []
     for idx in valid_ids:
         region = countries[int(idx)]
-        iso3   = to_iso3(region.abbrev, region.name)
+        iso3   = to_iso3(region.name)
         vols   = result_sum.sel(mask=idx).values         # Annual km³ values across all years
         area   = float(country_area.sel(mask=idx).values)  # Total masked land area in km²
 
@@ -341,64 +336,58 @@ def fetch_snowfall(refresh: bool = False) -> None:
 # ---------------------------------------------------------------------------
 def fetch_olympics(refresh: bool = False) -> None:
     """
-        Build Winter Olympics participant and medal tables from the Kaggle athlete dataset.
+    Build a unified Winter Olympics table from the Kaggle athlete dataset.
 
-        The raw Kaggle file has one row per athlete per event. We aggregate this into:
-          - A participants table: one row per (NOC, year), counting unique athletes
-          - A medals table:       one row per (NOC, year), summing gold/silver/bronze medals
+    The raw Kaggle file has one row per athlete per event. We aggregate into
+    one row per (NOC, year) containing team_name, n_athletes, and medal counts.
+    Countries that won zero medals are explicitly included with medal counts of 0
+    — a missing row is ambiguous, a 0 is an explicit fact.
 
-        Crucially, the medals table includes ALL countries that participated, even if they
-        won zero medals (they get 0s rather than being absent). This is important for
-        modelling — a missing row is ambiguous, a 0 is an explicit fact.
+    Non-country NOC codes (IOA, AHO) are dropped here before aggregation:
+      IOA = Individual Olympic Athletes (stateless, no ISO3 successor)
+      AHO = Netherlands Antilles (dissolved 2010, no meaningful successor)
 
-        Data coverage: 1992–2014 (limited by the Kaggle dataset, which ends at 2014).
-        Wikipedia scraping (fetch_wikipedia) covers 2018 onwards.
+    Data coverage: 1992–2014. Wikipedia scraping (fetch_wikipedia) covers 2018+.
+
+    Output: data/raw/olympics.csv
+      Columns: noc_code, year, team_name, n_athletes,
+               gold, silver, bronze, total_medals
     """
-    out_participants = RAW_DIR / "olympics_participants.csv"
-    out_medals       = RAW_DIR / "olympics_medals.csv"
-
-    if out_participants.exists() and out_medals.exists() and not refresh:
+    out_path = RAW_DIR / "olympics.csv"
+    if out_path.exists() and not refresh:
         print("\n[OLYMPICS] Using cached data.")
         return
+
+    DROP_NOC = {"IOA", "AHO"}
 
     print("\n[OLYMPICS] Processing athlete_events.csv…")
     df = pd.read_csv(OLYMPICS_FILE)
 
-    # Filter winter only + year range — NO filtering on NOC, keep every country that has participated
+    # Filter to Winter Games in scope, and drop non-country entities
     df = df[
         (df["Season"] == "Winter") &
         (df["Year"] >= START_YEAR) &
-        (df["Year"] <= 2022)
+        (df["Year"] <= 2022) &
+        (~df["NOC"].isin(DROP_NOC))
     ].copy()
 
-    # ── Participants table ──────────────────────────────────────────────────
-    # Participants: one row per (NOC, Year) — every country that showed up
-    participants = (
+    # ── Per-country aggregates ──────────────────────────────────────────────
+    base = (
         df.groupby(["NOC", "Year"])
         .agg(
-            team_name=("Team",  lambda x: x.value_counts().index[0]),
-            n_athletes=("Name", "nunique"),
+            team_name  = ("Team", lambda x: x.value_counts().index[0]),
+            n_athletes = ("Name", "nunique"),
         )
         .reset_index()
         .rename(columns={"NOC": "noc_code", "Year": "year"})
     )
 
-    save(participants.sort_values(["year", "noc_code"]), out_participants)
-    print(f"  {participants['noc_code'].nunique()} NOC codes · "
-          f"years: {sorted(participants['year'].unique()).pop(0)}–"
-          f"{sorted(participants['year'].unique()).pop()}")
-
-    # ── Medals table ────────────────────────────────────────────────────────
-    # Medals: start from ALL (NOC, Year) combinations from participants then left-join actual medal counts → countries with no medals get 0
-    # Step 1: Filter to rows where an athlete actually won a medal
+    # ── Medal counts ────────────────────────────────────────────────────────
     medal_df = df[df["Medal"].notna()].copy()
-
-    # Convert the Medal string into three binary indicator columns
     medal_df["gold"]   = (medal_df["Medal"] == "Gold").astype(int)
     medal_df["silver"] = (medal_df["Medal"] == "Silver").astype(int)
     medal_df["bronze"] = (medal_df["Medal"] == "Bronze").astype(int)
 
-    # Step 2: Sum medals per (NOC, year)
     medal_counts = (
         medal_df.groupby(["NOC", "Year"])
         .agg(gold=("gold", "sum"), silver=("silver", "sum"), bronze=("bronze", "sum"))
@@ -406,17 +395,17 @@ def fetch_olympics(refresh: bool = False) -> None:
         .rename(columns={"NOC": "noc_code", "Year": "year"})
     )
 
-    # Step 3: Left-join onto the full participant list.
-    # Countries with no medals will have NaN after the join → fill with 0. This ensures every participating country appears in the medals table.
-    medals = participants[["noc_code", "year"]].merge(
-        medal_counts,
-        on=["noc_code", "year"],
-        how="left",
+    # ── Merge medals onto base — non-winners get 0 ─────────────────────────
+    olympics = base.merge(medal_counts, on=["noc_code", "year"], how="left")
+    olympics[["gold", "silver", "bronze"]] = (
+        olympics[["gold", "silver", "bronze"]].fillna(0).astype(int)
     )
-    medals[["gold", "silver", "bronze"]] = medals[["gold", "silver", "bronze"]].fillna(0).astype(int)
-    medals["total_medals"] = medals["gold"] + medals["silver"] + medals["bronze"]
+    olympics["total_medals"] = olympics["gold"] + olympics["silver"] + olympics["bronze"]
 
-    save(medals.sort_values(["year", "noc_code"]), out_medals)
+    save(olympics.sort_values(["year", "noc_code"]), out_path)
+    print(f"  {olympics['noc_code'].nunique()} NOC codes · "
+          f"years: {sorted(olympics['year'].unique())[0]}–"
+          f"{sorted(olympics['year'].unique())[-1]}")
 
 # ---------------------------------------------------------------------------
 # 5. Wikipedia — medal tables + participants 2018, 2022, 2026
@@ -582,25 +571,32 @@ def _scrape_participants(year: int, soup: BeautifulSoup, medal_nocs: set) -> pd.
 
 def fetch_wikipedia(refresh: bool = False) -> None:
     """
-        Scrape Winter Olympics medal tables and participant lists from Wikipedia (2018–2026).
+    Scrape Winter Olympics data from Wikipedia (2018–2022).
 
-        This covers the years not included in the Kaggle dataset (which ends at 2014).
-        For each year we fetch two pages: the main games page (for participants) and
-        the medal table page (for medal counts). For 2018, both are on the same page.
+    Produces a single unified file per year — one row per (NOC, year) with
+    team_name, n_athletes, and medal counts — matching the structure of
+    olympics.csv produced by fetch_olympics().
 
-        After scraping, we expand the medal table to include ALL participating nations
-        (non-medal nations get 0s) — matching the structure of the Kaggle-based data.
+    Non-medal countries are included with medal counts of 0.
+    Non-country NOC codes (IOA, AHO) are dropped here before saving.
+
+    Output: data/raw/olympics_wikipedia.csv
+      Columns: noc_code, year, team_name, n_athletes,
+               gold, silver, bronze, total_medals
     """
-    out_medals = RAW_DIR / "olympics_medals_wikipedia.csv"
-    out_parts  = RAW_DIR / "olympics_participants_wikipedia.csv"
-    if out_medals.exists() and out_parts.exists() and not refresh:
+    DROP_NOC = {"IOA", "AHO"}
+
+    out_path = RAW_DIR / "olympics_wikipedia.csv"
+    if out_path.exists() and not refresh:
         print("\n[WIKIPEDIA] Using cached data.")
         return
+
     print("\n[WIKIPEDIA] Scraping 2018 / 2022")
-    all_medals, all_parts = [], []
+    all_years = []
+
     for year in [2018, 2022]:
 
-        # ── Medal table ──
+        # ── Medal table ──────────────────────────────────────────────────────
         print(f"\n  [{year}] Medal table ({MEDAL_URLS[year].split('/')[-1]})...")
         df_m = pd.DataFrame()
         try:
@@ -608,55 +604,44 @@ def fetch_wikipedia(refresh: bool = False) -> None:
             df_m   = _scrape_medal_table(year, soup_m)
             if not df_m.empty:
                 print(f"    -> {len(df_m)} countries with medals")
-                all_medals.append(df_m)
             else:
                 print(f"    [WARNING] No medals found for {year}")
         except Exception as e:
             print(f"    [ERROR] medals: {e}")
 
-        # ── Participants (always from main games page) ──
+        # ── Participants ─────────────────────────────────────────────────────
         print(f"  [{year}] Participants ({GAMES_URLS[year].split('/')[-1]})...")
         try:
-            # For 2018 the games page == medal page, avoid double fetch
-            if GAMES_URLS[year] == MEDAL_URLS[year] and not df_m.empty:
-                soup_g = soup_m
-            else:
-                soup_g = _fetch_page(GAMES_URLS[year])
-
+            # For 2018 the games page == medal page — avoid double fetch
+            soup_g = soup_m if GAMES_URLS[year] == MEDAL_URLS[year] else _fetch_page(GAMES_URLS[year])
             medal_nocs = set(df_m["noc_code"].tolist()) if not df_m.empty else set()
             df_p       = _scrape_participants(year, soup_g, medal_nocs)
             print(f"    -> {len(df_p)} countries")
-            all_parts.append(df_p)
         except Exception as e:
             print(f"    [ERROR] participants: {e}")
+            df_p = pd.DataFrame()
 
-    # ── Save participants ──
-    if all_parts:
-        parts = pd.concat(all_parts, ignore_index=True).drop_duplicates(subset=["noc_code", "year"])
-        save(parts, out_parts)
-    else:
-        parts = pd.DataFrame()
+        if df_p.empty:
+            continue
 
-    # ── Save medals (expanded to all participants) ──
-    if all_medals:
-        medals = pd.concat(all_medals, ignore_index=True)
+        # ── Merge medals into participants — non-winners get 0 ───────────────
+        combined = df_p.merge(df_m, on=["noc_code", "year"], how="left")
+        combined[["gold", "silver", "bronze", "total_medals"]] = (
+            combined[["gold", "silver", "bronze", "total_medals"]].fillna(0).astype(int)
+        )
 
-        # Expand to ALL participants — non-winners get 0 medals
-        if not parts.empty:
-            medals = parts[["noc_code", "year"]].merge(
-                medals,
-                on=["noc_code", "year"],
-                how="left",
-            )
-            medals[["gold", "silver", "bronze", "total_medals"]] = (
-                medals[["gold", "silver", "bronze", "total_medals"]].fillna(0).astype(int)
-            )
+        # Drop non-country entities
+        combined = combined[~combined["noc_code"].isin(DROP_NOC)]
 
-            # Fill missing country names (non-medal countries) with their NOC code as a fallback
-            medals["country_name"] = medals["country_name"].fillna(medals["noc_code"])
+        all_years.append(combined)
 
-        save(medals, out_medals)
-
+    if all_years:
+        result = (
+            pd.concat(all_years, ignore_index=True)
+            .drop_duplicates(subset=["noc_code", "year"])
+        )
+        save(result[["noc_code", "year", "team_name", "n_athletes",
+                      "gold", "silver", "bronze", "total_medals"]], out_path)
 
 # ---------------------------------------------------------------------------
 # CLI

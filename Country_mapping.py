@@ -9,37 +9,95 @@ Three different code systems are in use:
 These three systems overlap but are not the same. The dicts below handle the translation between them.
 """
 
-# The regionmask library uses short abbreviations to identify countries. Many of these are 1–2 letter codes that don't match ISO 3166-1 alpha-3.
-# This lookup table manually maps the ambiguous/non-standard ones to their correct ISO3 codes.
-# Countries already using a standard 3-letter code (e.g. "DEU") don't need an entry here — they are handled automatically by the to_iso3() fallback logic in fetch.py.
-REGIONMASK_TO_ISO3 = {
-    "A":   "AUT",  "N":   "NOR",  "S":   "SWE",  "J":   "JPN",
-    "CH":  "CHE",  "IS":  "ISL",  "IL":  "ISR",  "CL":  "CHL",
-    "CA":  "CAN",  "US":  "USA",  "AL":  "ALB",  "ME":  "MNE",
-    "KO":  "XKX",  "SLO": "SVN",  "SK":  "SVK",  "NM":  "MKD",
-    "BG":  "BGR",  "TR":  "TUR",  "GE":  "GEO",  "GL":  "GRL",
-    "AF":  "AFG",  "NP":  "NPL",  "BT":  "BTN",  "TJ":  "TJK",
-    "KG":  "KGZ",  "TF":  "ATF",  "CZ":  "CZE",  "BiH": "BIH",
-}
-
-# Wikipedia uses IOC/NOC codes (e.g. "SUI" for Switzerland, "NED" for Netherlands) which differ from ISO 3166-1 alpha-3 codes (e.g. "CHE", "NLD").
-# This mapping converts the NOC codes found in Wikipedia tables to standard ISO3.
+# Canonical NOC → ISO3 crosswalk used across the full pipeline.
+# Replaces the old WIKI_NOC_TO_ISO3 (which only covered a subset of nations).
+#
+# Olympic datasets use IOC National Olympic Committee (NOC) codes, which differ
+# from ISO 3166-1 alpha-3 codes used by the World Bank and ERA5.
+# Two categories of mapping:
+#   1. Simple substitutions: IOC chose a different 3-letter code than ISO
+#      (e.g. GER→DEU, NED→NLD, SUI→CHE)
+#   2. Defunct states: countries that no longer exist, mapped to modern successors.
+#      Each decision is documented:
+#        URS (Soviet Union) → RUS: Russia is the recognised successor state.
+#        EUN (Unified Team 1992) → RUS: former Soviet republics competing together
+#            one last time; attributed to RUS for continuity with URS records.
+#        GDR (East Germany) → DEU: merged into unified Germany in 1990.
+#        FRG (West Germany) → DEU: same reasoning as GDR.
+#        TCH (Czechoslovakia) → CZE: Czech Republic treated as primary successor
+#            for Winter Olympics purposes (Slovakia competed separately from 1994).
+#        YUG (Yugoslavia) → SRB: Serbia is the recognised successor state.
+#        SCG (Serbia-Montenegro 2006) → SRB: Montenegro declared independence 2006.
+#
 # Special cases:
-#   OAR = "Olympic Athletes from Russia" (2018, banned under own flag)
-#   ROC = "Russian Olympic Committee" (2022, still banned under own flag)
-#   AIN = "Individual Neutral Athletes" (2022, Belarusian athletes)
-WIKI_NOC_TO_ISO3 = {
-    "NOR": "NOR", "GER": "DEU", "CAN": "CAN", "USA": "USA", "NED": "NLD",
-    "SWE": "SWE", "KOR": "KOR", "SUI": "CHE", "FRA": "FRA", "AUT": "AUT",
-    "JPN": "JPN", "ITA": "ITA", "OAR": "RUS", "ROC": "RUS", "AIN": "RUS",
-    "CZE": "CZE", "BLR": "BLR", "CHN": "CHN", "SVK": "SVK", "FIN": "FIN",
-    "GBR": "GBR", "POL": "POL", "HUN": "HUN", "UKR": "UKR", "AUS": "AUS",
-    "SLO": "SVN", "BEL": "BEL", "NZL": "NZL", "ESP": "ESP", "KAZ": "KAZ",
-    "LAT": "LVA", "LIE": "LIE", "EST": "EST", "GEO": "GEO", "BUL": "BGR",
-    "DEN": "DNK", "BRA": "BRA", "ARM": "ARM", "ROU": "ROU", "CRO": "HRV",
-    "SRB": "SRB", "MEX": "MEX", "NIG": "NGA", "GRE": "GRC", "ISL": "ISL",
-    "MKD": "MKD", "MNE": "MNE", "POR": "PRT", "RSA": "ZAF", "TUR": "TUR",
-    "LTU": "LTU",
+#   OAR = "Olympic Athletes from Russia" (2018, banned under own flag) → RUS
+#   ROC = "Russian Olympic Committee"    (2022, banned under own flag) → RUS
+#   AIN = "Individual Neutral Athletes"  (2022, Belarusian athletes)   → BLR
+NOC_TO_ISO3 = {
+    # --- Simple code differences (same country, different code system) ---
+    "GER": "DEU",   # Germany: IOC uses GER, ISO uses DEU
+    "NED": "NLD",   # Netherlands: IOC uses NED, ISO uses NLD
+    "SUI": "CHE",   # Switzerland: IOC uses SUI, ISO uses CHE
+    "DEN": "DNK",   # Denmark: IOC uses DEN, ISO uses DNK
+    "POR": "PRT",   # Portugal
+    "SLO": "SVN",   # Slovenia: IOC uses SLO, ISO uses SVN
+    "CRO": "HRV",   # Croatia
+    "LAT": "LVA",   # Latvia
+    "MGL": "MNG",   # Mongolia
+    "PHI": "PHL",   # Philippines
+    "TRI": "TTO",   # Trinidad and Tobago
+    "ZIM": "ZWE",   # Zimbabwe
+    "IRI": "IRN",   # Iran
+    "MAS": "MYS",   # Malaysia
+    "UAE": "ARE",   # United Arab Emirates
+    "VIE": "VNM",   # Vietnam
+    "TPE": "TWN",   # Chinese Taipei (Taiwan) — politically sensitive;
+                    # IOC uses TPE, ISO uses TWN
+    "GRE": "GRC",   # Greece
+    "BUL": "BGR",   # Bulgaria
+    "HAI": "HTI",   # Haiti
+    "CHI": "CHL",   # Chile: IOC uses CHI, ISO uses CHL
+    "RSA": "ZAF",   # South Africa
+    "ALG": "DZA",   # Algeria
+    "PAR": "PRY",   # Paraguay
+    "URU": "URY",   # Uruguay
+    "CRC": "CRI",   # Costa Rica
+    "GUA": "GTM",   # Guatemala
+    "HON": "HND",   # Honduras
+    "ESA": "SLV",   # El Salvador
+    "NCA": "NIC",   # Nicaragua
+    "BAR": "BRB",   # Barbados
+    "SKN": "KNA",   # Saint Kitts and Nevis
+    "TGA": "TON",   # Tonga
+    "ANT": "ATG",   # Antigua and Barbuda
+    "ISV": "VIR",   # US Virgin Islands
+    "PUR": "PRI",   # Puerto Rico (US territory, competes separately)
+    "GUM": "GUM",   # Guam (no ISO3; kept as-is)
+    "ASA": "ASM",   # American Samoa
+    "HKG": "HKG",   # Hong Kong (special administrative region)
+    "ANG": "AGO",   # Angola
+    # --- Defunct states → modern successors ---
+    "URS": "RUS",   # Soviet Union → Russia
+    "EUN": "RUS",   # Unified Team 1992 → Russia
+    "OAR": "RUS",   # Olympic Athletes from Russia (2018) → Russia
+    "ROC": "RUS",   # Russian Olympic Committee (2022) → Russia
+    "AIN": "BLR",   # Individual Neutral Athletes (2022, Belarusian) → Belarus
+    "GDR": "DEU",   # East Germany → unified Germany
+    "FRG": "DEU",   # West Germany → unified Germany
+    "TCH": "CZE",   # Czechoslovakia → Czech Republic
+    "YUG": "SRB",   # Yugoslavia → Serbia
+    "SCG": "SRB",   # Serbia-Montenegro → Serbia
+    "NGR": "NGA",   # Nigeria: IOC uses NGR, ISO uses NGA
+    "BER": "BMU",   # Bermuda: IOC uses BER, ISO uses BMU
+    "LIB": "LBN",   # Lebanon: IOC uses LIB, ISO uses LBN
+    "MON": "MCO",   # Monaco: IOC uses MON, ISO uses MCO
+    "NEP": "NPL",   # Nepal: IOC uses NEP, ISO uses NPL
+    "MAD": "MDG",   # Madagascar: IOC uses MAD, ISO uses MDG
+    "KSA": "SAU",   # Saudi Arabia: IOC uses KSA, ISO uses SAU
+    "IVB": "VGB",   # British Virgin Islands: IOC uses IVB, ISO uses VGB
+    "CAY": "CYM",   # Cayman Islands: IOC uses CAY, ISO uses CYM
+    "KOS": "XKX",   # Kosovo: IOC uses KOS, ISO uses XKX (unrecognised state)
+    "FIJ": "FJI",   # Fiji: IOC uses FIJ, ISO uses FJI
 }
 
 # Maps English country names (as they appear on Wikipedia) to NOC codes.
