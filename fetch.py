@@ -3,19 +3,27 @@ Collection Pipeline — Raw Data
 =====================================
 Fetches raw data from all sources. No filtering, no cleaning, no merging. ALl refinements happens in clean.py.
 
-Output files in data/raw/:
-  worldbank_gdp.csv            — GDP + GDP per capita, ALL countries, 1992–2024
-  worldbank_population.csv     — Population total, ALL countries, 1992–2024
-  snowfall_raw.csv             — Snowfall, ALL countries, 1992–2026
-  olympics_participants.csv    — All Winter Olympic participants (NOC x Year), no filtering
-  olympics_medals.csv          — All NOC x Year combinations, medals = 0 if none won
+Data sources used:
+  1. World Bank API       — GDP and population figures for all countries
+  2. ERA5 NetCDF file     — Monthly snowfall raster data (local file, pre-downloaded)
+  3. Kaggle CSV           — Historical Winter Olympics athlete data (1992–2014)
+  4. Wikipedia (scraped)  — Winter Olympics medals + participants (2018–2022)
 
-Usage:
+Output files in data/raw/:
+  worldbank_gdp.csv               — GDP + GDP per capita, ALL countries, 1992–2024
+  worldbank_population.csv        — Population total, ALL countries, 1992–2024
+  snowfall_raw.csv                — Snowfall, ALL countries, 1992–2026
+  olympics_participants.csv       — All Winter Olympic participants from 1992-2014
+  olympics_medals.csv             — All NOC x Year combinations, medals = 0 if none won, from 1992-2014
+  olympics_participants_wikipedia — Webscraped Wikipedia of all winter Olympics participants 2018–2022
+  olympics_medals_wikipedia       — Webscraped Wikipedia of all winter Olympics medal winners 2018–2022
+
+Usage - inside terminal :
   python fetch.py               # fetch all
   python fetch.py --refresh     # force re-fetch (ignore cache)
   python fetch.py --skip-snow   # skip the slow ERA5 step
+  python fetch.py --skip-wiki   # skip Wikipedia scraping
 """
-
 import argparse
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -23,54 +31,39 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import regionmask
+import regionmask   # Provides country polygon masks aligned to grid coordinates
 import requests
-import xarray as xr
-from bs4 import BeautifulSoup
+import xarray as xr   # Used to open and process the ERA5 NetCDF climate dataset
+from bs4 import BeautifulSoup  # HTML parser for Wikipedia scraping
+from Country_mapping import REGIONMASK_TO_ISO3, ENGLISH_NAME_TO_NOC
 
-START_YEAR    = 1992
-RAW_DIR       = Path("data/raw")
-NC_FILE       = Path('Data/data_stream-moda.nc')
-OLYMPICS_FILE = Path("data/olympicDataset/athlete_events.csv")
+START_YEAR    = 1992 # Earliest year of data we want across all data sources
+RAW_DIR       = Path("data/raw") # Where all raw output CSVs are written
+NC_FILE       = Path('Data/data_stream-moda.nc') # Local ERA5 NetCDF file — contains the snowfall data
+OLYMPICS_FILE = Path("data/olympicDataset/athlete_events.csv") # Kaggle Winter Olympics dataset — one row per athlete per event per year.
 
-EARTH_RADIUS_KM = 6371.0
-CELL_DEG        = 0.1
+# Used to compute the surface area of each 0.1° x 0.1° grid cell (for snowfall volume)
+EARTH_RADIUS_KM = 6371.0 # Mean radius of the Earth in kilometres
+CELL_DEG        = 0.1 # Grid resolution in degrees (ERA5 dataset is 0.1° x 0.1°)
 
-GDP_INDICATORS = {
-    "gdp_usd":            "NY.GDP.MKTP.CD",
-    "gdp_per_capita_usd": "NY.GDP.PCAP.CD",
-}
-
-OLYMPIC_HOSTS = {
-    1992: "FRA", 1994: "NOR", 1998: "JPN", 2002: "USA",
-    2006: "ITA", 2010: "CAN", 2014: "RUS", 2018: "KOR",
-    2022: "CHN", 2026: "ITA",
-}
-
-REGIONMASK_TO_ISO3 = {
-    "A":   "AUT",  "N":   "NOR",  "S":   "SWE",  "J":   "JPN",
-    "CH":  "CHE",  "IS":  "ISL",  "IL":  "ISR",  "CL":  "CHL",
-    "CA":  "CAN",  "US":  "USA",  "AL":  "ALB",  "ME":  "MNE",
-    "KO":  "XKX",  "SLO": "SVN",  "SK":  "SVK",  "NM":  "MKD",
-    "BG":  "BGR",  "TR":  "TUR",  "GE":  "GEO",  "GL":  "GRL",
-    "AF":  "AFG",  "NP":  "NPL",  "BT":  "BTN",  "TJ":  "TJK",
-    "KG":  "KGZ",  "TF":  "ATF",  "CZ":  "CZE",  "BiH": "BIH",
+GDP_INDICATORS = { # World Bank API indicator codes for the two GDP metrics we want.These are the official codes used in the World Bank's data API v2.
+    "gdp_usd":            "NY.GDP.MKTP.CD", # Total GDP in current USD
+    "gdp_per_capita_usd": "NY.GDP.PCAP.CD", # GDP per capita in current USD
 }
 
 # ---------------------------------------------------------------------------
-# Helpers
+# Helper functions
 # ---------------------------------------------------------------------------
-
-def progress(step, total, label, start_time):
-    pct     = step / total
-    done    = int(40 * pct)
-    bar     = "█" * done + "░" * (40 - done)
-    elapsed = time.time() - start_time
-    eta     = (elapsed / pct - elapsed) if pct > 0 else 0
-    print(f"\r[{bar}] {pct*100:5.1f}%  {label}  elapsed {elapsed:.0f}s  ETA {eta:.0f}s   ",
-          end="", flush=True)
-
 def to_iso3(abbrev: str, name: str) -> str:
+    """"
+    Convert a regionmask country abbreviation to an ISO 3166-1 alpha-3 code.
+
+    Resolution order:
+      1. Check the manual REGIONMASK_TO_ISO3 lookup table (handles ambiguous short codes)
+      2. If the abbreviation is already 3 letters, assume it's a valid ISO3 and return it
+      3. Try a fuzzy name search using the pycountry library as a last resort
+      4. If all else fails, return the abbreviation uppercased (so it's at least consistent)
+    """
     if abbrev in REGIONMASK_TO_ISO3:
         return REGIONMASK_TO_ISO3[abbrev]
     if len(abbrev) == 3:
@@ -85,27 +78,45 @@ def to_iso3(abbrev: str, name: str) -> str:
     return abbrev.upper()
 
 def compute_cell_area_km2(latitudes: np.ndarray) -> xr.DataArray:
+    """
+    Compute the surface area (in km²) of each 0.1° x 0.1° ERA5 grid cell.
+
+    Grid cells are square in degrees, but their actual physical size shrinks towards the poles because lines of longitude converge.
+    Specifically, cell width = R * cos(lat) * Δlon, so area = R² * Δlat * Δlon * cos(lat).
+
+    This area array is used to convert snowfall depth (metres) to volume (km³) by multiplying: volume = depth * cell_area / 1000.
+    """
     delta_rad = np.deg2rad(CELL_DEG)
     lat_rad   = np.deg2rad(latitudes)
     area_km2  = (EARTH_RADIUS_KM ** 2) * (delta_rad ** 2) * np.cos(lat_rad)
     return xr.DataArray(area_km2, coords={"latitude": latitudes}, dims=["latitude"])
 
 def fetch_wb_indicator(code: str) -> pd.DataFrame:
-    """Fetch a single World Bank indicator for ALL countries, no filtering.
+    """"
+    Fetch a single World Bank indicator for ALL countries from the World Bank API v2.
 
-    Uses per_page=32767 (API max) to minimise round trips, and retries
-    up to 3 times with exponential back-off on timeout or server errors.
+    The World Bank API is paginated. We request the maximum allowed page size (32767 rows) to minimise the number of HTTP round trips needed.
+
+    Retries up to 3 times with increasing wait times on timeout or connection errors.
+    This is important because the World Bank API can be slow and occasionally drops requests.
+
+    Args:
+        code: World Bank indicator code (e.g. "NY.GDP.MKTP.CD" for total GDP)
+
+    Returns:
+        DataFrame with columns: iso3, country_name, year, value
+        One row per (country, year) combination. Value is None if data is missing.
     """
     url    = f"https://api.worldbank.org/v2/country/all/indicator/{code}"
-    params = {"format": "json", "per_page": 32767, "date": f"{START_YEAR}:2026"}
+    params = {"format": "json", "per_page": 32767, "date": f"{START_YEAR}:2024"}
     rows, page, total_pages = [], 1, None
 
     def _get_page(p: int) -> list:
-        for attempt in range(3):
+        for attempt in range(3): # Fetch a single page from the API, retrying up to 3 times on failure.
             try:
                 resp = requests.get(url, params={**params, "page": p}, timeout=90)
-                resp.raise_for_status()
-                data = resp.json()
+                resp.raise_for_status() # Raise an error for HTTP 4xx/5xx responses
+                data = resp.json() # The API returns a 2-element list: [metadata_dict, records_list]
                 if not isinstance(data, list) or len(data) < 2:
                     raise ValueError(f"Unexpected response: {data}")
                 return data
@@ -113,27 +124,27 @@ def fetch_wb_indicator(code: str) -> pd.DataFrame:
                     requests.exceptions.ConnectionError,
                     ValueError) as e:
                 if attempt == 2:
-                    raise
+                    raise # Give up after 3 failed attempts
                 wait = 5 * (attempt + 1)
                 print(f"\n      [{code}] page {p} failed ({e}), retrying in {wait}s...")
                 time.sleep(wait)
 
-    while True:
+    while True: # Paginate through all pages until we've collected every record
         data = _get_page(page)
-        meta, records = data[0], data[1] or []
-        if total_pages is None:
+        meta, records = data[0], data[1] or [] # data[0] = metadata, data[1] = records
+        if total_pages is None: # On the first page, read the total page count from the metadata
             total_pages = meta["pages"]
             print(f"    {code}: {meta['total']} records, {total_pages} page(s)")
         if total_pages == 0:
-            break
+            break # No data at all for this indicator
 
         for r in records:
-            if r:
+            if r: # Skip null entries that the API occasionally returns
                 rows.append({
                     "iso3":         r.get("countryiso3code") or r.get("country", {}).get("id", ""),
                     "country_name": r.get("country", {}).get("value", ""),
                     "year":         int(r["date"]),
-                    "value":        r.get("value"),
+                    "value":        r.get("value"), # None if data not available for that year
                 })
 
         print(f"      page {page}/{total_pages}", end="\r")
@@ -141,18 +152,27 @@ def fetch_wb_indicator(code: str) -> pd.DataFrame:
             break
         page += 1
 
-    print()
+    print() # Move to a new line after the in-place page counter
     return pd.DataFrame(rows)
 
 def save(df: pd.DataFrame, path: Path) -> None:
+    """
+       Write a DataFrame to CSV and print a confirmation message.
+
+       index=False prevents pandas from writing the row index as an extra column.
+
+       Args:
+           df:   DataFrame to save
+           path: Destination file path (should be inside RAW_DIR)
+       """
     df.to_csv(path, index=False)
     print(f"  [saved] {len(df):,} rows → {path}")
+
 
 # ---------------------------------------------------------------------------
 # 1. World Bank GDP  (all countries, gdp + gdp per capita side by side)
 # ---------------------------------------------------------------------------
-
-def fetch_gdp(refresh: bool = False) -> None:
+def fetch_gdp(refresh: bool = False) -> None: # Fetch total GDP and GDP per capita for all countries (1992–2024) from the World Bank API.
     out_path = RAW_DIR / "worldbank_gdp.csv"
     if out_path.exists() and not refresh:
         print("  [cache] worldbank_gdp.csv")
@@ -160,13 +180,17 @@ def fetch_gdp(refresh: bool = False) -> None:
 
     print("\n[WORLD BANK — GDP] Fetching all countries (parallel)...")
     frames = {}
+
+    # Fetch GDP and GDP-per-capita simultaneously using two worker threads
     with ThreadPoolExecutor(max_workers=2) as ex:
         futures = {ex.submit(fetch_wb_indicator, code): col_name
                    for col_name, code in GDP_INDICATORS.items()}
         for future in as_completed(futures):
             col_name = futures[future]
+            # Rename the generic "value" column to the specific metric name
             frames[col_name] = future.result().rename(columns={"value": col_name})
 
+    # Outer merge so we keep rows even if one indicator is missing for a country/year
     df = frames["gdp_usd"].merge(
         frames["gdp_per_capita_usd"][["iso3", "year", "gdp_per_capita_usd"]],
         on=["iso3", "year"],
@@ -178,7 +202,7 @@ def fetch_gdp(refresh: bool = False) -> None:
 # 2. World Bank Population  (all countries, total only)
 # ---------------------------------------------------------------------------
 
-def fetch_population(refresh: bool = False) -> None:
+def fetch_population(refresh: bool = False) -> None: # Fetch total population for all countries (1992–2024) from the World Bank API.
     out_path = RAW_DIR / "worldbank_population.csv"
     if out_path.exists() and not refresh:
         print("  [cache] worldbank_population.csv")
@@ -191,8 +215,35 @@ def fetch_population(refresh: bool = False) -> None:
 # ---------------------------------------------------------------------------
 # 3. ERA5 Snowfall  (all countries)
 # ---------------------------------------------------------------------------
-
 def fetch_snowfall(refresh: bool = False) -> None:
+    """
+    Aggregate ERA5 monthly snowfall data into annual per-country totals.
+
+    The ERA5 dataset is a global climate reanalysis product from the Copernicus Climate Data Store.
+    The local NetCDF file (NC_FILE) contains the variable "sf" (snowfall, in metres of water equivalent) on a 0.1° x 0.1° global grid,
+    with one timestep per month.
+
+    Processing steps:
+      1. Open the NetCDF and extract the "sf" variable
+      2. Chunk the data with Dask so it can be processed piece by piece without
+         loading the full dataset into RAM
+      3. Resample monthly timesteps into annual sums
+      4. Compute each cell's physical area in km² (cells shrink towards the poles)
+      5. Multiply depth * area / 1000 to get snowfall volume in km³
+      6. Compute total land area per country using the same cell areas (for depth calc)
+      7. Apply a country mask (from regionmask) to assign each grid cell to a country
+      8. Sum volumes per country per year
+      9. Derive area-weighted snowfall depth: depth_mm = volume_km3 / country_area_km2 * 1_000_000
+     10. Write one row per (country, year) to CSV
+
+    Output: data/raw/snowfall_raw.csv
+      Columns: iso3, country_name, year, snowfall_km3, snowfall_mm
+        snowfall_km3 — total annual snowfall volume for the country
+        snowfall_mm  — area-weighted average annual snowfall depth (physically correct)
+
+    Note: This step is slow (can take 5–20 minutes depending on hardware).
+    Use --skip-snow to skip it if you already have the cached CSV.
+    """
     out_path = RAW_DIR / "snowfall_raw.csv"
     if out_path.exists() and not refresh:
         print("\n[SNOWFALL] Using cached data.")
@@ -203,56 +254,84 @@ def fetch_snowfall(refresh: bool = False) -> None:
 
     print("  Opening dataset…")
     ds = xr.open_dataset(NC_FILE)
-    sf = ds["sf"]
+    sf = ds["sf"]   # "sf" = snowfall variable (metres of water equivalent per month)
     print(f"  {len(sf.valid_time)} timesteps · {len(sf.latitude)} lats · {len(sf.longitude)} lons")
+
+    # Chunk the dataset so Dask can process it lazily without loading everything into RAM. valid_time=12 means one year of months per chunk; latitude/longitude=-1 = no chunking on those axes.
     sf = sf.chunk({"valid_time": 12, "latitude": -1, "longitude": -1})
 
     print("  Resampling monthly → annual…")
-    sf_yearly = sf.resample(valid_time="YE").sum()
+    sf_yearly = sf.resample(valid_time="YE").sum() # Sum monthly snowfall values into a single annual total per grid cell
 
     print("  Computing cell areas…")
-    cell_area = compute_cell_area_km2(sf.latitude.values)
-    sf_volume = sf_yearly * cell_area / 1000.0  # km³ w.e.
+    # compute_cell_area_km2 returns an xr.DataArray with a latitude coordinate.
+    # When multiplied against sf_yearly (which has lat + lon + time dims), xarray automatically broadcasts the 1D latitude array
+    # across longitude and time, so every cell gets the correct area for its latitude row.
+    cell_area_da = compute_cell_area_km2(sf.latitude.values)
+
+    sf_volume = sf_yearly * cell_area_da / 1000.0     # Convert depth (m water equivalent) × area (km²) / 1000 → volume in km³ water equivalent
 
     print("  Building country mask…")
+    # regionmask assigns each (lat, lon) grid cell an integer country ID using Natural Earth country polygons at 1:110m resolution
     countries = regionmask.defined_regions.natural_earth_v5_0_0.countries_110
-    mask = countries.mask(sf.longitude, sf.latitude)
+    mask = countries.mask(sf.longitude, sf.latitude)   # Shape: (n_lat, n_lon), values = country index or NaN
 
     print("  Computing groupby (slow step)…")
     t_compute = time.time()
     try:
+        # Use Dask's ProgressBar if available for a visual progress indicator during compute()
         from dask.diagnostics import ProgressBar
         with ProgressBar():
-            result_sum  = sf_volume.groupby(mask).sum().compute()
-            result_mean = sf_yearly.groupby(mask).mean().compute()
+            # Total annual snowfall volume per country per year (km³)
+            result_sum = sf_volume.groupby(mask).sum().compute()
+
+            # Total land area per country according to the mask (km²).
+            # broadcast_like expands the 1D (latitude-only) cell_area_da into a full
+            # 2D (lat × lon) grid matching a single timestep, so the groupby over the
+            # 2D mask can correctly sum all cell areas belonging to each country.
+            # This is the denominator used to convert volume → area-weighted depth.
+            country_area = (
+                cell_area_da
+                .broadcast_like(sf_yearly.isel(valid_time=0))
+                .groupby(mask)
+                .sum()
+                .compute()
+            )
     except ImportError:
-        result_sum  = sf_volume.groupby(mask).sum().compute()
-        result_mean = sf_yearly.groupby(mask).mean().compute()
+        result_sum = sf_volume.groupby(mask).sum().compute()
+        country_area = (cell_area_da
+            .broadcast_like(sf_yearly.isel(valid_time=0))
+            .groupby(mask)
+            .sum()
+            .compute()
+        )
     print(f"  Groupby done in {time.time() - t_compute:.0f}s")
 
     print("  Building DataFrame...")
     country_ids = result_sum.coords["mask"].values.astype(int)
-    valid_ids   = country_ids[country_ids >= 0]
+    valid_ids   = country_ids[country_ids >= 0]    # Filter out -1 (ocean / unmasked cells)
     years       = result_sum.coords["valid_time"].dt.year.values
 
     records = []
     for idx in valid_ids:
         region = countries[int(idx)]
         iso3   = to_iso3(region.abbrev, region.name)
-        vols   = result_sum.sel(mask=idx).values
-        means  = result_mean.sel(mask=idx).values
-        for year, vol, mean in zip(years, vols, means):
-            records.append((
-                iso3,
-                region.name,
-                int(year),
-                float(vol)  if not np.isnan(vol)  else None,
-                float(mean) * 1000 if not np.isnan(mean) else None,
-            ))
+        vols   = result_sum.sel(mask=idx).values         # Annual km³ values across all years
+        area   = float(country_area.sel(mask=idx).values)  # Total masked land area in km²
+
+        for year, vol in zip(years, vols):
+            if not np.isnan(vol) and area > 0:
+                snowfall_km3 = float(vol)
+                # Area-weighted depth: convert km³ / km² → km, then × 1,000,000 → mm
+                snowfall_mm  = snowfall_km3 / area * 1_000_000
+            else:
+                snowfall_km3 = None
+                snowfall_mm  = None
+
+            records.append((iso3, region.name, int(year), snowfall_km3, snowfall_mm, ))
 
     df_snow = pd.DataFrame(records, columns=[
-        "iso3", "country_name", "year", "snowfall_km3", "snowfall_mm"
-    ])
+        "iso3", "country_name", "year", "snowfall_km3", "snowfall_mm"])
 
     save(df_snow, out_path)
     print(f"  Total time: {time.time() - t0:.0f}s")
@@ -260,8 +339,21 @@ def fetch_snowfall(refresh: bool = False) -> None:
 # ---------------------------------------------------------------------------
 # 4. Olympics — participants + complete medals table (0 for non-winners)
 # ---------------------------------------------------------------------------
-
 def fetch_olympics(refresh: bool = False) -> None:
+    """
+        Build Winter Olympics participant and medal tables from the Kaggle athlete dataset.
+
+        The raw Kaggle file has one row per athlete per event. We aggregate this into:
+          - A participants table: one row per (NOC, year), counting unique athletes
+          - A medals table:       one row per (NOC, year), summing gold/silver/bronze medals
+
+        Crucially, the medals table includes ALL countries that participated, even if they
+        won zero medals (they get 0s rather than being absent). This is important for
+        modelling — a missing row is ambiguous, a 0 is an explicit fact.
+
+        Data coverage: 1992–2014 (limited by the Kaggle dataset, which ends at 2014).
+        Wikipedia scraping (fetch_wikipedia) covers 2018 onwards.
+    """
     out_participants = RAW_DIR / "olympics_participants.csv"
     out_medals       = RAW_DIR / "olympics_medals.csv"
 
@@ -272,14 +364,15 @@ def fetch_olympics(refresh: bool = False) -> None:
     print("\n[OLYMPICS] Processing athlete_events.csv…")
     df = pd.read_csv(OLYMPICS_FILE)
 
-    # Filter winter only + year range — NO filtering on NOC, keep everything
+    # Filter winter only + year range — NO filtering on NOC, keep every country that has participated
     df = df[
         (df["Season"] == "Winter") &
         (df["Year"] >= START_YEAR) &
-        (df["Year"] <= 2026)
+        (df["Year"] <= 2022)
     ].copy()
 
-    # ── Participants: one row per (NOC, Year) — every country that showed up
+    # ── Participants table ──────────────────────────────────────────────────
+    # Participants: one row per (NOC, Year) — every country that showed up
     participants = (
         df.groupby(["NOC", "Year"])
         .agg(
@@ -289,22 +382,23 @@ def fetch_olympics(refresh: bool = False) -> None:
         .reset_index()
         .rename(columns={"NOC": "noc_code", "Year": "year"})
     )
-    participants["host_flag"] = participants.apply(
-        lambda r: 1 if OLYMPIC_HOSTS.get(r["year"]) == r["noc_code"] else 0, axis=1
-    )
 
     save(participants.sort_values(["year", "noc_code"]), out_participants)
     print(f"  {participants['noc_code'].nunique()} NOC codes · "
           f"years: {sorted(participants['year'].unique()).pop(0)}–"
           f"{sorted(participants['year'].unique()).pop()}")
 
-    # ── Medals: start from ALL (NOC, Year) combinations from participants
-    #    then left-join actual medal counts → countries with no medals get 0
+    # ── Medals table ────────────────────────────────────────────────────────
+    # Medals: start from ALL (NOC, Year) combinations from participants then left-join actual medal counts → countries with no medals get 0
+    # Step 1: Filter to rows where an athlete actually won a medal
     medal_df = df[df["Medal"].notna()].copy()
+
+    # Convert the Medal string into three binary indicator columns
     medal_df["gold"]   = (medal_df["Medal"] == "Gold").astype(int)
     medal_df["silver"] = (medal_df["Medal"] == "Silver").astype(int)
     medal_df["bronze"] = (medal_df["Medal"] == "Bronze").astype(int)
 
+    # Step 2: Sum medals per (NOC, year)
     medal_counts = (
         medal_df.groupby(["NOC", "Year"])
         .agg(gold=("gold", "sum"), silver=("silver", "sum"), bronze=("bronze", "sum"))
@@ -312,7 +406,8 @@ def fetch_olympics(refresh: bool = False) -> None:
         .rename(columns={"NOC": "noc_code", "Year": "year"})
     )
 
-    # Merge onto full participant list so every country appears
+    # Step 3: Left-join onto the full participant list.
+    # Countries with no medals will have NaN after the join → fill with 0. This ensures every participating country appears in the medals table.
     medals = participants[["noc_code", "year"]].merge(
         medal_counts,
         on=["noc_code", "year"],
@@ -323,109 +418,56 @@ def fetch_olympics(refresh: bool = False) -> None:
 
     save(medals.sort_values(["year", "noc_code"]), out_medals)
 
-
 # ---------------------------------------------------------------------------
 # 5. Wikipedia — medal tables + participants 2018, 2022, 2026
 # ---------------------------------------------------------------------------
-
-# English Wikipedia
+# Main Wikipedia page for each Winter Olympics (used to find the participant list)
 GAMES_URLS = {
     2018: "https://en.wikipedia.org/wiki/2018_Winter_Olympics",
     2022: "https://en.wikipedia.org/wiki/2022_Winter_Olympics",
-    2026: "https://en.wikipedia.org/wiki/2026_Winter_Olympics",
 }
-# 2018: medal table is on the main games page
-# 2022/2026: medal table has its own dedicated URL
+
+# Wikipedia medal table pages.
 MEDAL_URLS = {
     2018: "https://en.wikipedia.org/wiki/2018_Winter_Olympics_medal_table",
     2022: "https://en.wikipedia.org/wiki/2022_Winter_Olympics_medal_table",
-    2026: "https://en.wikipedia.org/wiki/2026_Winter_Olympics_medal_table",
-}
-WIKI_HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
-WIKI_NOC_TO_ISO3 = {
-    "NOR": "NOR", "GER": "DEU", "CAN": "CAN", "USA": "USA", "NED": "NLD",
-    "SWE": "SWE", "KOR": "KOR", "SUI": "CHE", "FRA": "FRA", "AUT": "AUT",
-    "JPN": "JPN", "ITA": "ITA", "OAR": "RUS", "ROC": "RUS", "AIN": "RUS",
-    "CZE": "CZE", "BLR": "BLR", "CHN": "CHN", "SVK": "SVK", "FIN": "FIN",
-    "GBR": "GBR", "POL": "POL", "HUN": "HUN", "UKR": "UKR", "AUS": "AUS",
-    "SLO": "SVN", "BEL": "BEL", "NZL": "NZL", "ESP": "ESP", "KAZ": "KAZ",
-    "LAT": "LVA", "LIE": "LIE", "EST": "EST", "GEO": "GEO", "BUL": "BGR",
-    "DEN": "DNK", "BRA": "BRA", "ARM": "ARM", "ROU": "ROU", "CRO": "HRV",
-    "SRB": "SRB", "MEX": "MEX", "NIG": "NGA", "GRE": "GRC", "ISL": "ISL",
-    "MKD": "MKD", "MNE": "MNE", "POR": "PRT", "RSA": "ZAF", "TUR": "TUR",
-    "LTU": "LTU",
 }
 
+# Mimic a real browser's User-Agent header so Wikipedia doesn't block the request
+WIKI_HEADERS = {"User-Agent": "olympics-snowfall-research-bot/1.0 (student project; contact: your@email.com)"}
 
 def _fetch_page(url: str) -> BeautifulSoup:
+    """
+        Download a Wikipedia page and parse it into a BeautifulSoup object.
+
+        Includes a 1-second sleep after each request to be a polite web scraper and avoid triggering Wikipedia's rate limiting.
+    """
     resp = requests.get(url, headers=WIKI_HEADERS, timeout=15)
     resp.raise_for_status()
-    time.sleep(1)
+    time.sleep(5)  # Polite delay — avoids hammering Wikipedia's servers
     return BeautifulSoup(resp.text, "html.parser")
 
-
-
-def _country_name_to_noc(name: str) -> str | None:
-    """Map English country name to NOC code."""
-    ENGLISH_NAME_TO_NOC = {
-        "Albania": "ALB", "Andorra": "AND", "Argentina": "ARG",
-        "Armenia": "ARM", "Australia": "AUS", "Austria": "AUT",
-        "Azerbaijan": "AZE", "Belarus": "BLR", "Belgium": "BEL",
-        "Bermuda": "BER", "Bolivia": "BOL", "Bosnia and Herzegovina": "BIH",
-        "Brazil": "BRA", "Bulgaria": "BUL", "Canada": "CAN",
-        "Chile": "CHI", "China": "CHN", "Chinese Taipei": "TPE",
-        "Colombia": "COL", "Croatia": "CRO", "Cyprus": "CYP",
-        "Czech Republic": "CZE", "Czechia": "CZE", "Denmark": "DEN",
-        "Ecuador": "ECU", "Eritrea": "ERI", "Estonia": "EST",
-        "Finland": "FIN", "France": "FRA", "Georgia": "GEO",
-        "Germany": "GER", "Ghana": "GHA", "Great Britain": "GBR",
-        "Greece": "GRE", "Hong Kong": "HKG", "Hungary": "HUN",
-        "Iceland": "ISL", "India": "IND", "Iran": "IRI",
-        "Ireland": "IRL", "Israel": "ISR", "Italy": "ITA",
-        "Jamaica": "JAM", "Japan": "JPN", "Kazakhstan": "KAZ",
-        "Kenya": "KEN", "Kosovo": "KOS", "Kyrgyzstan": "KGZ",
-        "Latvia": "LAT", "Lebanon": "LIB", "Liechtenstein": "LIE",
-        "Lithuania": "LTU", "Luxembourg": "LUX", "North Macedonia": "MKD",
-        "Macedonia": "MKD", "Madagascar": "MAD", "Malaysia": "MAS",
-        "Malta": "MLT", "Mexico": "MEX", "Moldova": "MDA",
-        "Monaco": "MON", "Mongolia": "MGL", "Montenegro": "MNE",
-        "Morocco": "MAR", "Netherlands": "NED", "New Zealand": "NZL",
-        "Nigeria": "NGR", "North Korea": "PRK", "Norway": "NOR",
-        "Olympic Athletes from Russia": "OAR", "ROC": "ROC",
-        "Individual Neutral Athletes": "AIN", "Pakistan": "PAK",
-        "Philippines": "PHI", "Poland": "POL", "Portugal": "POR",
-        "Puerto Rico": "PUR", "Romania": "ROU", "Russia": "RUS",
-        "San Marino": "SMR", "Serbia": "SRB", "Singapore": "SGP",
-        "Slovakia": "SVK", "Slovenia": "SLO", "South Africa": "RSA",
-        "South Korea": "KOR", "Korea": "KOR", "Spain": "ESP",
-        "Sweden": "SWE", "Switzerland": "SUI", "Thailand": "THA",
-        "Timor-Leste": "TLS", "Togo": "TOG", "Tonga": "TGA",
-        "Turkey": "TUR", "Ukraine": "UKR", "United States": "USA",
-        "Uzbekistan": "UZB", "Tajikistan": "TJK", "Peru": "PER",
-        "American Samoa": "ASA", "Virgin Islands": "ISV",
-        "United Arab Emirates": "UAE", "Uruguay": "URU",
-        "Venezuela": "VEN", "Zimbabwe": "ZIM", "Nepal": "NEP",
-        "Paraguay": "PAR", "British Virgin Islands": "IVB",
-        "Cayman Islands": "CAY", "Dominica": "DMA", "Indonesia": "INA",
-        "Guatemala": "GUA", "Haiti": "HAI", "El Salvador": "ESA",
-        "Trinidad and Tobago": "TTO", "Saudi Arabia": "KSA",
-        "Benin": "BEN", "Guinea-Bissau": "GBS", "Senegal": "SEN",
-        "Tunisia": "TUN", "Ethiopia": "ETH", "Tanzania": "TAN",
-        "Uganda": "UGA", "Namibia": "NAM", "Cameroon": "CMR",
-        "Egypt": "EGY", "Algeria": "ALG", "Fiji": "FIJ",
-        "Samoa": "SAM", "Guam": "GUM", "Kosovo": "KOS",
-        "Israel": "ISR", "Liechtenstein": "LIE", "Jamaica": "JAM",
-    }
-    return ENGLISH_NAME_TO_NOC.get(name)
-
 def _scrape_medal_table(year: int, soup: BeautifulSoup) -> pd.DataFrame:
+    """"
+    Extract the medal table from a parsed Wikipedia page.
+
+    Wikipedia medal tables are HTML <table> elements with class "wikitable".
+    We identify the correct table by looking for one whose first row has headers containing "Gold", "Silver", "Bronze", and "Total".
+
+    Each data row looks like:
+      Rank | Country (hyperlink) | Gold | Silver | Bronze | Total
+
+    The country name is extracted from the first hyperlink in the row (the flag image link or country name link).
+    Medal counts are extracted by parsing all integer-valued cells, then reading them from the end of
+    the row (to handle variable numbers of leading columns like rank).
+
+    Rows are skipped if:
+      - They have fewer than 4 cells (header/footer rows)
+      - The country name can't be mapped to a known NOC code
+      - total_medals > 200 (likely a "Totals" summary row, not a country)
     """
-    Parse the medal table — first wikitable with Gold/Silver/Bronze headers.
-    Rows: Rank | Country (link) | Gold | Silver | Bronze | Total
-    """
-    # Find the medal table: first row must have Rank/NOC + Gold/Silver/Bronze/Total
     table = None
-    for t in soup.find_all("table", class_="wikitable"):
+    for t in soup.find_all("table", class_="wikitable"):     # Find the first wikitable whose header row contains all four medal columns
         first_row = t.find("tr")
         if not first_row:
             continue
@@ -433,14 +475,14 @@ def _scrape_medal_table(year: int, soup: BeautifulSoup) -> pd.DataFrame:
         if "Gold" in hdrs and "Silver" in hdrs and "Bronze" in hdrs and "Total" in hdrs:
             table = t
             break
-    if table is None:
+    if table is None: # Page had no medal table — return empty result
         return pd.DataFrame()
 
     rows = []
     for tr in table.find_all("tr"):
         cells = tr.find_all(["td", "th"])
         if len(cells) < 4:
-            continue
+            continue # Page had no medal table — return empty result
 
         # Country name from the first anchor tag in the row
         country_name = next(
@@ -452,46 +494,48 @@ def _scrape_medal_table(year: int, soup: BeautifulSoup) -> pd.DataFrame:
         if not country_name:
             continue
 
-        noc = _country_name_to_noc(country_name)
-        if not noc:
+        noc = ENGLISH_NAME_TO_NOC.get(country_name)
+        if not noc: # Skip if we can't map the name to a known NOC code
             continue
 
         numbers = []
         for cell in cells:
             try:
                 numbers.append(int(cell.get_text(strip=True).replace("*","").replace("\xa0","")))
-            except ValueError:
+            except ValueError: # Skip non-numeric cells (country name, rank with letters, etc.)
                 pass
 
         if len(numbers) < 3:
-            continue
+            continue # Need at least gold, silver, bronze
 
+        # Read medal counts from the end of the numbers list. Wikipedia rows end with: [..., Gold, Silver, Bronze, Total]
         gold, silver, bronze = numbers[-4], numbers[-3], numbers[-2]
         total = numbers[-1] if len(numbers) >= 4 else gold + silver + bronze
 
         if total > 200:
             continue
 
-        rows.append({
-            "noc_code":     noc,
-            "country_name": country_name,
-            "year":         year,
-            "gold":         gold,
-            "silver":       silver,
-            "bronze":       bronze,
-            "total_medals": total,
-            "iso3":         WIKI_NOC_TO_ISO3.get(noc, noc),
-            "host_flag":    1 if noc == OLYMPIC_HOSTS.get(year, "") else 0,
-        })
+        rows.append({"noc_code": noc, "country_name": country_name, "year": year, "gold":gold,
+            "silver": silver, "bronze": bronze, "total_medals": total})
 
     return pd.DataFrame(rows)
 
 
 def _scrape_participants(year: int, soup: BeautifulSoup, medal_nocs: set) -> pd.DataFrame:
-    """
-    Parse the participant list from the "Participating National Olympic Committees"
-    section. Entries look like: Albania (2), Andorra (5), ...
-    We find the heading then collect all li items until the next heading.
+    """"
+    Parse the participant list from a Wikipedia Winter Olympics page.
+
+    Wikipedia lists participating nations in a section headed something like
+    "Participating National Olympic Committees". Each entry looks like:
+      Albania (2), Andorra (5), Australia (40), ...
+    where the number in parentheses is the count of athletes.
+
+    Strategy:
+      1. Find the "Participating" section heading (h2 or h3)
+      2. Collect all <li> elements that follow it until the next heading
+      3. Parse each item with a regex to extract country name and athlete count
+      4. Always include medal-winning countries even if they're not in the list
+         (as a safety net for scraping misses)
     """
     import re
 
@@ -504,21 +548,26 @@ def _scrape_participants(year: int, soup: BeautifulSoup, medal_nocs: set) -> pd.
 
     found = {}  # noc_code -> {name, n_athletes}
 
-    if heading:
+    if heading:         # Walk forward through the DOM from the heading, collecting <li> items.
+        # Stop when we hit the next section heading (h2 or h3).
         for el in heading.find_all_next(["li", "h2", "h3"]):
             if el.name in ["h2", "h3"]:
-                break
+                break  # Reached the next section — stop collecting
+
             text = el.get_text(strip=True)
-            m = re.match(r"^(.+?)\s*\((\d+)\)", text)
+            m = re.match(r"^(.+?)\s*\((\d+)\)", text)  # Match pattern: "Country Name (NumberOfAthletes)" with optional trailing symbols
             if not m or not (1 <= int(m.group(2)) <= 500):
                 continue
+
+            # Strip footnote markers (*, †, [) that sometimes appear after the country name
             name = m.group(1).strip().rstrip("*†[").strip()
             n    = int(m.group(2))
-            noc  = _country_name_to_noc(name)
+            noc  = ENGLISH_NAME_TO_NOC.get(name)
             if noc:
                 found[noc] = {"name": name, "n_athletes": n}
 
-    # Always include medal countries
+    # Safety net: ensure every medal-winning country appears in the participant list.
+    # If Wikipedia's participant section is missing or malformed, we'd otherwise lose medal-winning countries from the output entirely.
     for noc in medal_nocs:
         if noc not in found:
             found[noc] = {"name": noc, "n_athletes": 0}
@@ -528,20 +577,28 @@ def _scrape_participants(year: int, soup: BeautifulSoup, medal_nocs: set) -> pd.
         "year":       year,
         "team_name":  info["name"],
         "n_athletes": info["n_athletes"],
-        "iso3":       WIKI_NOC_TO_ISO3.get(noc, noc),
-        "host_flag":  1 if noc == OLYMPIC_HOSTS.get(year, "") else 0,
     } for noc, info in sorted(found.items())])
 
 
 def fetch_wikipedia(refresh: bool = False) -> None:
+    """
+        Scrape Winter Olympics medal tables and participant lists from Wikipedia (2018–2026).
+
+        This covers the years not included in the Kaggle dataset (which ends at 2014).
+        For each year we fetch two pages: the main games page (for participants) and
+        the medal table page (for medal counts). For 2018, both are on the same page.
+
+        After scraping, we expand the medal table to include ALL participating nations
+        (non-medal nations get 0s) — matching the structure of the Kaggle-based data.
+    """
     out_medals = RAW_DIR / "olympics_medals_wikipedia.csv"
     out_parts  = RAW_DIR / "olympics_participants_wikipedia.csv"
     if out_medals.exists() and out_parts.exists() and not refresh:
         print("\n[WIKIPEDIA] Using cached data.")
         return
-    print("\n[WIKIPEDIA] Scraping 2018 / 2022 / 2026...")
+    print("\n[WIKIPEDIA] Scraping 2018 / 2022")
     all_medals, all_parts = [], []
-    for year in [2018, 2022, 2026]:
+    for year in [2018, 2022]:
 
         # ── Medal table ──
         print(f"\n  [{year}] Medal table ({MEDAL_URLS[year].split('/')[-1]})...")
@@ -573,27 +630,30 @@ def fetch_wikipedia(refresh: bool = False) -> None:
         except Exception as e:
             print(f"    [ERROR] participants: {e}")
 
+    # ── Save participants ──
     if all_parts:
         parts = pd.concat(all_parts, ignore_index=True).drop_duplicates(subset=["noc_code", "year"])
         save(parts, out_parts)
     else:
         parts = pd.DataFrame()
 
+    # ── Save medals (expanded to all participants) ──
     if all_medals:
         medals = pd.concat(all_medals, ignore_index=True)
 
         # Expand to ALL participants — non-winners get 0 medals
         if not parts.empty:
-            medals = parts[["noc_code", "year", "iso3"]].merge(
-                medals.drop(columns=["iso3"], errors="ignore"),
+            medals = parts[["noc_code", "year"]].merge(
+                medals,
                 on=["noc_code", "year"],
                 how="left",
             )
             medals[["gold", "silver", "bronze", "total_medals"]] = (
                 medals[["gold", "silver", "bronze", "total_medals"]].fillna(0).astype(int)
             )
+
+            # Fill missing country names (non-medal countries) with their NOC code as a fallback
             medals["country_name"] = medals["country_name"].fillna(medals["noc_code"])
-            medals["host_flag"]    = medals["host_flag"].fillna(0).astype(int)
 
         save(medals, out_medals)
 
@@ -603,13 +663,26 @@ def fetch_wikipedia(refresh: bool = False) -> None:
 # ---------------------------------------------------------------------------
 
 def main():
+    """
+        Parse command-line arguments and run each data fetch step in order.
+
+        Steps run in this order:
+          1. GDP           (fast — World Bank API, ~30s)
+          2. Population    (fast — World Bank API, ~15s)
+          3. Olympics      (fast — local CSV, <5s)
+          4. Wikipedia     (moderate — 3 web pages, ~10s)
+          5. Snowfall      (slow — ERA5 NetCDF processing, 5–20 min)
+
+        Snowfall is last because it's by far the slowest step.
+        Each step is skippable independently via flags.
+    """
     p = argparse.ArgumentParser(description="Fetch all raw data — no filtering")
     p.add_argument("--refresh",   action="store_true", help="Ignore cache, re-fetch everything")
     p.add_argument("--skip-snow", action="store_true", help="Skip the slow ERA5 snowfall step")
     p.add_argument("--skip-wiki", action="store_true", help="Skip Wikipedia scraping")
     args = p.parse_args()
 
-    RAW_DIR.mkdir(parents=True, exist_ok=True)
+    RAW_DIR.mkdir(parents=True, exist_ok=True)     # Create the output directory if it doesn't already exist
 
     fetch_gdp(refresh=args.refresh)
     fetch_population(refresh=args.refresh)
@@ -630,8 +703,8 @@ def main():
     print("  worldbank_population.csv            — population_total")
     print("  olympics_participants.csv           — Kaggle: 1992-2014")
     print("  olympics_medals.csv                 — Kaggle: 1992-2014")
-    print("  olympics_participants_wikipedia.csv — Wikipedia: 2018-2026")
-    print("  olympics_medals_wikipedia.csv       — Wikipedia: 2018-2026")
+    print("  olympics_participants_wikipedia.csv — Wikipedia: 2018-2014")
+    print("  olympics_medals_wikipedia.csv       — Wikipedia: 2018-2022")
     print("  snowfall_raw.csv                    — all countries, snowfall per year")
 
 if __name__ == "__main__":

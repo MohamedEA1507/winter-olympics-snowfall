@@ -1,19 +1,11 @@
 """
-=============================================================================
-clean.py  —  Data Cleaning & Integration Pipeline
-Winter Olympics & Snowfall Project
-Data Engineering 2025–2026  |  University of Antwerp
-=============================================================================
-
 PURPOSE
 -------
-This script implements the CLEAN and INTEGRATE stages of the project's
-batch ELT pipeline (as defined in the project blueprint, Section 3).
+This script implements the CLEAN and INTEGRATE stages of the project's data pipeline.
 
 In a data engineering pipeline, raw data should never be modified.
-Instead, this script reads from data/raw/ and writes clean, validated,
-integrated data to data/clean/. This separation is a core principle of
-data governance (Lecture 2): raw data is the immutable source of truth,
+Instead, this script reads from data/raw/ and writes clean, validated, integrated data to data/clean/.
+This separation is a core principle of data governance (Lecture 2): raw data is the immutable source of truth,
 cleaned data is derived and always reproducible.
 
 PIPELINE STAGE OVERVIEW
@@ -48,14 +40,6 @@ Individual cleaned files (one per source):
 Master analytical table:
   data/clean/master.csv      — all four sources merged, with engineered
                                 features ready for modelling in analyse.py
-
-USAGE
------
-  python clean.py
-
-DEPENDENCIES
-------------
-  pip install pandas numpy
 """
 
 # =============================================================================
@@ -73,24 +57,21 @@ import pandas as pd
 RAW_DIR   = Path("data/raw")
 CLEAN_DIR = Path("data/clean")
 
-# Olympic years covered by this project.
-# Starting at 1992 avoids most Cold-War-era NOC complexity:
+# Olympic years covered by this project. Starting at 1992 avoids most Cold-War-era NOC complexity:
 # no USSR (dissolved 1991), no East/West Germany (reunified 1990).
 # The 1992 Unified Team (EUN) still needs mapping — handled below.
-OLYMPIC_YEARS = [1992, 1994, 1998, 2002, 2006, 2010, 2014, 2018, 2022, 2026]
+OLYMPIC_YEARS = [1992, 1994, 1998, 2002, 2006, 2010, 2014, 2018, 2022]
 
 # =============================================================================
 # 2. REFERENCE DATA: COUNTRY IDENTIFIER CROSSWALKS
 # =============================================================================
 
 # --- World Bank aggregate row filter -------------------------------------------
-# The World Bank API returns aggregate entries alongside country rows —
-# things like "World", "High income", "OECD members", "Euro area".
+# The World Bank API returns aggregate entries alongside country rows — things like "World", "High income", "OECD members", "Euro area".
 # These are NOT countries and must be excluded before any analysis.
 # We identify them by their ISO3 prefix (aggregates use codes starting
-# with X or Z, which are not assigned to any real country by ISO 3166)
-# and by keywords in their name.
-#
+# with X or Z, which are not assigned to any real country by ISO 3166) and by keywords in their name.
+
 # This is an example of data quality practice from Lecture 2:
 # knowing where data physically comes from and what artefacts the source
 # introduces. The World Bank API explicitly mixes country and aggregate
@@ -120,11 +101,9 @@ AGGREGATE_NAME_KEYWORDS = {
 }
 
 # --- NOC → ISO3 crosswalk -------------------------------------------------------
-# Olympic datasets use IOC National Olympic Committee (NOC) codes, which
-# differ from ISO 3166-1 alpha-3 codes used by the World Bank and ERA5.
-# Entity resolution — mapping between identifier systems — is one of
-# the classic hard problems in data engineering (blueprint Section 9).
-#
+# Olympic datasets use IOC National Olympic Committee (NOC) codes, which differ from ISO 3166-1 alpha-3 codes used by the World Bank and ERA5.
+# Entity resolution — mapping between identifier systems — is one of the classic hard problems in data engineering (blueprint Section 9).
+
 # Two categories of mapping:
 #   1. Simple substitutions: IOC chose a different 3-letter code than ISO
 #      (e.g. GER→DEU, NED→NLD, SUI→CHE)
@@ -381,7 +360,7 @@ def clean_olympics() -> pd.DataFrame:
         The left join keeps all participants; non-winners get medal = 0.
 
     Output schema:
-        iso3, noc_code, team_name, year, n_athletes, host_flag,
+        iso3, noc_code, team_name, year, n_athletes,
         gold, silver, bronze, total_medals
     """
     print("\n" + "="*60)
@@ -418,7 +397,6 @@ def clean_olympics() -> pd.DataFrame:
             noc_code  = ("noc_code",   "first"),   # keep one representative NOC
             team_name = ("team_name",  "first"),
             n_athletes= ("n_athletes", "sum"),      # sum athletes across merged teams
-            host_flag = ("host_flag",  "max"),      # 1 if any of the teams was host
         )
     )
     medals = (
@@ -446,8 +424,7 @@ def clean_olympics() -> pd.DataFrame:
     df = df.sort_values(["year", "iso3"]).reset_index(drop=True)
     df = df[[
         "iso3", "noc_code", "team_name", "year",
-        "n_athletes", "host_flag",
-        "gold", "silver", "bronze", "total_medals",
+        "n_athletes", "gold", "silver", "bronze", "total_medals",
     ]]
 
     missing_report(df, "olympics")
@@ -735,7 +712,6 @@ def build_master(
         team_name            — Team name as used in competition
         year                 — Olympic year (1992, 1994, ..., 2026)
         n_athletes           — number of athletes sent by this country
-        host_flag            — 1 if this country hosted the Games that year
         gold/silver/bronze   — medal counts by type
         total_medals         — sum of gold + silver + bronze
         snowfall_total       — total snowfall volume in km³ (size-dependent)
@@ -788,8 +764,7 @@ def build_master(
     # ── Select and order core columns ──────────────────────────────────────
     core_cols = [
         "country", "noc_code", "team_name", "year",
-        "n_athletes", "host_flag",
-        "gold", "silver", "bronze", "total_medals",
+        "n_athletes", "gold", "silver", "bronze", "total_medals",
         "snowfall_total", "snowfall_mean_gridcell",
         "gdp", "gdp_per_capita", "population",
     ]

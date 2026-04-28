@@ -1,806 +1,713 @@
-iso3,noc_code,team_name,year,n_athletes,host_flag,gold,silver,bronze,total_medals
-AHO,AHO,Netherlands Antilles,1992,2,0,0,0,0,0
-AND,AND,Andorra,1992,5,0,0,0,0,0
-ARG,ARG,Argentina,1992,20,0,0,0,0,0
-AUS,AUS,Australia,1992,22,0,0,0,0,0
-AUT,AUT,Austria,1992,58,0,9,10,10,29
-BEL,BEL,Belgium,1992,5,0,0,0,0,0
-BER,BER,Bermuda,1992,1,0,0,0,0,0
-BGR,BUL,Bulgaria,1992,30,0,0,0,0,0
-BOL,BOL,Bolivia,1992,5,0,0,0,0,0
-BRA,BRA,Brazil,1992,7,0,0,0,0,0
-CAN,CAN,Canada,1992,108,0,5,28,3,36
-CHE,SUI,Switzerland,1992,74,0,2,0,5,7
-CHL,CHI,Chile,1992,5,0,0,0,0,0
-CHN,CHN,China,1992,32,0,0,3,0,3
-CRI,CRC,Costa Rica,1992,4,0,0,0,0,0
-CYP,CYP,Cyprus,1992,4,0,0,0,0,0
-CZE,TCH,Czechoslovakia,1992,74,0,0,0,27,27
-DEU,GER,Germany,1992,111,0,14,17,7,38
-DNK,DEN,Denmark,1992,6,0,0,0,0,0
-DZA,ALG,Algeria,1992,4,0,0,0,0,0
-ESP,ESP,Spain,1992,17,0,0,0,1,1
-EST,EST,Estonia,1992,19,0,0,0,0,0
-FIN,FIN,Finland,1992,62,0,6,1,6,13
-FRA,FRA,France,1992,109,1,5,6,1,12
-GBR,GBR,Great Britain,1992,49,0,0,0,0,0
-GRC,GRE,Greece,1992,8,0,0,0,0,0
-HND,HON,Honduras,1992,1,0,0,0,0,0
-HRV,CRO,Croatia,1992,4,0,0,0,0,0
-HUN,HUN,Hungary,1992,24,0,0,0,0,0
-IND,IND,India,1992,2,0,0,0,0,0
-IRL,IRL,Ireland-2,1992,4,0,0,0,0,0
-ISL,ISL,Iceland,1992,5,0,0,0,0,0
-ITA,ITA,Italy,1992,107,0,4,9,8,21
-JAM,JAM,Jamaica,1992,5,0,0,0,0,0
-JPN,JPN,Japan,1992,60,0,3,2,7,12
-KOR,KOR,South Korea,1992,23,0,5,1,1,7
-LIB,LIB,Lebanon,1992,4,0,0,0,0,0
-LIE,LIE,Liechtenstein,1992,7,0,0,0,0,0
-LTU,LTU,Lithuania,1992,6,0,0,0,0,0
-LUX,LUX,Luxembourg,1992,1,0,0,2,0,2
-LVA,LAT,Latvia,1992,23,0,0,0,0,0
-MAR,MAR,Morocco,1992,12,0,0,0,0,0
-MEX,MEX,Mexico,1992,20,0,0,0,0,0
-MNG,MGL,Mongolia,1992,4,0,0,0,0,0
-MON,MON,Monaco,1992,5,0,0,0,0,0
-NLD,NED,Netherlands,1992,19,0,1,1,2,4
-NOR,NOR,Norway,1992,79,0,9,10,5,24
-NZL,NZL,New Zealand,1992,6,0,0,1,0,1
-PHL,PHI,Philippines,1992,1,0,0,0,0,0
-POL,POL,Poland,1992,53,0,0,0,0,0
-PRI,PUR,Puerto Rico-2,1992,6,0,0,0,0,0
-PRK,PRK,North Korea,1992,20,0,0,0,1,1
-ROU,ROU,Romania,1992,23,0,0,0,0,0
-RUS,EUN,Unified Team,1992,129,0,35,10,14,59
-SEN,SEN,Senegal,1992,2,0,0,0,0,0
-SMR,SMR,San Marino,1992,3,0,0,0,0,0
-SRB,YUG,Yugoslavia,1992,25,0,0,0,0,0
-SVN,SLO,Slovenia,1992,27,0,0,0,0,0
-SWE,SWE,Sweden,1992,73,0,1,0,6,7
-SWZ,SWZ,Swaziland,1992,1,0,0,0,0,0
-TUR,TUR,Turkey,1992,8,0,0,0,0,0
-TWN,TPE,Chinese Taipei,1992,8,0,0,0,0,0
-USA,USA,United States,1992,148,0,5,7,2,14
-VIR,ISV,United States Virgin Islands,1992,12,0,0,0,0,0
-AND,AND,Andorra,1994,6,0,0,0,0,0
-ARG,ARG,Argentina,1994,10,0,0,0,0,0
-ARM,ARM,Armenia,1994,2,0,0,0,0,0
-ASM,ASA,American Samoa,1994,2,0,0,0,0,0
-AUS,AUS,Australia,1994,25,0,0,0,4,4
-AUT,AUT,Austria,1994,80,0,2,3,7,12
-BEL,BEL,Belgium,1994,5,0,0,0,0,0
-BER,BER,Bermuda,1994,1,0,0,0,0,0
-BGR,BUL,Bulgaria,1994,17,0,0,0,0,0
-BIH,BIH,Bosnia and Herzegovina,1994,10,0,0,0,0,0
-BLR,BLR,Belarus,1994,33,0,0,2,0,2
-BRA,BRA,Brazil,1994,1,0,0,0,0,0
-CAN,CAN,Canada,1994,95,0,3,29,5,37
-CHE,SUI,Switzerland,1994,59,0,4,8,4,16
-CHL,CHI,Chile,1994,3,0,0,0,0,0
-CHN,CHN,China,1994,24,0,0,1,2,3
-CYP,CYP,Cyprus,1994,1,0,0,0,0,0
-CZE,CZE,Czech Republic,1994,63,0,0,0,0,0
-DEU,GER,Germany,1994,112,0,18,10,12,40
-DNK,DEN,Denmark,1994,4,0,0,0,0,0
-ESP,ESP,Spain,1994,13,0,0,0,0,0
-EST,EST,Estonia,1994,26,0,0,0,0,0
-FIJ,FIJ,Fiji,1994,1,0,0,0,0,0
-FIN,FIN,Finland,1994,61,0,0,1,29,30
-FRA,FRA,France,1994,98,0,0,1,10,11
-GBR,GBR,Great Britain,1994,32,0,0,0,3,3
-GEO,GEO,Georgia,1994,5,0,0,0,0,0
-GRC,GRE,Greece,1994,9,0,0,0,0,0
-HRV,CRO,Croatia,1994,3,0,0,0,0,0
-HUN,HUN,Hungary,1994,16,0,0,0,0,0
-ISL,ISL,Iceland,1994,5,0,0,0,0,0
-ISR,ISR,Israel,1994,1,0,0,0,0,0
-ITA,ITA,Italy,1994,104,0,14,6,12,32
-JAM,JAM,Jamaica,1994,4,0,0,0,0,0
-JPN,JPN,Japan,1994,59,0,3,5,2,10
-KAZ,KAZ,Kazakhstan,1994,29,0,1,2,0,3
-KGZ,KGZ,Kyrgyzstan,1994,1,0,0,0,0,0
-KOR,KOR,South Korea,1994,21,0,7,1,1,9
-LIE,LIE,Liechtenstein,1994,10,0,0,0,0,0
-LTU,LTU,Lithuania,1994,6,0,0,0,0,0
-LUX,LUX,Luxembourg,1994,1,0,0,0,0,0
-LVA,LAT,Latvia,1994,27,0,0,0,0,0
-MDA,MDA,Moldova,1994,2,0,0,0,0,0
-MEX,MEX,Mexico,1994,1,0,0,0,0,0
-MNG,MGL,Mongolia,1994,1,0,0,0,0,0
-MON,MON,Monaco,1994,5,0,0,0,0,0
-NLD,NED,Netherlands,1994,21,0,0,1,3,4
-NOR,NOR,Norway,1994,87,1,8,17,5,30
-NZL,NZL,New Zealand,1994,7,0,0,0,0,0
-POL,POL,Poland,1994,28,0,0,0,0,0
-PRI,PUR,Puerto Rico,1994,5,0,0,0,0,0
-PRT,POR,Portugal,1994,1,0,0,0,0,0
-ROU,ROU,Romania,1994,23,0,0,0,0,0
-RUS,RUS,Russia,1994,113,0,19,13,4,36
-SEN,SEN,Senegal,1994,1,0,0,0,0,0
-SMR,SMR,San Marino,1994,3,0,0,0,0,0
-SVK,SVK,Slovakia,1994,42,0,0,0,0,0
-SVN,SLO,Slovenia,1994,22,0,0,0,3,3
-SWE,SWE,Sweden,1994,84,0,23,1,0,24
-TTO,TTO,Trinidad and Tobago,1994,2,0,0,0,0,0
-TUR,TUR,Turkey,1994,1,0,0,0,0,0
-TWN,TPE,Chinese Taipei,1994,2,0,0,0,0,0
-UKR,UKR,Ukraine,1994,37,0,1,0,1,2
-USA,USA,United States,1994,148,0,6,8,5,19
-UZB,UZB,Uzbekistan,1994,7,0,1,0,0,1
-VIR,ISV,United States Virgin Islands,1994,8,0,0,0,0,0
-ZAF,RSA,South Africa,1994,2,0,0,0,0,0
-AND,AND,Andorra,1998,3,0,0,0,0,0
-ARG,ARG,Argentina,1998,2,0,0,0,0,0
-ARM,ARM,Armenia,1998,7,0,0,0,0,0
-AUS,AUS,Australia,1998,23,0,0,0,1,1
-AUT,AUT,Austria,1998,96,0,3,5,12,20
-AZE,AZE,Azerbaijan,1998,4,0,0,0,0,0
-BEL,BEL,Belgium,1998,1,0,0,0,1,1
-BER,BER,Bermuda,1998,1,0,0,0,0,0
-BGR,BUL,Bulgaria,1998,19,0,1,0,0,1
-BIH,BIH,Bosnia and Herzegovina,1998,8,0,0,0,0,0
-BLR,BLR,Belarus,1998,59,0,0,0,2,2
-BRA,BRA,Brazil,1998,1,0,0,0,0,0
-CAN,CAN,Canada,1998,144,0,14,28,7,49
-CHE,SUI,Switzerland,1998,69,0,6,5,3,14
-CHL,CHI,Chile,1998,3,0,0,0,0,0
-CHN,CHN,China,1998,56,0,0,9,5,14
-CYP,CYP,Cyprus,1998,1,0,0,0,0,0
-CZE,CZE,Czech Republic,1998,61,0,21,1,1,23
-DEU,GER,Germany,1998,125,0,22,12,10,44
-DNK,DEN,Denmark,1998,12,0,0,5,0,5
-ESP,ESP,Spain,1998,12,0,0,0,0,0
-EST,EST,Estonia,1998,20,0,0,0,0,0
-FIN,FIN,Finland,1998,85,0,2,7,49,58
-FRA,FRA,France,1998,106,0,2,1,12,15
-GBR,GBR,Great Britain,1998,34,0,0,0,4,4
-GEO,GEO,Georgia,1998,4,0,0,0,0,0
-GRC,GRE,Greece,1998,13,0,0,0,0,0
-HRV,CRO,Croatia,1998,6,0,0,0,0,0
-HUN,HUN,Hungary,1998,17,0,0,0,0,0
-IND,IND,India,1998,1,0,0,0,0,0
-IRL,IRL,Ireland,1998,6,0,0,0,0,0
-IRN,IRI,Iran,1998,1,0,0,0,0,0
-ISL,ISL,Iceland,1998,7,0,0,0,0,0
-ISR,ISR,Israel,1998,3,0,0,0,0,0
-ITA,ITA,Italy,1998,113,0,3,9,5,17
-JAM,JAM,Jamaica,1998,6,0,0,0,0,0
-JPN,JPN,Japan,1998,156,1,8,1,4,13
-KAZ,KAZ,Kazakhstan,1998,60,0,0,0,2,2
-KEN,KEN,Kenya,1998,1,0,0,0,0,0
-KGZ,KGZ,Kyrgyzstan,1998,1,0,0,0,0,0
-KOR,KOR,South Korea,1998,37,0,6,4,2,12
-LIE,LIE,Liechtenstein,1998,8,0,0,0,0,0
-LTU,LTU,Lithuania,1998,7,0,0,0,0,0
-LUX,LUX,Luxembourg,1998,1,0,0,0,0,0
-LVA,LAT,Latvia,1998,29,0,0,0,0,0
-MDA,MDA,Moldova,1998,2,0,0,0,0,0
-MKD,MKD,Macedonia,1998,3,0,0,0,0,0
-MNG,MGL,Mongolia,1998,3,0,0,0,0,0
-MON,MON,Monaco,1998,4,0,0,0,0,0
-NLD,NED,Netherlands,1998,22,0,5,4,2,11
-NOR,NOR,Norway,1998,75,0,13,15,12,40
-NZL,NZL,New Zealand,1998,8,0,0,0,0,0
-POL,POL,Poland,1998,39,0,0,0,0,0
-PRI,PUR,Puerto Rico,1998,6,0,0,0,0,0
-PRK,PRK,North Korea,1998,8,0,0,0,0,0
-PRT,POR,Portugal,1998,2,0,0,0,0,0
-ROU,ROU,Romania,1998,16,0,0,0,0,0
-RUS,RUS,Russia,1998,122,0,14,32,6,52
-SRB,SCG,Serbia and Montenegro,1998,2,0,0,0,0,0
-SVK,SVK,Slovakia,1998,37,0,0,0,0,0
-SVN,SLO,Slovenia,1998,34,0,0,0,0,0
-SWE,SWE,Sweden,1998,99,0,0,2,5,7
-TTO,TTO,Trinidad and Tobago,1998,2,0,0,0,0,0
-TUR,TUR,Turkey,1998,1,0,0,0,0,0
-TWN,TPE,Chinese Taipei,1998,7,0,0,0,0,0
-UKR,UKR,Ukraine,1998,56,0,0,1,0,1
-URY,URU,Uruguay,1998,1,0,0,0,0,0
-USA,USA,United States,1998,186,0,25,4,5,34
-UZB,UZB,Uzbekistan,1998,4,0,0,0,0,0
-VEN,VEN,Venezuela,1998,1,0,0,0,0,0
-VIR,ISV,United States Virgin Islands,1998,7,0,0,0,0,0
-ZAF,RSA,South Africa,1998,2,0,0,0,0,0
-AND,AND,Andorra,2002,3,0,0,0,0,0
-ARG,ARG,Argentina,2002,11,0,0,0,0,0
-ARM,ARM,Armenia,2002,9,0,0,0,0,0
-AUS,AUS,Australia,2002,25,0,2,0,0,2
-AUT,AUT,Austria,2002,90,0,3,4,13,20
-AZE,AZE,Azerbaijan,2002,4,0,0,0,0,0
-BEL,BEL,Belgium,2002,6,0,0,0,0,0
-BER,BER,Bermuda,2002,1,0,0,0,0,0
-BGR,BUL,Bulgaria,2002,23,0,0,1,2,3
-BIH,BIH,Bosnia and Herzegovina,2002,2,0,0,0,0,0
-BLR,BLR,Belarus,2002,64,0,0,0,1,1
-BRA,BRA,Brazil,2002,10,0,0,0,0,0
-CAN,CAN,Canada,2002,150,0,52,7,15,74
-CHE,SUI,Switzerland,2002,110,0,3,7,14,24
-CHL,CHI,Chile,2002,6,0,0,0,0,0
-CHN,CHN,China,2002,65,0,2,5,9,16
-CMR,CMR,Cameroon,2002,1,0,0,0,0,0
-CRI,CRC,Costa Rica,2002,1,0,0,0,0,0
-CYP,CYP,Cyprus,2002,1,0,0,0,0,0
-CZE,CZE,Czech Republic,2002,76,0,1,2,0,3
-DEU,GER,Germany,2002,157,0,26,23,12,61
-DNK,DEN,Denmark,2002,11,0,0,0,0,0
-ESP,ESP,Spain,2002,7,0,0,0,0,0
-EST,EST,Estonia,2002,17,0,1,1,1,3
-FIJ,FIJ,Fiji,2002,1,0,0,0,0,0
-FIN,FIN,Finland,2002,98,0,7,5,1,13
-FRA,FRA,France,2002,114,0,5,5,5,15
-GBR,GBR,Great Britain,2002,49,0,5,0,1,6
-GEO,GEO,Georgia,2002,4,0,0,0,0,0
-GRC,GRE,Greece,2002,10,0,0,0,0,0
-HKG,HKG,Hong Kong,2002,2,0,0,0,0,0
-HRV,CRO,Croatia,2002,13,0,3,1,0,4
-HUN,HUN,Hungary,2002,25,0,0,0,0,0
-IND,IND,India,2002,1,0,0,0,0,0
-IRL,IRL,Ireland,2002,6,0,0,0,0,0
-IRN,IRI,Iran,2002,2,0,0,0,0,0
-ISL,ISL,Iceland,2002,6,0,0,0,0,0
-ISR,ISR,Israel,2002,5,0,0,0,0,0
-ITA,ITA,Italy,2002,108,0,4,11,6,21
-JAM,JAM,Jamaica,2002,2,0,0,0,0,0
-JPN,JPN,Japan,2002,103,0,0,1,1,2
-KAZ,KAZ,Kazakhstan,2002,50,0,0,0,0,0
-KEN,KEN,Kenya,2002,1,0,0,0,0,0
-KGZ,KGZ,Kyrgyzstan,2002,2,0,0,0,0,0
-KOR,KOR,South Korea,2002,46,0,5,2,0,7
-LIB,LIB,Lebanon,2002,2,0,0,0,0,0
-LIE,LIE,Liechtenstein,2002,8,0,0,0,0,0
-LTU,LTU,Lithuania,2002,8,0,0,0,0,0
-LVA,LAT,Latvia,2002,47,0,0,0,0,0
-MDA,MDA,Moldova,2002,5,0,0,0,0,0
-MEX,MEX,Mexico,2002,3,0,0,0,0,0
-MKD,MKD,Macedonia,2002,2,0,0,0,0,0
-MNG,MGL,Mongolia,2002,4,0,0,0,0,0
-MON,MON,Monaco,2002,5,0,0,0,0,0
-NEP,NEP,Nepal,2002,1,0,0,0,0,0
-NLD,NED,Netherlands,2002,27,0,3,5,0,8
-NOR,NOR,Norway,2002,77,0,23,11,7,41
-NZL,NZL,New Zealand,2002,10,0,0,0,0,0
-POL,POL,Poland,2002,27,0,0,1,1,2
-ROU,ROU,Romania,2002,21,0,0,0,0,0
-RUS,RUS,Russia,2002,151,0,6,5,27,38
-SMR,SMR,San Marino,2002,1,0,0,0,0,0
-SRB,SCG,Serbia and Montenegro,2002,6,0,0,0,0,0
-SVK,SVK,Slovakia,2002,49,0,0,0,0,0
-SVN,SLO,Slovenia,2002,40,0,0,0,4,4
-SWE,SWE,Sweden,2002,102,0,0,2,24,26
-THA,THA,Thailand,2002,1,0,0,0,0,0
-TJK,TJK,Tajikistan,2002,1,0,0,0,0,0
-TTO,TTO,Trinidad and Tobago,2002,3,0,0,0,0,0
-TUR,TUR,Turkey,2002,3,0,0,0,0,0
-TWN,TPE,Chinese Taipei,2002,6,0,0,0,0,0
-UKR,UKR,Ukraine,2002,68,0,0,0,0,0
-USA,USA,United States,2002,202,1,11,58,15,84
-UZB,UZB,Uzbekistan,2002,6,0,0,0,0,0
-VEN,VEN,Venezuela,2002,4,0,0,0,0,0
-VIR,ISV,United States Virgin Islands,2002,8,0,0,0,0,0
-ZAF,RSA,South Africa,2002,1,0,0,0,0,0
-ALB,ALB,Albania,2006,1,0,0,0,0,0
-AND,AND,Andorra,2006,3,0,0,0,0,0
-ARG,ARG,Argentina,2006,9,0,0,0,0,0
-ARM,ARM,Armenia,2006,5,0,0,0,0,0
-AUS,AUS,Australia,2006,40,0,1,0,1,2
-AUT,AUT,Austria,2006,73,0,16,7,7,30
-AZE,AZE,Azerbaijan,2006,2,0,0,0,0,0
-BEL,BEL,Belgium,2006,4,0,0,0,0,0
-BER,BER,Bermuda,2006,1,0,0,0,0,0
-BGR,BUL,Bulgaria,2006,21,0,0,1,0,1
-BIH,BIH,Bosnia and Herzegovina,2006,6,0,0,0,0,0
-BLR,BLR,Belarus,2006,28,0,0,1,0,1
-BRA,BRA,Brazil,2006,9,0,0,0,0,0
-CAN,CAN,Canada,2006,191,0,30,28,11,69
-CHE,SUI,Switzerland,2006,125,0,5,7,9,21
-CHL,CHI,Chile,2006,9,0,0,0,0,0
-CHN,CHN,China,2006,73,0,2,5,6,13
-CRI,CRC,Costa Rica,2006,1,0,0,0,0,0
-CYP,CYP,Cyprus,2006,1,0,0,0,0,0
-CZE,CZE,Czech Republic,2006,83,0,1,2,24,27
-DEU,GER,Germany,2006,155,0,23,25,6,54
-DNK,DEN,Denmark,2006,4,0,0,0,0,0
-DZA,ALG,Algeria,2006,2,0,0,0,0,0
-ESP,ESP,Spain,2006,16,0,0,0,0,0
-EST,EST,Estonia,2006,26,0,3,0,0,3
-ETH,ETH,Ethiopia,2006,1,0,0,0,0,0
-FIN,FIN,Finland,2006,90,0,0,34,7,41
-FRA,FRA,France,2006,82,0,3,2,10,15
-GBR,GBR,Great Britain,2006,39,0,0,1,0,1
-GEO,GEO,Georgia,2006,3,0,0,0,0,0
-GRC,GRE,Greece,2006,5,0,0,0,0,0
-HKG,HKG,Hong Kong,2006,1,0,0,0,0,0
-HRV,CRO,Croatia,2006,23,0,1,2,0,3
-HUN,HUN,Hungary,2006,19,0,0,0,0,0
-IND,IND,India,2006,4,0,0,0,0,0
-IRL,IRL,Ireland,2006,4,0,0,0,0,0
-IRN,IRI,Iran,2006,2,0,0,0,0,0
-ISL,ISL,Iceland,2006,5,0,0,0,0,0
-ISR,ISR,Israel-1,2006,5,0,0,0,0,0
-ITA,ITA,Italy,2006,179,1,11,0,14,25
-JPN,JPN,Japan,2006,110,0,1,0,0,1
-KAZ,KAZ,Kazakhstan,2006,55,0,0,0,0,0
-KEN,KEN,Kenya,2006,1,0,0,0,0,0
-KGZ,KGZ,Kyrgyzstan,2006,1,0,0,0,0,0
-KOR,KOR,South Korea,2006,40,0,14,3,2,19
-LIB,LIB,Lebanon,2006,3,0,0,0,0,0
-LIE,LIE,Liechtenstein,2006,5,0,0,0,0,0
-LTU,LTU,Lithuania,2006,7,0,0,0,0,0
-LUX,LUX,Luxembourg,2006,1,0,0,0,0,0
-LVA,LAT,Latvia,2006,57,0,0,0,1,1
-MAD,MAD,Madagascar,2006,1,0,0,0,0,0
-MDA,MDA,Moldova,2006,6,0,0,0,0,0
-MKD,MKD,Macedonia,2006,3,0,0,0,0,0
-MNG,MGL,Mongolia,2006,2,0,0,0,0,0
-MON,MON,Monaco,2006,4,0,0,0,0,0
-NEP,NEP,Nepal,2006,1,0,0,0,0,0
-NLD,NED,Netherlands,2006,33,0,3,2,8,13
-NOR,NOR,Norway,2006,67,0,2,9,12,23
-NZL,NZL,New Zealand,2006,15,0,0,0,0,0
-POL,POL,Poland,2006,45,0,0,1,1,2
-PRK,PRK,North Korea,2006,6,0,0,0,0,0
-PRT,POR,Portugal,2006,1,0,0,0,0,0
-ROU,ROU,Romania,2006,25,0,0,0,0,0
-RUS,RUS,Russia,2006,174,0,16,12,13,41
-SEN,SEN,Senegal,2006,1,0,0,0,0,0
-SMR,SMR,San Marino,2006,1,0,0,0,0,0
-SRB,SCG,Serbia and Montenegro,2006,6,0,0,0,0,0
-SVK,SVK,Slovakia,2006,58,0,0,1,0,1
-SVN,SLO,Slovenia,2006,36,0,0,0,0,0
-SWE,SWE,Sweden,2006,106,0,35,21,8,64
-THA,THA,Thailand,2006,1,0,0,0,0,0
-TJK,TJK,Tajikistan,2006,1,0,0,0,0,0
-TUR,TUR,Turkey,2006,6,0,0,0,0,0
-TWN,TPE,Chinese Taipei,2006,1,0,0,0,0,0
-UKR,UKR,Ukraine,2006,52,0,0,0,3,3
-USA,USA,United States,2006,204,0,9,11,32,52
-UZB,UZB,Uzbekistan,2006,4,0,0,0,0,0
-VEN,VEN,Venezuela,2006,1,0,0,0,0,0
-ZAF,RSA,South Africa,2006,3,0,0,0,0,0
-ALB,ALB,Albania,2010,1,0,0,0,0,0
-AND,AND,Andorra,2010,6,0,0,0,0,0
-ARG,ARG,Argentina,2010,7,0,0,0,0,0
-ARM,ARM,Armenia,2010,4,0,0,0,0,0
-AUS,AUS,Australia,2010,40,0,2,1,0,3
-AUT,AUT,Austria,2010,75,0,11,9,6,26
-AZE,AZE,Azerbaijan,2010,2,0,0,0,0,0
-BEL,BEL,Belgium,2010,8,0,0,0,0,0
-BER,BER,Bermuda,2010,1,0,0,0,0,0
-BGR,BUL,Bulgaria,2010,19,0,0,0,0,0
-BIH,BIH,Bosnia and Herzegovina,2010,5,0,0,0,0,0
-BLR,BLR,Belarus,2010,47,0,1,1,1,3
-BRA,BRA,Brazil,2010,5,0,0,0,0,0
-CAN,CAN,Canada,2010,201,1,67,15,8,90
-CAY,CAY,Cayman Islands,2010,1,0,0,0,0,0
-CHE,SUI,Switzerland,2010,134,0,6,0,6,12
-CHL,CHI,Chile,2010,3,0,0,0,0,0
-CHN,CHN,China,2010,85,0,9,3,7,19
-COL,COL,Colombia,2010,1,0,0,0,0,0
-CYP,CYP,Cyprus,2010,2,0,0,0,0,0
-CZE,CZE,Czech Republic,2010,90,0,2,0,7,9
-DEU,GER,Germany,2010,149,0,15,24,15,54
-DNK,DEN,Denmark,2010,17,0,0,0,0,0
-DZA,ALG,Algeria,2010,1,0,0,0,0,0
-ESP,ESP,Spain,2010,18,0,0,0,0,0
-EST,EST,Estonia,2010,30,0,0,1,0,1
-ETH,ETH,Ethiopia,2010,1,0,0,0,0,0
-FIN,FIN,Finland,2010,91,0,0,1,46,47
-FRA,FRA,France,2010,104,0,2,6,6,14
-GBR,GBR,Great Britain,2010,52,0,1,0,0,1
-GEO,GEO,Georgia,2010,6,0,0,0,0,0
-GHA,GHA,Ghana,2010,1,0,0,0,0,0
-GRC,GRE,Greece,2010,7,0,0,0,0,0
-HKG,HKG,Hong Kong,2010,1,0,0,0,0,0
-HRV,CRO,Croatia,2010,19,0,0,2,1,3
-HUN,HUN,Hungary,2010,15,0,0,0,0,0
-IND,IND,India,2010,3,0,0,0,0,0
-IRL,IRL,Ireland,2010,6,0,0,0,0,0
-IRN,IRI,Iran,2010,4,0,0,0,0,0
-ISL,ISL,Iceland,2010,4,0,0,0,0,0
-ISR,ISR,Israel,2010,3,0,0,0,0,0
-ITA,ITA,Italy,2010,109,0,1,1,3,5
-JAM,JAM,Jamaica,2010,1,0,0,0,0,0
-JPN,JPN,Japan,2010,91,0,0,5,2,7
-KAZ,KAZ,Kazakhstan,2010,37,0,0,1,0,1
-KGZ,KGZ,Kyrgyzstan,2010,2,0,0,0,0,0
-KOR,KOR,South Korea,2010,45,0,6,10,2,18
-LIB,LIB,Lebanon,2010,3,0,0,0,0,0
-LIE,LIE,Liechtenstein,2010,4,0,0,0,0,0
-LTU,LTU,Lithuania,2010,6,0,0,0,0,0
-LVA,LAT,Latvia,2010,53,0,0,3,0,3
-MAR,MAR,Morocco,2010,1,0,0,0,0,0
-MDA,MDA,Moldova,2010,7,0,0,0,0,0
-MEX,MEX,Mexico,2010,1,0,0,0,0,0
-MKD,MKD,Macedonia,2010,3,0,0,0,0,0
-MNE,MNE,Montenegro,2010,1,0,0,0,0,0
-MNG,MGL,Mongolia,2010,2,0,0,0,0,0
-MON,MON,Monaco,2010,3,0,0,0,0,0
-NEP,NEP,Nepal,2010,1,0,0,0,0,0
-NLD,NED,Netherlands,2010,32,0,4,1,6,11
-NOR,NOR,Norway,2010,95,0,16,14,9,39
-NZL,NZL,New Zealand,2010,16,0,0,0,0,0
-PAK,PAK,Pakistan,2010,1,0,0,0,0,0
-PER,PER,Peru,2010,3,0,0,0,0,0
-POL,POL,Poland,2010,46,0,1,3,4,8
-PRK,PRK,North Korea,2010,2,0,0,0,0,0
-PRT,POR,Portugal,2010,1,0,0,0,0,0
-ROU,ROU,Romania,2010,28,0,0,0,0,0
-RUS,RUS,Russia,2010,175,0,6,5,14,25
-SEN,SEN,Senegal,2010,1,0,0,0,0,0
-SMR,SMR,San Marino,2010,1,0,0,0,0,0
-SRB,SRB,Serbia,2010,10,0,0,0,0,0
-SVK,SVK,Slovakia,2010,68,0,1,1,1,3
-SVN,SLO,Slovenia,2010,47,0,0,2,1,3
-SWE,SWE,Sweden,2010,101,0,11,3,4,18
-TJK,TJK,Tajikistan,2010,1,0,0,0,0,0
-TUR,TUR,Turkey,2010,5,0,0,0,0,0
-TWN,TPE,Chinese Taipei,2010,1,0,0,0,0,0
-UKR,UKR,Ukraine,2010,45,0,0,0,0,0
-USA,USA,United States,2010,212,0,12,63,22,97
-UZB,UZB,Uzbekistan,2010,3,0,0,0,0,0
-ZAF,RSA,South Africa,2010,2,0,0,0,0,0
-ALB,ALB,Albania,2014,1,0,0,0,0,0
-AND,AND,Andorra,2014,6,0,0,0,0,0
-ARG,ARG,Argentina,2014,7,0,0,0,0,0
-ARM,ARM,Armenia,2014,4,0,0,0,0,0
-AUS,AUS,Australia,2014,60,0,0,2,1,3
-AUT,AUT,Austria,2014,126,0,4,12,11,27
-AZE,AZE,Azerbaijan,2014,3,0,0,0,0,0
-BEL,BEL,Belgium,2014,7,0,0,0,0,0
-BER,BER,Bermuda,2014,1,0,0,0,0,0
-BGR,BUL,Bulgaria,2014,18,0,0,0,0,0
-BIH,BIH,Bosnia and Herzegovina,2014,5,0,0,0,0,0
-BLR,BLR,Belarus,2014,26,0,5,0,1,6
-BRA,BRA,Brazil,2014,13,0,0,0,0,0
-CAN,CAN,Canada,2014,217,0,59,22,5,86
-CAY,CAY,Cayman Islands,2014,1,0,0,0,0,0
-CHE,SUI,Switzerland,2014,152,0,6,4,20,30
-CHL,CHI,Chile,2014,6,0,0,0,0,0
-CHN,CHN,China,2014,62,0,3,4,5,12
-CYP,CYP,Cyprus,2014,1,0,0,0,0,0
-CZE,CZE,Czech Republic,2014,87,0,2,7,2,11
-DEU,GER,Germany,2014,151,0,15,12,9,36
-DMA,DMA,Dominica,2014,1,0,0,0,0,0
-DNK,DEN,Denmark,2014,10,0,0,0,0,0
-ESP,ESP,Spain,2014,20,0,0,0,0,0
-EST,EST,Estonia,2014,25,0,0,0,0,0
-FIN,FIN,Finland,2014,99,0,2,7,24,33
-FRA,FRA,France,2014,107,0,4,4,10,18
-GBR,GBR,Great Britain,2014,53,0,1,4,5,10
-GEO,GEO,Georgia,2014,4,0,0,0,0,0
-GRC,GRE,Greece,2014,7,0,0,0,0,0
-HKG,HKG,Hong Kong,2014,1,0,0,0,0,0
-HRV,CRO,Croatia,2014,11,0,0,1,0,1
-HUN,HUN,Hungary,2014,16,0,0,0,0,0
-IND,IND,India,2014,2,0,0,0,0,0
-IRL,IRL,Ireland,2014,5,0,0,0,0,0
-IRN,IRI,Iran,2014,5,0,0,0,0,0
-ISL,ISL,Iceland,2014,5,0,0,0,0,0
-ISR,ISR,Israel,2014,4,0,0,0,0,0
-ITA,ITA,Italy,2014,110,0,0,2,12,14
-IVB,IVB,British Virgin Islands,2014,1,0,0,0,0,0
-JAM,JAM,Jamaica,2014,2,0,0,0,0,0
-JPN,JPN,Japan,2014,109,0,1,4,6,11
-KAZ,KAZ,Kazakhstan,2014,50,0,0,0,1,1
-KGZ,KGZ,Kyrgyzstan,2014,1,0,0,0,0,0
-KOR,KOR,South Korea,2014,70,0,7,5,2,14
-LIB,LIB,Lebanon,2014,2,0,0,0,0,0
-LIE,LIE,Liechtenstein,2014,3,0,0,0,0,0
-LTU,LTU,Lithuania,2014,9,0,0,0,0,0
-LUX,LUX,Luxembourg,2014,1,0,0,0,0,0
-LVA,LAT,Latvia,2014,56,0,0,5,6,11
-MAR,MAR,Morocco,2014,2,0,0,0,0,0
-MDA,MDA,Moldova,2014,4,0,0,0,0,0
-MEX,MEX,Mexico,2014,1,0,0,0,0,0
-MKD,MKD,Macedonia,2014,3,0,0,0,0,0
-MLT,MLT,Malta,2014,1,0,0,0,0,0
-MNE,MNE,Montenegro,2014,2,0,0,0,0,0
-MNG,MGL,Mongolia,2014,2,0,0,0,0,0
-MON,MON,Monaco,2014,5,0,0,0,0,0
-NEP,NEP,Nepal,2014,1,0,0,0,0,0
-NLD,NED,Netherlands,2014,39,0,13,7,9,29
-NOR,NOR,Norway,2014,110,0,18,5,13,36
-NZL,NZL,New Zealand,2014,14,0,0,0,0,0
-PAK,PAK,Pakistan,2014,1,0,0,0,0,0
-PER,PER,Peru,2014,3,0,0,0,0,0
-PHL,PHI,Philippines,2014,1,0,0,0,0,0
-POL,POL,Poland,2014,58,0,4,4,3,11
-PRT,POR,Portugal,2014,2,0,0,0,0,0
-PRY,PAR,Paraguay,2014,1,0,0,0,0,0
-ROU,ROU,Romania,2014,22,0,0,0,0,0
-RUS,RUS,Russia,2014,213,1,33,22,13,68
-SMR,SMR,San Marino,2014,2,0,0,0,0,0
-SRB,SRB,Serbia,2014,8,0,0,0,0,0
-SVK,SVK,Slovakia,2014,62,0,1,0,0,1
-SVN,SLO,Slovenia,2014,58,0,2,2,4,8
-SWE,SWE,Sweden,2014,99,0,8,32,11,51
-THA,THA,Thailand,2014,2,0,0,0,0,0
-TJK,TJK,Tajikistan,2014,1,0,0,0,0,0
-TLS,TLS,Timor Leste,2014,1,0,0,0,0,0
-TOG,TOG,Togo,2014,2,0,0,0,0,0
-TON,TGA,Tonga,2014,1,0,0,0,0,0
-TUR,TUR,Turkey,2014,6,0,0,0,0,0
-TWN,TPE,Chinese Taipei,2014,3,0,0,0,0,0
-UKR,UKR,Ukraine,2014,42,0,4,0,1,5
-USA,USA,United States,2014,222,0,10,30,24,64
-UZB,UZB,Uzbekistan,2014,3,0,0,0,0,0
-VEN,VEN,Venezuela,2014,1,0,0,0,0,0
-VIR,ISV,United States Virgin Islands,2014,1,0,0,0,0,0
-ZWE,ZIM,Zimbabwe,2014,1,0,0,0,0,0
-ALB,ALB,Albania,2018,2,0,0,0,0,0
-AND,AND,Andorra,2018,5,0,0,0,0,0
-ARG,ARG,Argentina,2018,7,0,0,0,0,0
-ARM,ARM,Armenia,2018,3,0,0,0,0,0
-AUS,AUS,Australia,2018,50,0,0,0,0,0
-AUT,AUT,Austria,2018,105,0,0,0,0,0
-AZE,AZE,Azerbaijan,2018,1,0,0,0,0,0
-BEL,BEL,Belgium,2018,22,0,0,0,0,0
-BER,BER,Bermuda,2018,1,0,0,0,0,0
-BGR,BUL,Bulgaria,2018,21,0,0,0,0,0
-BIH,BIH,Bosnia and Herzegovina,2018,4,0,0,0,0,0
-BLR,BLR,Belarus,2018,33,0,0,0,0,0
-BOL,BOL,Bolivia,2018,2,0,0,0,0,0
-BRA,BRA,Brazil,2018,9,0,0,0,0,0
-CAN,CAN,Canada,2018,225,0,0,0,0,0
-CHE,SUI,Switzerland,2018,166,0,0,0,0,0
-CHL,CHI,Chile,2018,7,0,0,0,0,0
-CHN,CHN,China,2018,80,0,0,0,0,0
-COL,COL,Colombia,2018,4,0,0,0,0,0
-CYP,CYP,Cyprus,2018,1,0,0,0,0,0
-CZE,CZE,Czech Republic,2018,93,0,0,0,0,0
-DEU,GER,Germany,2018,153,0,0,0,0,0
-DNK,DEN,Denmark,2018,17,0,0,0,0,0
-ECU,ECU,Ecuador,2018,1,0,0,0,0,0
-ERI,ERI,Eritrea,2018,1,0,0,0,0,0
-ESP,ESP,Spain,2018,13,0,0,0,0,0
-EST,EST,Estonia,2018,22,0,0,0,0,0
-FIN,FIN,Finland,2018,100,0,0,0,0,0
-FRA,FRA,France,2018,106,0,0,0,0,0
-GBR,GBR,Great Britain,2018,58,0,0,0,0,0
-GEO,GEO,Georgia,2018,4,0,0,0,0,0
-GHA,GHA,Ghana,2018,1,0,0,0,0,0
-GRC,GRE,Greece,2018,4,0,0,0,0,0
-HKG,HKG,Hong Kong,2018,1,0,0,0,0,0
-HRV,CRO,Croatia,2018,19,0,0,0,0,0
-HUN,HUN,Hungary,2018,19,0,0,0,0,0
-IND,IND,India,2018,2,0,0,0,0,0
-IRL,IRL,Ireland,2018,5,0,0,0,0,0
-IRN,IRI,Iran,2018,4,0,0,0,0,0
-ISL,ISL,Iceland,2018,5,0,0,0,0,0
-ISR,ISR,Israel,2018,10,0,0,0,0,0
-ITA,ITA,Italy,2018,120,0,0,0,0,0
-JAM,JAM,Jamaica,2018,3,0,0,0,0,0
-JPN,JPN,Japan,2018,124,0,0,0,0,0
-KAZ,KAZ,Kazakhstan,2018,46,0,0,0,0,0
-KEN,KEN,Kenya,2018,1,0,0,0,0,0
-KGZ,KGZ,Kyrgyzstan,2018,2,0,0,0,0,0
-KOR,KOR,South Korea,2018,122,1,0,0,0,0
-KOS,KOS,Kosovo,2018,1,0,0,0,0,0
-LIB,LIB,Lebanon,2018,3,0,0,0,0,0
-LIE,LIE,Liechtenstein,2018,3,0,0,0,0,0
-LTU,LTU,Lithuania,2018,9,0,0,0,0,0
-LUX,LUX,Luxembourg,2018,1,0,0,0,0,0
-LVA,LAT,Latvia,2018,34,0,0,0,0,0
-MAD,MAD,Madagascar,2018,1,0,0,0,0,0
-MAR,MAR,Morocco,2018,2,0,0,0,0,0
-MDA,MDA,Moldova,2018,2,0,0,0,0,0
-MEX,MEX,Mexico,2018,4,0,0,0,0,0
-MKD,MKD,Macedonia,2018,3,0,0,0,0,0
-MLT,MLT,Malta,2018,1,0,0,0,0,0
-MNE,MNE,Montenegro,2018,3,0,0,0,0,0
-MNG,MGL,Mongolia,2018,2,0,0,0,0,0
-MON,MON,Monaco,2018,4,0,0,0,0,0
-MYS,MAS,Malaysia,2018,2,0,0,0,0,0
-NGR,NGR,Nigeria,2018,3,0,0,0,0,0
-NLD,NED,Netherlands,2018,33,0,0,0,0,0
-NOR,NOR,Norway,2018,109,0,0,0,0,0
-NZL,NZL,New Zealand,2018,21,0,0,0,0,0
-OAR,OAR,Olympic Athletes from Russia,2018,168,0,0,0,0,0
-PAK,PAK,Pakistan,2018,2,0,0,0,0,0
-PHL,PHI,Philippines,2018,2,0,0,0,0,0
-POL,POL,Poland,2018,62,0,0,0,0,0
-PRI,PUR,Puerto Rico,2018,1,0,0,0,0,0
-PRK,PRK,North Korea,2018,10,0,0,0,0,0
-PRT,POR,Portugal,2018,2,0,0,0,0,0
-ROU,ROU,Romania,2018,27,0,0,0,0,0
-SGP,SGP,Singapore,2018,1,0,0,0,0,0
-SMR,SMR,San Marino,2018,1,0,0,0,0,0
-SRB,SRB,Serbia,2018,4,0,0,0,0,0
-SVK,SVK,Slovakia,2018,56,0,0,0,0,0
-SVN,SLO,Slovenia,2018,71,0,0,0,0,0
-SWE,SWE,Sweden,2018,116,0,0,0,0,0
-THA,THA,Thailand,2018,4,0,0,0,0,0
-TLS,TLS,Timor-Leste,2018,1,0,0,0,0,0
-TOG,TOG,Togo,2018,1,0,0,0,0,0
-TON,TGA,Tonga,2018,1,0,0,0,0,0
-TUR,TUR,Turkey,2018,8,0,0,0,0,0
-TWN,TPE,Chinese Taipei,2018,4,0,0,0,0,0
-UKR,UKR,Ukraine,2018,33,0,0,0,0,0
-USA,USA,United States,2018,241,0,0,0,0,0
-UZB,UZB,Uzbekistan,2018,2,0,0,0,0,0
-ZAF,RSA,South Africa,2018,1,0,0,0,0,0
-ALB,ALB,Albania,2022,1,0,0,0,0,0
-AND,AND,Andorra,2022,5,0,0,0,0,0
-ARG,ARG,Argentina,2022,6,0,0,0,0,0
-ARM,ARM,Armenia,2022,6,0,0,0,0,0
-ASM,ASA,American Samoa,2022,1,0,0,0,0,0
-AUS,AUS,Australia,2022,43,0,1,2,1,4
-AUT,AUT,Austria,2022,106,0,7,7,4,18
-AZE,AZE,Azerbaijan,2022,2,0,0,0,0,0
-BEL,BEL,Belgium,2022,19,0,1,0,1,2
-BGR,BUL,Bulgaria,2022,15,0,0,0,0,0
-BIH,BIH,Bosnia and Herzegovina,2022,6,0,0,0,0,0
-BLR,BLR,Belarus,2022,26,0,0,2,0,2
-BOL,BOL,Bolivia,2022,2,0,0,0,0,0
-BRA,BRA,Brazil,2022,10,0,0,0,0,0
-CAN,CAN,Canada,2022,215,0,4,8,14,26
-CHE,SUI,Switzerland,2022,167,0,7,2,6,15
-CHL,CHI,Chile,2022,4,0,0,0,0,0
-CHN,CHN,China,2022,182,1,9,4,2,15
-COL,COL,Colombia,2022,3,0,0,0,0,0
-CYP,CYP,Cyprus,2022,1,0,0,0,0,0
-CZE,CZE,Czech Republic,2022,114,0,1,0,1,2
-DEU,GER,Germany,2022,149,0,12,10,5,27
-DNK,DEN,Denmark,2022,62,0,0,0,0,0
-ECU,ECU,Ecuador,2022,1,0,0,0,0,0
-ERI,ERI,Eritrea,2022,1,0,0,0,0,0
-ESP,ESP,Spain,2022,14,0,0,1,0,1
-EST,EST,Estonia,2022,26,0,0,0,1,1
-FIN,FIN,Finland,2022,95,0,2,2,4,8
-FRA,FRA,France,2022,86,0,5,7,2,14
-GBR,GBR,Great Britain,2022,50,0,1,1,0,2
-GEO,GEO,Georgia,2022,9,0,0,0,0,0
-GHA,GHA,Ghana,2022,1,0,0,0,0,0
-GRC,GRE,Greece,2022,5,0,0,0,0,0
-HKG,HKG,Hong Kong,2022,3,0,0,0,0,0
-HRV,CRO,Croatia,2022,11,0,0,0,0,0
-HTI,HAI,Haiti,2022,1,0,0,0,0,0
-HUN,HUN,Hungary,2022,14,0,1,0,2,3
-IND,IND,India,2022,1,0,0,0,0,0
-IRL,IRL,Ireland,2022,6,0,0,0,0,0
-IRN,IRI,Iran,2022,3,0,0,0,0,0
-ISL,ISL,Iceland,2022,5,0,0,0,0,0
-ISR,ISR,Israel,2022,6,0,0,0,0,0
-ITA,ITA,Italy,2022,118,0,2,7,8,17
-JAM,JAM,Jamaica,2022,7,0,0,0,0,0
-JPN,JPN,Japan,2022,124,0,3,7,8,18
-KAZ,KAZ,Kazakhstan,2022,34,0,0,0,0,0
-KGZ,KGZ,Kyrgyzstan,2022,1,0,0,0,0,0
-KOR,KOR,South Korea,2022,64,0,2,5,2,9
-KOS,KOS,Kosovo,2022,2,0,0,0,0,0
-KSA,KSA,Saudi Arabia,2022,1,0,0,0,0,0
-LIB,LIB,Lebanon,2022,3,0,0,0,0,0
-LIE,LIE,Liechtenstein,2022,2,0,0,0,0,0
-LTU,LTU,Lithuania,2022,13,0,0,0,0,0
-LUX,LUX,Luxembourg,2022,2,0,0,0,0,0
-LVA,LAT,Latvia,2022,60,0,0,0,1,1
-MAD,MAD,Madagascar,2022,2,0,0,0,0,0
-MAR,MAR,Morocco,2022,1,0,0,0,0,0
-MDA,MDA,Moldova,2022,5,0,0,0,0,0
-MEX,MEX,Mexico,2022,4,0,0,0,0,0
-MKD,MKD,North Macedonia,2022,3,0,0,0,0,0
-MLT,MLT,Malta,2022,1,0,0,0,0,0
-MNE,MNE,Montenegro,2022,3,0,0,0,0,0
-MNG,MGL,Mongolia,2022,2,0,0,0,0,0
-MON,MON,Monaco,2022,3,0,0,0,0,0
-MYS,MAS,Malaysia,2022,2,0,0,0,0,0
-NGR,NGR,Nigeria,2022,1,0,0,0,0,0
-NLD,NED,Netherlands,2022,41,0,8,5,4,17
-NOR,NOR,Norway,2022,84,0,16,8,13,37
-NZL,NZL,New Zealand,2022,15,0,2,1,0,3
-PAK,PAK,Pakistan,2022,1,0,0,0,0,0
-PER,PER,Peru,2022,1,0,0,0,0,0
-PHL,PHI,Philippines,2022,1,0,0,0,0,0
-POL,POL,Poland,2022,57,0,0,0,1,1
-PRI,PUR,Puerto Rico,2022,2,0,0,0,0,0
-PRT,POR,Portugal,2022,3,0,0,0,0,0
-ROC,ROC,ROC,2022,212,0,5,12,15,32
-ROU,ROU,Romania,2022,21,0,0,0,0,0
-SMR,SMR,San Marino,2022,2,0,0,0,0,0
-SRB,SRB,Serbia,2022,2,0,0,0,0,0
-SVK,SVK,Slovakia,2022,50,0,1,0,1,2
-SVN,SLO,Slovenia,2022,42,0,2,3,2,7
-SWE,SWE,Sweden,2022,116,0,8,5,5,18
-THA,THA,Thailand,2022,4,0,0,0,0,0
-TLS,TLS,Timor-Leste,2022,1,0,0,0,0,0
-TTO,TTO,Trinidad and Tobago,2022,2,0,0,0,0,0
-TUR,TUR,Turkey,2022,7,0,0,0,0,0
-TWN,TPE,Chinese Taipei,2022,4,0,0,0,0,0
-UKR,UKR,Ukraine,2022,45,0,0,1,0,1
-USA,USA,United States,2022,224,0,9,9,7,25
-UZB,UZB,Uzbekistan,2022,1,0,0,0,0,0
-VIR,ISV,Virgin Islands,2022,1,0,0,0,0,0
-AIN,AIN,Individual Neutral Athletes,2026,20,0,0,1,0,1
-ALB,ALB,Albania,2026,4,0,0,0,0,0
-AND,AND,Andorra,2026,7,0,0,0,0,0
-ARE,UAE,United Arab Emirates,2026,2,0,0,0,0,0
-ARG,ARG,Argentina,2026,8,0,0,0,0,0
-ARM,ARM,Armenia,2026,5,0,0,0,0,0
-AUS,AUS,Australia,2026,51,0,3,2,1,6
-AUT,AUT,Austria,2026,115,0,5,8,5,18
-AZE,AZE,Azerbaijan,2026,2,0,0,0,0,0
-BEL,BEL,Belgium,2026,30,0,0,0,1,1
-BEN,BEN,Benin,2026,1,0,0,0,0,0
-BGR,BUL,Bulgaria,2026,20,0,0,0,2,2
-BIH,BIH,Bosnia and Herzegovina,2026,5,0,0,0,0,0
-BOL,BOL,Bolivia,2026,1,0,0,0,0,0
-BRA,BRA,Brazil,2026,14,0,1,0,0,1
-CAN,CAN,Canada,2026,205,0,5,7,9,21
-CHE,SUI,Switzerland,2026,175,0,6,9,8,23
-CHL,CHI,Chile,2026,4,0,0,0,0,0
-CHN,CHN,China,2026,125,0,5,4,6,15
-COL,COL,Colombia,2026,1,0,0,0,0,0
-CYP,CYP,Cyprus,2026,2,0,0,0,0,0
-CZE,CZE,Czech Republic,2026,115,0,2,2,1,5
-DEU,GER,Germany,2026,185,0,8,10,8,26
-DNK,DEN,Denmark,2026,39,0,0,1,0,1
-ECU,ECU,Ecuador,2026,1,0,0,0,0,0
-ERI,ERI,Eritrea,2026,1,0,0,0,0,0
-ESP,ESP,Spain,2026,20,0,1,0,2,3
-EST,EST,Estonia,2026,31,0,0,1,0,1
-FIN,FIN,Finland,2026,103,0,0,1,5,6
-FRA,FRA,France,2026,160,0,8,9,6,23
-GBR,GBR,Great Britain,2026,53,0,3,1,1,5
-GBS,GBS,Guinea-Bissau,2026,1,0,0,0,0,0
-GEO,GEO,Georgia,2026,8,0,0,1,0,1
-GRC,GRE,Greece,2026,5,0,0,0,0,0
-HKG,HKG,Hong Kong,2026,4,0,0,0,0,0
-HRV,CRO,Croatia,2026,14,0,0,0,0,0
-HTI,HAI,Haiti,2026,2,0,0,0,0,0
-HUN,HUN,Hungary,2026,16,0,0,0,0,0
-IND,IND,India,2026,2,0,0,0,0,0
-IRL,IRL,Ireland,2026,4,0,0,0,0,0
-IRN,IRI,Iran,2026,4,0,0,0,0,0
-ISL,ISL,Iceland,2026,5,0,0,0,0,0
-ISR,ISR,Israel,2026,9,0,0,0,0,0
-ITA,ITA,Italy,2026,196,1,10,6,14,30
-JAM,JAM,Jamaica,2026,6,0,0,0,0,0
-JPN,JPN,Japan,2026,121,0,5,7,12,24
-KAZ,KAZ,Kazakhstan,2026,36,0,1,0,0,1
-KEN,KEN,Kenya,2026,1,0,0,0,0,0
-KGZ,KGZ,Kyrgyzstan,2026,2,0,0,0,0,0
-KOR,KOR,South Korea,2026,71,0,3,4,3,10
-KOS,KOS,Kosovo,2026,2,0,0,0,0,0
-KSA,KSA,Saudi Arabia,2026,2,0,0,0,0,0
-LIB,LIB,Lebanon,2026,2,0,0,0,0,0
-LIE,LIE,Liechtenstein,2026,7,0,0,0,0,0
-LTU,LTU,Lithuania,2026,17,0,0,0,0,0
-LUX,LUX,Luxembourg,2026,2,0,0,0,0,0
-LVA,LAT,Latvia,2026,67,0,0,1,1,2
-MAD,MAD,Madagascar,2026,2,0,0,0,0,0
-MAR,MAR,Morocco,2026,2,0,0,0,0,0
-MDA,MDA,Moldova,2026,5,0,0,0,0,0
-MEX,MEX,Mexico,2026,5,0,0,0,0,0
-MKD,MKD,North Macedonia,2026,4,0,0,0,0,0
-MLT,MLT,Malta,2026,1,0,0,0,0,0
-MNE,MNE,Montenegro,2026,2,0,0,0,0,0
-MNG,MGL,Mongolia,2026,3,0,0,0,0,0
-MON,MON,Monaco,2026,1,0,0,0,0,0
-MYS,MAS,Malaysia,2026,1,0,0,0,0,0
-NGR,NGR,Nigeria,2026,1,0,0,0,0,0
-NLD,NED,Netherlands,2026,38,0,10,7,3,20
-NOR,NOR,Norway,2026,80,0,18,12,11,41
-NZL,NZL,New Zealand,2026,17,0,0,2,1,3
-PAK,PAK,Pakistan,2026,1,0,0,0,0,0
-PHL,PHI,Philippines,2026,2,0,0,0,0,0
-POL,POL,Poland,2026,59,0,0,3,1,4
-PRI,PUR,Puerto Rico,2026,1,0,0,0,0,0
-PRT,POR,Portugal,2026,3,0,0,0,0,0
-ROU,ROU,Romania,2026,28,0,0,0,0,0
-SGP,SGP,Singapore,2026,1,0,0,0,0,0
-SMR,SMR,San Marino,2026,1,0,0,0,0,0
-SRB,SRB,Serbia,2026,3,0,0,0,0,0
-SVK,SVK,Slovakia,2026,53,0,0,0,0,0
-SVN,SLO,Slovenia,2026,37,0,2,1,1,4
-SWE,SWE,Sweden,2026,110,0,8,6,4,18
-THA,THA,Thailand,2026,3,0,0,0,0,0
-TTO,TTO,Trinidad and Tobago,2026,6,0,0,0,0,0
-TUR,TUR,Turkey,2026,8,0,0,0,0,0
-TWN,TPE,Chinese Taipei,2026,9,0,0,0,0,0
-UKR,UKR,Ukraine,2026,46,0,0,0,0,0
-URY,URU,Uruguay,2026,1,0,0,0,0,0
-USA,USA,United States,2026,232,0,12,12,9,33
-UZB,UZB,Uzbekistan,2026,2,0,0,0,0,0
-VEN,VEN,Venezuela,2026,1,0,0,0,0,0
-ZAF,RSA,South Africa,2026,5,0,0,0,0,0
+iso3,noc_code,team_name,year,n_athletes,gold,silver,bronze,total_medals
+AHO,AHO,Netherlands Antilles,1992,2,0,0,0,0
+AND,AND,Andorra,1992,5,0,0,0,0
+ARG,ARG,Argentina,1992,20,0,0,0,0
+AUS,AUS,Australia,1992,22,0,0,0,0
+AUT,AUT,Austria,1992,58,9,10,10,29
+BEL,BEL,Belgium,1992,5,0,0,0,0
+BER,BER,Bermuda,1992,1,0,0,0,0
+BGR,BUL,Bulgaria,1992,30,0,0,0,0
+BOL,BOL,Bolivia,1992,5,0,0,0,0
+BRA,BRA,Brazil,1992,7,0,0,0,0
+CAN,CAN,Canada,1992,108,5,28,3,36
+CHE,SUI,Switzerland,1992,74,2,0,5,7
+CHL,CHI,Chile,1992,5,0,0,0,0
+CHN,CHN,China,1992,32,0,3,0,3
+CRI,CRC,Costa Rica,1992,4,0,0,0,0
+CYP,CYP,Cyprus,1992,4,0,0,0,0
+CZE,TCH,Czechoslovakia,1992,74,0,0,27,27
+DEU,GER,Germany,1992,111,14,17,7,38
+DNK,DEN,Denmark,1992,6,0,0,0,0
+DZA,ALG,Algeria,1992,4,0,0,0,0
+ESP,ESP,Spain,1992,17,0,0,1,1
+EST,EST,Estonia,1992,19,0,0,0,0
+FIN,FIN,Finland,1992,62,6,1,6,13
+FRA,FRA,France,1992,109,5,6,1,12
+GBR,GBR,Great Britain,1992,49,0,0,0,0
+GRC,GRE,Greece,1992,8,0,0,0,0
+HND,HON,Honduras,1992,1,0,0,0,0
+HRV,CRO,Croatia,1992,4,0,0,0,0
+HUN,HUN,Hungary,1992,24,0,0,0,0
+IND,IND,India,1992,2,0,0,0,0
+IRL,IRL,Ireland-2,1992,4,0,0,0,0
+ISL,ISL,Iceland,1992,5,0,0,0,0
+ITA,ITA,Italy,1992,107,4,9,8,21
+JAM,JAM,Jamaica,1992,5,0,0,0,0
+JPN,JPN,Japan,1992,60,3,2,7,12
+KOR,KOR,South Korea,1992,23,5,1,1,7
+LIB,LIB,Lebanon,1992,4,0,0,0,0
+LIE,LIE,Liechtenstein,1992,7,0,0,0,0
+LTU,LTU,Lithuania,1992,6,0,0,0,0
+LUX,LUX,Luxembourg,1992,1,0,2,0,2
+LVA,LAT,Latvia,1992,23,0,0,0,0
+MAR,MAR,Morocco,1992,12,0,0,0,0
+MEX,MEX,Mexico,1992,20,0,0,0,0
+MNG,MGL,Mongolia,1992,4,0,0,0,0
+MON,MON,Monaco,1992,5,0,0,0,0
+NLD,NED,Netherlands,1992,19,1,1,2,4
+NOR,NOR,Norway,1992,79,9,10,5,24
+NZL,NZL,New Zealand,1992,6,0,1,0,1
+PHL,PHI,Philippines,1992,1,0,0,0,0
+POL,POL,Poland,1992,53,0,0,0,0
+PRI,PUR,Puerto Rico-2,1992,6,0,0,0,0
+PRK,PRK,North Korea,1992,20,0,0,1,1
+ROU,ROU,Romania,1992,23,0,0,0,0
+RUS,EUN,Unified Team,1992,129,35,10,14,59
+SEN,SEN,Senegal,1992,2,0,0,0,0
+SMR,SMR,San Marino,1992,3,0,0,0,0
+SRB,YUG,Yugoslavia,1992,25,0,0,0,0
+SVN,SLO,Slovenia,1992,27,0,0,0,0
+SWE,SWE,Sweden,1992,73,1,0,6,7
+SWZ,SWZ,Swaziland,1992,1,0,0,0,0
+TUR,TUR,Turkey,1992,8,0,0,0,0
+TWN,TPE,Chinese Taipei,1992,8,0,0,0,0
+USA,USA,United States,1992,148,5,7,2,14
+VIR,ISV,United States Virgin Islands,1992,12,0,0,0,0
+AND,AND,Andorra,1994,6,0,0,0,0
+ARG,ARG,Argentina,1994,10,0,0,0,0
+ARM,ARM,Armenia,1994,2,0,0,0,0
+ASM,ASA,American Samoa,1994,2,0,0,0,0
+AUS,AUS,Australia,1994,25,0,0,4,4
+AUT,AUT,Austria,1994,80,2,3,7,12
+BEL,BEL,Belgium,1994,5,0,0,0,0
+BER,BER,Bermuda,1994,1,0,0,0,0
+BGR,BUL,Bulgaria,1994,17,0,0,0,0
+BIH,BIH,Bosnia and Herzegovina,1994,10,0,0,0,0
+BLR,BLR,Belarus,1994,33,0,2,0,2
+BRA,BRA,Brazil,1994,1,0,0,0,0
+CAN,CAN,Canada,1994,95,3,29,5,37
+CHE,SUI,Switzerland,1994,59,4,8,4,16
+CHL,CHI,Chile,1994,3,0,0,0,0
+CHN,CHN,China,1994,24,0,1,2,3
+CYP,CYP,Cyprus,1994,1,0,0,0,0
+CZE,CZE,Czech Republic,1994,63,0,0,0,0
+DEU,GER,Germany,1994,112,18,10,12,40
+DNK,DEN,Denmark,1994,4,0,0,0,0
+ESP,ESP,Spain,1994,13,0,0,0,0
+EST,EST,Estonia,1994,26,0,0,0,0
+FIJ,FIJ,Fiji,1994,1,0,0,0,0
+FIN,FIN,Finland,1994,61,0,1,29,30
+FRA,FRA,France,1994,98,0,1,10,11
+GBR,GBR,Great Britain,1994,32,0,0,3,3
+GEO,GEO,Georgia,1994,5,0,0,0,0
+GRC,GRE,Greece,1994,9,0,0,0,0
+HRV,CRO,Croatia,1994,3,0,0,0,0
+HUN,HUN,Hungary,1994,16,0,0,0,0
+ISL,ISL,Iceland,1994,5,0,0,0,0
+ISR,ISR,Israel,1994,1,0,0,0,0
+ITA,ITA,Italy,1994,104,14,6,12,32
+JAM,JAM,Jamaica,1994,4,0,0,0,0
+JPN,JPN,Japan,1994,59,3,5,2,10
+KAZ,KAZ,Kazakhstan,1994,29,1,2,0,3
+KGZ,KGZ,Kyrgyzstan,1994,1,0,0,0,0
+KOR,KOR,South Korea,1994,21,7,1,1,9
+LIE,LIE,Liechtenstein,1994,10,0,0,0,0
+LTU,LTU,Lithuania,1994,6,0,0,0,0
+LUX,LUX,Luxembourg,1994,1,0,0,0,0
+LVA,LAT,Latvia,1994,27,0,0,0,0
+MDA,MDA,Moldova,1994,2,0,0,0,0
+MEX,MEX,Mexico,1994,1,0,0,0,0
+MNG,MGL,Mongolia,1994,1,0,0,0,0
+MON,MON,Monaco,1994,5,0,0,0,0
+NLD,NED,Netherlands,1994,21,0,1,3,4
+NOR,NOR,Norway,1994,87,8,17,5,30
+NZL,NZL,New Zealand,1994,7,0,0,0,0
+POL,POL,Poland,1994,28,0,0,0,0
+PRI,PUR,Puerto Rico,1994,5,0,0,0,0
+PRT,POR,Portugal,1994,1,0,0,0,0
+ROU,ROU,Romania,1994,23,0,0,0,0
+RUS,RUS,Russia,1994,113,19,13,4,36
+SEN,SEN,Senegal,1994,1,0,0,0,0
+SMR,SMR,San Marino,1994,3,0,0,0,0
+SVK,SVK,Slovakia,1994,42,0,0,0,0
+SVN,SLO,Slovenia,1994,22,0,0,3,3
+SWE,SWE,Sweden,1994,84,23,1,0,24
+TTO,TTO,Trinidad and Tobago,1994,2,0,0,0,0
+TUR,TUR,Turkey,1994,1,0,0,0,0
+TWN,TPE,Chinese Taipei,1994,2,0,0,0,0
+UKR,UKR,Ukraine,1994,37,1,0,1,2
+USA,USA,United States,1994,148,6,8,5,19
+UZB,UZB,Uzbekistan,1994,7,1,0,0,1
+VIR,ISV,United States Virgin Islands,1994,8,0,0,0,0
+ZAF,RSA,South Africa,1994,2,0,0,0,0
+AND,AND,Andorra,1998,3,0,0,0,0
+ARG,ARG,Argentina,1998,2,0,0,0,0
+ARM,ARM,Armenia,1998,7,0,0,0,0
+AUS,AUS,Australia,1998,23,0,0,1,1
+AUT,AUT,Austria,1998,96,3,5,12,20
+AZE,AZE,Azerbaijan,1998,4,0,0,0,0
+BEL,BEL,Belgium,1998,1,0,0,1,1
+BER,BER,Bermuda,1998,1,0,0,0,0
+BGR,BUL,Bulgaria,1998,19,1,0,0,1
+BIH,BIH,Bosnia and Herzegovina,1998,8,0,0,0,0
+BLR,BLR,Belarus,1998,59,0,0,2,2
+BRA,BRA,Brazil,1998,1,0,0,0,0
+CAN,CAN,Canada,1998,144,14,28,7,49
+CHE,SUI,Switzerland,1998,69,6,5,3,14
+CHL,CHI,Chile,1998,3,0,0,0,0
+CHN,CHN,China,1998,56,0,9,5,14
+CYP,CYP,Cyprus,1998,1,0,0,0,0
+CZE,CZE,Czech Republic,1998,61,21,1,1,23
+DEU,GER,Germany,1998,125,22,12,10,44
+DNK,DEN,Denmark,1998,12,0,5,0,5
+ESP,ESP,Spain,1998,12,0,0,0,0
+EST,EST,Estonia,1998,20,0,0,0,0
+FIN,FIN,Finland,1998,85,2,7,49,58
+FRA,FRA,France,1998,106,2,1,12,15
+GBR,GBR,Great Britain,1998,34,0,0,4,4
+GEO,GEO,Georgia,1998,4,0,0,0,0
+GRC,GRE,Greece,1998,13,0,0,0,0
+HRV,CRO,Croatia,1998,6,0,0,0,0
+HUN,HUN,Hungary,1998,17,0,0,0,0
+IND,IND,India,1998,1,0,0,0,0
+IRL,IRL,Ireland,1998,6,0,0,0,0
+IRN,IRI,Iran,1998,1,0,0,0,0
+ISL,ISL,Iceland,1998,7,0,0,0,0
+ISR,ISR,Israel,1998,3,0,0,0,0
+ITA,ITA,Italy,1998,113,3,9,5,17
+JAM,JAM,Jamaica,1998,6,0,0,0,0
+JPN,JPN,Japan,1998,156,8,1,4,13
+KAZ,KAZ,Kazakhstan,1998,60,0,0,2,2
+KEN,KEN,Kenya,1998,1,0,0,0,0
+KGZ,KGZ,Kyrgyzstan,1998,1,0,0,0,0
+KOR,KOR,South Korea,1998,37,6,4,2,12
+LIE,LIE,Liechtenstein,1998,8,0,0,0,0
+LTU,LTU,Lithuania,1998,7,0,0,0,0
+LUX,LUX,Luxembourg,1998,1,0,0,0,0
+LVA,LAT,Latvia,1998,29,0,0,0,0
+MDA,MDA,Moldova,1998,2,0,0,0,0
+MKD,MKD,Macedonia,1998,3,0,0,0,0
+MNG,MGL,Mongolia,1998,3,0,0,0,0
+MON,MON,Monaco,1998,4,0,0,0,0
+NLD,NED,Netherlands,1998,22,5,4,2,11
+NOR,NOR,Norway,1998,75,13,15,12,40
+NZL,NZL,New Zealand,1998,8,0,0,0,0
+POL,POL,Poland,1998,39,0,0,0,0
+PRI,PUR,Puerto Rico,1998,6,0,0,0,0
+PRK,PRK,North Korea,1998,8,0,0,0,0
+PRT,POR,Portugal,1998,2,0,0,0,0
+ROU,ROU,Romania,1998,16,0,0,0,0
+RUS,RUS,Russia,1998,122,14,32,6,52
+SRB,SCG,Serbia and Montenegro,1998,2,0,0,0,0
+SVK,SVK,Slovakia,1998,37,0,0,0,0
+SVN,SLO,Slovenia,1998,34,0,0,0,0
+SWE,SWE,Sweden,1998,99,0,2,5,7
+TTO,TTO,Trinidad and Tobago,1998,2,0,0,0,0
+TUR,TUR,Turkey,1998,1,0,0,0,0
+TWN,TPE,Chinese Taipei,1998,7,0,0,0,0
+UKR,UKR,Ukraine,1998,56,0,1,0,1
+URY,URU,Uruguay,1998,1,0,0,0,0
+USA,USA,United States,1998,186,25,4,5,34
+UZB,UZB,Uzbekistan,1998,4,0,0,0,0
+VEN,VEN,Venezuela,1998,1,0,0,0,0
+VIR,ISV,United States Virgin Islands,1998,7,0,0,0,0
+ZAF,RSA,South Africa,1998,2,0,0,0,0
+AND,AND,Andorra,2002,3,0,0,0,0
+ARG,ARG,Argentina,2002,11,0,0,0,0
+ARM,ARM,Armenia,2002,9,0,0,0,0
+AUS,AUS,Australia,2002,25,2,0,0,2
+AUT,AUT,Austria,2002,90,3,4,13,20
+AZE,AZE,Azerbaijan,2002,4,0,0,0,0
+BEL,BEL,Belgium,2002,6,0,0,0,0
+BER,BER,Bermuda,2002,1,0,0,0,0
+BGR,BUL,Bulgaria,2002,23,0,1,2,3
+BIH,BIH,Bosnia and Herzegovina,2002,2,0,0,0,0
+BLR,BLR,Belarus,2002,64,0,0,1,1
+BRA,BRA,Brazil,2002,10,0,0,0,0
+CAN,CAN,Canada,2002,150,52,7,15,74
+CHE,SUI,Switzerland,2002,110,3,7,14,24
+CHL,CHI,Chile,2002,6,0,0,0,0
+CHN,CHN,China,2002,65,2,5,9,16
+CMR,CMR,Cameroon,2002,1,0,0,0,0
+CRI,CRC,Costa Rica,2002,1,0,0,0,0
+CYP,CYP,Cyprus,2002,1,0,0,0,0
+CZE,CZE,Czech Republic,2002,76,1,2,0,3
+DEU,GER,Germany,2002,157,26,23,12,61
+DNK,DEN,Denmark,2002,11,0,0,0,0
+ESP,ESP,Spain,2002,7,0,0,0,0
+EST,EST,Estonia,2002,17,1,1,1,3
+FIJ,FIJ,Fiji,2002,1,0,0,0,0
+FIN,FIN,Finland,2002,98,7,5,1,13
+FRA,FRA,France,2002,114,5,5,5,15
+GBR,GBR,Great Britain,2002,49,5,0,1,6
+GEO,GEO,Georgia,2002,4,0,0,0,0
+GRC,GRE,Greece,2002,10,0,0,0,0
+HKG,HKG,Hong Kong,2002,2,0,0,0,0
+HRV,CRO,Croatia,2002,13,3,1,0,4
+HUN,HUN,Hungary,2002,25,0,0,0,0
+IND,IND,India,2002,1,0,0,0,0
+IRL,IRL,Ireland,2002,6,0,0,0,0
+IRN,IRI,Iran,2002,2,0,0,0,0
+ISL,ISL,Iceland,2002,6,0,0,0,0
+ISR,ISR,Israel,2002,5,0,0,0,0
+ITA,ITA,Italy,2002,108,4,11,6,21
+JAM,JAM,Jamaica,2002,2,0,0,0,0
+JPN,JPN,Japan,2002,103,0,1,1,2
+KAZ,KAZ,Kazakhstan,2002,50,0,0,0,0
+KEN,KEN,Kenya,2002,1,0,0,0,0
+KGZ,KGZ,Kyrgyzstan,2002,2,0,0,0,0
+KOR,KOR,South Korea,2002,46,5,2,0,7
+LIB,LIB,Lebanon,2002,2,0,0,0,0
+LIE,LIE,Liechtenstein,2002,8,0,0,0,0
+LTU,LTU,Lithuania,2002,8,0,0,0,0
+LVA,LAT,Latvia,2002,47,0,0,0,0
+MDA,MDA,Moldova,2002,5,0,0,0,0
+MEX,MEX,Mexico,2002,3,0,0,0,0
+MKD,MKD,Macedonia,2002,2,0,0,0,0
+MNG,MGL,Mongolia,2002,4,0,0,0,0
+MON,MON,Monaco,2002,5,0,0,0,0
+NEP,NEP,Nepal,2002,1,0,0,0,0
+NLD,NED,Netherlands,2002,27,3,5,0,8
+NOR,NOR,Norway,2002,77,23,11,7,41
+NZL,NZL,New Zealand,2002,10,0,0,0,0
+POL,POL,Poland,2002,27,0,1,1,2
+ROU,ROU,Romania,2002,21,0,0,0,0
+RUS,RUS,Russia,2002,151,6,5,27,38
+SMR,SMR,San Marino,2002,1,0,0,0,0
+SRB,SCG,Serbia and Montenegro,2002,6,0,0,0,0
+SVK,SVK,Slovakia,2002,49,0,0,0,0
+SVN,SLO,Slovenia,2002,40,0,0,4,4
+SWE,SWE,Sweden,2002,102,0,2,24,26
+THA,THA,Thailand,2002,1,0,0,0,0
+TJK,TJK,Tajikistan,2002,1,0,0,0,0
+TTO,TTO,Trinidad and Tobago,2002,3,0,0,0,0
+TUR,TUR,Turkey,2002,3,0,0,0,0
+TWN,TPE,Chinese Taipei,2002,6,0,0,0,0
+UKR,UKR,Ukraine,2002,68,0,0,0,0
+USA,USA,United States,2002,202,11,58,15,84
+UZB,UZB,Uzbekistan,2002,6,0,0,0,0
+VEN,VEN,Venezuela,2002,4,0,0,0,0
+VIR,ISV,United States Virgin Islands,2002,8,0,0,0,0
+ZAF,RSA,South Africa,2002,1,0,0,0,0
+ALB,ALB,Albania,2006,1,0,0,0,0
+AND,AND,Andorra,2006,3,0,0,0,0
+ARG,ARG,Argentina,2006,9,0,0,0,0
+ARM,ARM,Armenia,2006,5,0,0,0,0
+AUS,AUS,Australia,2006,40,1,0,1,2
+AUT,AUT,Austria,2006,73,16,7,7,30
+AZE,AZE,Azerbaijan,2006,2,0,0,0,0
+BEL,BEL,Belgium,2006,4,0,0,0,0
+BER,BER,Bermuda,2006,1,0,0,0,0
+BGR,BUL,Bulgaria,2006,21,0,1,0,1
+BIH,BIH,Bosnia and Herzegovina,2006,6,0,0,0,0
+BLR,BLR,Belarus,2006,28,0,1,0,1
+BRA,BRA,Brazil,2006,9,0,0,0,0
+CAN,CAN,Canada,2006,191,30,28,11,69
+CHE,SUI,Switzerland,2006,125,5,7,9,21
+CHL,CHI,Chile,2006,9,0,0,0,0
+CHN,CHN,China,2006,73,2,5,6,13
+CRI,CRC,Costa Rica,2006,1,0,0,0,0
+CYP,CYP,Cyprus,2006,1,0,0,0,0
+CZE,CZE,Czech Republic,2006,83,1,2,24,27
+DEU,GER,Germany,2006,155,23,25,6,54
+DNK,DEN,Denmark,2006,4,0,0,0,0
+DZA,ALG,Algeria,2006,2,0,0,0,0
+ESP,ESP,Spain,2006,16,0,0,0,0
+EST,EST,Estonia,2006,26,3,0,0,3
+ETH,ETH,Ethiopia,2006,1,0,0,0,0
+FIN,FIN,Finland,2006,90,0,34,7,41
+FRA,FRA,France,2006,82,3,2,10,15
+GBR,GBR,Great Britain,2006,39,0,1,0,1
+GEO,GEO,Georgia,2006,3,0,0,0,0
+GRC,GRE,Greece,2006,5,0,0,0,0
+HKG,HKG,Hong Kong,2006,1,0,0,0,0
+HRV,CRO,Croatia,2006,23,1,2,0,3
+HUN,HUN,Hungary,2006,19,0,0,0,0
+IND,IND,India,2006,4,0,0,0,0
+IRL,IRL,Ireland,2006,4,0,0,0,0
+IRN,IRI,Iran,2006,2,0,0,0,0
+ISL,ISL,Iceland,2006,5,0,0,0,0
+ISR,ISR,Israel-1,2006,5,0,0,0,0
+ITA,ITA,Italy,2006,179,11,0,14,25
+JPN,JPN,Japan,2006,110,1,0,0,1
+KAZ,KAZ,Kazakhstan,2006,55,0,0,0,0
+KEN,KEN,Kenya,2006,1,0,0,0,0
+KGZ,KGZ,Kyrgyzstan,2006,1,0,0,0,0
+KOR,KOR,South Korea,2006,40,14,3,2,19
+LIB,LIB,Lebanon,2006,3,0,0,0,0
+LIE,LIE,Liechtenstein,2006,5,0,0,0,0
+LTU,LTU,Lithuania,2006,7,0,0,0,0
+LUX,LUX,Luxembourg,2006,1,0,0,0,0
+LVA,LAT,Latvia,2006,57,0,0,1,1
+MAD,MAD,Madagascar,2006,1,0,0,0,0
+MDA,MDA,Moldova,2006,6,0,0,0,0
+MKD,MKD,Macedonia,2006,3,0,0,0,0
+MNG,MGL,Mongolia,2006,2,0,0,0,0
+MON,MON,Monaco,2006,4,0,0,0,0
+NEP,NEP,Nepal,2006,1,0,0,0,0
+NLD,NED,Netherlands,2006,33,3,2,8,13
+NOR,NOR,Norway,2006,67,2,9,12,23
+NZL,NZL,New Zealand,2006,15,0,0,0,0
+POL,POL,Poland,2006,45,0,1,1,2
+PRK,PRK,North Korea,2006,6,0,0,0,0
+PRT,POR,Portugal,2006,1,0,0,0,0
+ROU,ROU,Romania,2006,25,0,0,0,0
+RUS,RUS,Russia,2006,174,16,12,13,41
+SEN,SEN,Senegal,2006,1,0,0,0,0
+SMR,SMR,San Marino,2006,1,0,0,0,0
+SRB,SCG,Serbia and Montenegro,2006,6,0,0,0,0
+SVK,SVK,Slovakia,2006,58,0,1,0,1
+SVN,SLO,Slovenia,2006,36,0,0,0,0
+SWE,SWE,Sweden,2006,106,35,21,8,64
+THA,THA,Thailand,2006,1,0,0,0,0
+TJK,TJK,Tajikistan,2006,1,0,0,0,0
+TUR,TUR,Turkey,2006,6,0,0,0,0
+TWN,TPE,Chinese Taipei,2006,1,0,0,0,0
+UKR,UKR,Ukraine,2006,52,0,0,3,3
+USA,USA,United States,2006,204,9,11,32,52
+UZB,UZB,Uzbekistan,2006,4,0,0,0,0
+VEN,VEN,Venezuela,2006,1,0,0,0,0
+ZAF,RSA,South Africa,2006,3,0,0,0,0
+ALB,ALB,Albania,2010,1,0,0,0,0
+AND,AND,Andorra,2010,6,0,0,0,0
+ARG,ARG,Argentina,2010,7,0,0,0,0
+ARM,ARM,Armenia,2010,4,0,0,0,0
+AUS,AUS,Australia,2010,40,2,1,0,3
+AUT,AUT,Austria,2010,75,11,9,6,26
+AZE,AZE,Azerbaijan,2010,2,0,0,0,0
+BEL,BEL,Belgium,2010,8,0,0,0,0
+BER,BER,Bermuda,2010,1,0,0,0,0
+BGR,BUL,Bulgaria,2010,19,0,0,0,0
+BIH,BIH,Bosnia and Herzegovina,2010,5,0,0,0,0
+BLR,BLR,Belarus,2010,47,1,1,1,3
+BRA,BRA,Brazil,2010,5,0,0,0,0
+CAN,CAN,Canada,2010,201,67,15,8,90
+CAY,CAY,Cayman Islands,2010,1,0,0,0,0
+CHE,SUI,Switzerland,2010,134,6,0,6,12
+CHL,CHI,Chile,2010,3,0,0,0,0
+CHN,CHN,China,2010,85,9,3,7,19
+COL,COL,Colombia,2010,1,0,0,0,0
+CYP,CYP,Cyprus,2010,2,0,0,0,0
+CZE,CZE,Czech Republic,2010,90,2,0,7,9
+DEU,GER,Germany,2010,149,15,24,15,54
+DNK,DEN,Denmark,2010,17,0,0,0,0
+DZA,ALG,Algeria,2010,1,0,0,0,0
+ESP,ESP,Spain,2010,18,0,0,0,0
+EST,EST,Estonia,2010,30,0,1,0,1
+ETH,ETH,Ethiopia,2010,1,0,0,0,0
+FIN,FIN,Finland,2010,91,0,1,46,47
+FRA,FRA,France,2010,104,2,6,6,14
+GBR,GBR,Great Britain,2010,52,1,0,0,1
+GEO,GEO,Georgia,2010,6,0,0,0,0
+GHA,GHA,Ghana,2010,1,0,0,0,0
+GRC,GRE,Greece,2010,7,0,0,0,0
+HKG,HKG,Hong Kong,2010,1,0,0,0,0
+HRV,CRO,Croatia,2010,19,0,2,1,3
+HUN,HUN,Hungary,2010,15,0,0,0,0
+IND,IND,India,2010,3,0,0,0,0
+IRL,IRL,Ireland,2010,6,0,0,0,0
+IRN,IRI,Iran,2010,4,0,0,0,0
+ISL,ISL,Iceland,2010,4,0,0,0,0
+ISR,ISR,Israel,2010,3,0,0,0,0
+ITA,ITA,Italy,2010,109,1,1,3,5
+JAM,JAM,Jamaica,2010,1,0,0,0,0
+JPN,JPN,Japan,2010,91,0,5,2,7
+KAZ,KAZ,Kazakhstan,2010,37,0,1,0,1
+KGZ,KGZ,Kyrgyzstan,2010,2,0,0,0,0
+KOR,KOR,South Korea,2010,45,6,10,2,18
+LIB,LIB,Lebanon,2010,3,0,0,0,0
+LIE,LIE,Liechtenstein,2010,4,0,0,0,0
+LTU,LTU,Lithuania,2010,6,0,0,0,0
+LVA,LAT,Latvia,2010,53,0,3,0,3
+MAR,MAR,Morocco,2010,1,0,0,0,0
+MDA,MDA,Moldova,2010,7,0,0,0,0
+MEX,MEX,Mexico,2010,1,0,0,0,0
+MKD,MKD,Macedonia,2010,3,0,0,0,0
+MNE,MNE,Montenegro,2010,1,0,0,0,0
+MNG,MGL,Mongolia,2010,2,0,0,0,0
+MON,MON,Monaco,2010,3,0,0,0,0
+NEP,NEP,Nepal,2010,1,0,0,0,0
+NLD,NED,Netherlands,2010,32,4,1,6,11
+NOR,NOR,Norway,2010,95,16,14,9,39
+NZL,NZL,New Zealand,2010,16,0,0,0,0
+PAK,PAK,Pakistan,2010,1,0,0,0,0
+PER,PER,Peru,2010,3,0,0,0,0
+POL,POL,Poland,2010,46,1,3,4,8
+PRK,PRK,North Korea,2010,2,0,0,0,0
+PRT,POR,Portugal,2010,1,0,0,0,0
+ROU,ROU,Romania,2010,28,0,0,0,0
+RUS,RUS,Russia,2010,175,6,5,14,25
+SEN,SEN,Senegal,2010,1,0,0,0,0
+SMR,SMR,San Marino,2010,1,0,0,0,0
+SRB,SRB,Serbia,2010,10,0,0,0,0
+SVK,SVK,Slovakia,2010,68,1,1,1,3
+SVN,SLO,Slovenia,2010,47,0,2,1,3
+SWE,SWE,Sweden,2010,101,11,3,4,18
+TJK,TJK,Tajikistan,2010,1,0,0,0,0
+TUR,TUR,Turkey,2010,5,0,0,0,0
+TWN,TPE,Chinese Taipei,2010,1,0,0,0,0
+UKR,UKR,Ukraine,2010,45,0,0,0,0
+USA,USA,United States,2010,212,12,63,22,97
+UZB,UZB,Uzbekistan,2010,3,0,0,0,0
+ZAF,RSA,South Africa,2010,2,0,0,0,0
+ALB,ALB,Albania,2014,1,0,0,0,0
+AND,AND,Andorra,2014,6,0,0,0,0
+ARG,ARG,Argentina,2014,7,0,0,0,0
+ARM,ARM,Armenia,2014,4,0,0,0,0
+AUS,AUS,Australia,2014,60,0,2,1,3
+AUT,AUT,Austria,2014,126,4,12,11,27
+AZE,AZE,Azerbaijan,2014,3,0,0,0,0
+BEL,BEL,Belgium,2014,7,0,0,0,0
+BER,BER,Bermuda,2014,1,0,0,0,0
+BGR,BUL,Bulgaria,2014,18,0,0,0,0
+BIH,BIH,Bosnia and Herzegovina,2014,5,0,0,0,0
+BLR,BLR,Belarus,2014,26,5,0,1,6
+BRA,BRA,Brazil,2014,13,0,0,0,0
+CAN,CAN,Canada,2014,217,59,22,5,86
+CAY,CAY,Cayman Islands,2014,1,0,0,0,0
+CHE,SUI,Switzerland,2014,152,6,4,20,30
+CHL,CHI,Chile,2014,6,0,0,0,0
+CHN,CHN,China,2014,62,3,4,5,12
+CYP,CYP,Cyprus,2014,1,0,0,0,0
+CZE,CZE,Czech Republic,2014,87,2,7,2,11
+DEU,GER,Germany,2014,151,15,12,9,36
+DMA,DMA,Dominica,2014,1,0,0,0,0
+DNK,DEN,Denmark,2014,10,0,0,0,0
+ESP,ESP,Spain,2014,20,0,0,0,0
+EST,EST,Estonia,2014,25,0,0,0,0
+FIN,FIN,Finland,2014,99,2,7,24,33
+FRA,FRA,France,2014,107,4,4,10,18
+GBR,GBR,Great Britain,2014,53,1,4,5,10
+GEO,GEO,Georgia,2014,4,0,0,0,0
+GRC,GRE,Greece,2014,7,0,0,0,0
+HKG,HKG,Hong Kong,2014,1,0,0,0,0
+HRV,CRO,Croatia,2014,11,0,1,0,1
+HUN,HUN,Hungary,2014,16,0,0,0,0
+IND,IND,India,2014,2,0,0,0,0
+IRL,IRL,Ireland,2014,5,0,0,0,0
+IRN,IRI,Iran,2014,5,0,0,0,0
+ISL,ISL,Iceland,2014,5,0,0,0,0
+ISR,ISR,Israel,2014,4,0,0,0,0
+ITA,ITA,Italy,2014,110,0,2,12,14
+IVB,IVB,British Virgin Islands,2014,1,0,0,0,0
+JAM,JAM,Jamaica,2014,2,0,0,0,0
+JPN,JPN,Japan,2014,109,1,4,6,11
+KAZ,KAZ,Kazakhstan,2014,50,0,0,1,1
+KGZ,KGZ,Kyrgyzstan,2014,1,0,0,0,0
+KOR,KOR,South Korea,2014,70,7,5,2,14
+LIB,LIB,Lebanon,2014,2,0,0,0,0
+LIE,LIE,Liechtenstein,2014,3,0,0,0,0
+LTU,LTU,Lithuania,2014,9,0,0,0,0
+LUX,LUX,Luxembourg,2014,1,0,0,0,0
+LVA,LAT,Latvia,2014,56,0,5,6,11
+MAR,MAR,Morocco,2014,2,0,0,0,0
+MDA,MDA,Moldova,2014,4,0,0,0,0
+MEX,MEX,Mexico,2014,1,0,0,0,0
+MKD,MKD,Macedonia,2014,3,0,0,0,0
+MLT,MLT,Malta,2014,1,0,0,0,0
+MNE,MNE,Montenegro,2014,2,0,0,0,0
+MNG,MGL,Mongolia,2014,2,0,0,0,0
+MON,MON,Monaco,2014,5,0,0,0,0
+NEP,NEP,Nepal,2014,1,0,0,0,0
+NLD,NED,Netherlands,2014,39,13,7,9,29
+NOR,NOR,Norway,2014,110,18,5,13,36
+NZL,NZL,New Zealand,2014,14,0,0,0,0
+PAK,PAK,Pakistan,2014,1,0,0,0,0
+PER,PER,Peru,2014,3,0,0,0,0
+PHL,PHI,Philippines,2014,1,0,0,0,0
+POL,POL,Poland,2014,58,4,4,3,11
+PRT,POR,Portugal,2014,2,0,0,0,0
+PRY,PAR,Paraguay,2014,1,0,0,0,0
+ROU,ROU,Romania,2014,22,0,0,0,0
+RUS,RUS,Russia,2014,213,33,22,13,68
+SMR,SMR,San Marino,2014,2,0,0,0,0
+SRB,SRB,Serbia,2014,8,0,0,0,0
+SVK,SVK,Slovakia,2014,62,1,0,0,1
+SVN,SLO,Slovenia,2014,58,2,2,4,8
+SWE,SWE,Sweden,2014,99,8,32,11,51
+THA,THA,Thailand,2014,2,0,0,0,0
+TJK,TJK,Tajikistan,2014,1,0,0,0,0
+TLS,TLS,Timor Leste,2014,1,0,0,0,0
+TOG,TOG,Togo,2014,2,0,0,0,0
+TON,TGA,Tonga,2014,1,0,0,0,0
+TUR,TUR,Turkey,2014,6,0,0,0,0
+TWN,TPE,Chinese Taipei,2014,3,0,0,0,0
+UKR,UKR,Ukraine,2014,42,4,0,1,5
+USA,USA,United States,2014,222,10,30,24,64
+UZB,UZB,Uzbekistan,2014,3,0,0,0,0
+VEN,VEN,Venezuela,2014,1,0,0,0,0
+VIR,ISV,United States Virgin Islands,2014,1,0,0,0,0
+ZWE,ZIM,Zimbabwe,2014,1,0,0,0,0
+ALB,ALB,Albania,2018,2,0,0,0,0
+AND,AND,Andorra,2018,5,0,0,0,0
+ARG,ARG,Argentina,2018,7,0,0,0,0
+ARM,ARM,Armenia,2018,3,0,0,0,0
+AUS,AUS,Australia,2018,50,0,2,1,3
+AUT,AUT,Austria,2018,105,5,3,6,14
+AZE,AZE,Azerbaijan,2018,1,0,0,0,0
+BEL,BEL,Belgium,2018,22,0,1,0,1
+BER,BER,Bermuda,2018,1,0,0,0,0
+BGR,BUL,Bulgaria,2018,21,0,0,0,0
+BIH,BIH,Bosnia and Herzegovina,2018,4,0,0,0,0
+BLR,BLR,Belarus,2018,33,2,1,0,3
+BOL,BOL,Bolivia,2018,2,0,0,0,0
+BRA,BRA,Brazil,2018,9,0,0,0,0
+CAN,CAN,Canada,2018,225,11,8,10,29
+CHE,SUI,Switzerland,2018,166,5,6,4,15
+CHL,CHI,Chile,2018,7,0,0,0,0
+CHN,CHN,China,2018,80,1,6,2,9
+COL,COL,Colombia,2018,4,0,0,0,0
+CYP,CYP,Cyprus,2018,1,0,0,0,0
+CZE,CZE,Czech Republic,2018,93,2,2,3,7
+DEU,GER,Germany,2018,153,14,10,7,31
+DNK,DEN,Denmark,2018,17,0,0,0,0
+ECU,ECU,Ecuador,2018,1,0,0,0,0
+ERI,ERI,Eritrea,2018,1,0,0,0,0
+ESP,ESP,Spain,2018,13,0,0,2,2
+EST,EST,Estonia,2018,22,0,0,0,0
+FIN,FIN,Finland,2018,100,1,1,4,6
+FRA,FRA,France,2018,106,5,4,6,15
+GBR,GBR,Great Britain,2018,58,1,0,4,5
+GEO,GEO,Georgia,2018,4,0,0,0,0
+GHA,GHA,Ghana,2018,1,0,0,0,0
+GRC,GRE,Greece,2018,4,0,0,0,0
+HKG,HKG,Hong Kong,2018,1,0,0,0,0
+HRV,CRO,Croatia,2018,19,0,0,0,0
+HUN,HUN,Hungary,2018,19,1,0,0,1
+IND,IND,India,2018,2,0,0,0,0
+IRL,IRL,Ireland,2018,5,0,0,0,0
+IRN,IRI,Iran,2018,4,0,0,0,0
+ISL,ISL,Iceland,2018,5,0,0,0,0
+ISR,ISR,Israel,2018,10,0,0,0,0
+ITA,ITA,Italy,2018,120,3,2,5,10
+JAM,JAM,Jamaica,2018,3,0,0,0,0
+JPN,JPN,Japan,2018,124,4,5,4,13
+KAZ,KAZ,Kazakhstan,2018,46,0,0,1,1
+KEN,KEN,Kenya,2018,1,0,0,0,0
+KGZ,KGZ,Kyrgyzstan,2018,2,0,0,0,0
+KOR,KOR,South Korea,2018,122,5,8,4,17
+KOS,KOS,Kosovo,2018,1,0,0,0,0
+LIB,LIB,Lebanon,2018,3,0,0,0,0
+LIE,LIE,Liechtenstein,2018,3,0,0,1,1
+LTU,LTU,Lithuania,2018,9,0,0,0,0
+LUX,LUX,Luxembourg,2018,1,0,0,0,0
+LVA,LAT,Latvia,2018,34,0,0,1,1
+MAD,MAD,Madagascar,2018,1,0,0,0,0
+MAR,MAR,Morocco,2018,2,0,0,0,0
+MDA,MDA,Moldova,2018,2,0,0,0,0
+MEX,MEX,Mexico,2018,4,0,0,0,0
+MKD,MKD,Macedonia,2018,3,0,0,0,0
+MLT,MLT,Malta,2018,1,0,0,0,0
+MNE,MNE,Montenegro,2018,3,0,0,0,0
+MNG,MGL,Mongolia,2018,2,0,0,0,0
+MON,MON,Monaco,2018,4,0,0,0,0
+MYS,MAS,Malaysia,2018,2,0,0,0,0
+NGR,NGR,Nigeria,2018,3,0,0,0,0
+NLD,NED,Netherlands,2018,33,8,6,6,20
+NOR,NOR,Norway,2018,109,14,14,11,39
+NZL,NZL,New Zealand,2018,21,0,0,2,2
+OAR,OAR,Olympic Athletes from Russia,2018,168,2,6,9,17
+PAK,PAK,Pakistan,2018,2,0,0,0,0
+PHL,PHI,Philippines,2018,2,0,0,0,0
+POL,POL,Poland,2018,62,1,0,1,2
+PRI,PUR,Puerto Rico,2018,1,0,0,0,0
+PRK,PRK,North Korea,2018,10,0,0,0,0
+PRT,POR,Portugal,2018,2,0,0,0,0
+ROU,ROU,Romania,2018,27,0,0,0,0
+SGP,SGP,Singapore,2018,1,0,0,0,0
+SMR,SMR,San Marino,2018,1,0,0,0,0
+SRB,SRB,Serbia,2018,4,0,0,0,0
+SVK,SVK,Slovakia,2018,56,1,2,0,3
+SVN,SLO,Slovenia,2018,71,0,1,1,2
+SWE,SWE,Sweden,2018,116,7,6,1,14
+THA,THA,Thailand,2018,4,0,0,0,0
+TLS,TLS,Timor-Leste,2018,1,0,0,0,0
+TOG,TOG,Togo,2018,1,0,0,0,0
+TON,TGA,Tonga,2018,1,0,0,0,0
+TUR,TUR,Turkey,2018,8,0,0,0,0
+TWN,TPE,Chinese Taipei,2018,4,0,0,0,0
+UKR,UKR,Ukraine,2018,33,1,0,0,1
+USA,USA,United States,2018,241,9,8,6,23
+UZB,UZB,Uzbekistan,2018,2,0,0,0,0
+ZAF,RSA,South Africa,2018,1,0,0,0,0
+ALB,ALB,Albania,2022,1,0,0,0,0
+AND,AND,Andorra,2022,5,0,0,0,0
+ARG,ARG,Argentina,2022,6,0,0,0,0
+ARM,ARM,Armenia,2022,6,0,0,0,0
+ASM,ASA,American Samoa,2022,1,0,0,0,0
+AUS,AUS,Australia,2022,43,1,2,1,4
+AUT,AUT,Austria,2022,106,7,7,4,18
+AZE,AZE,Azerbaijan,2022,2,0,0,0,0
+BEL,BEL,Belgium,2022,19,1,0,1,2
+BGR,BUL,Bulgaria,2022,15,0,0,0,0
+BIH,BIH,Bosnia and Herzegovina,2022,6,0,0,0,0
+BLR,BLR,Belarus,2022,26,0,2,0,2
+BOL,BOL,Bolivia,2022,2,0,0,0,0
+BRA,BRA,Brazil,2022,10,0,0,0,0
+CAN,CAN,Canada,2022,215,4,8,14,26
+CHE,SUI,Switzerland,2022,167,7,2,6,15
+CHL,CHI,Chile,2022,4,0,0,0,0
+CHN,CHN,China,2022,182,9,4,2,15
+COL,COL,Colombia,2022,3,0,0,0,0
+CYP,CYP,Cyprus,2022,1,0,0,0,0
+CZE,CZE,Czech Republic,2022,114,1,0,1,2
+DEU,GER,Germany,2022,149,12,10,5,27
+DNK,DEN,Denmark,2022,62,0,0,0,0
+ECU,ECU,Ecuador,2022,1,0,0,0,0
+ERI,ERI,Eritrea,2022,1,0,0,0,0
+ESP,ESP,Spain,2022,14,0,1,0,1
+EST,EST,Estonia,2022,26,0,0,1,1
+FIN,FIN,Finland,2022,95,2,2,4,8
+FRA,FRA,France,2022,86,5,7,2,14
+GBR,GBR,Great Britain,2022,50,1,1,0,2
+GEO,GEO,Georgia,2022,9,0,0,0,0
+GHA,GHA,Ghana,2022,1,0,0,0,0
+GRC,GRE,Greece,2022,5,0,0,0,0
+HKG,HKG,Hong Kong,2022,3,0,0,0,0
+HRV,CRO,Croatia,2022,11,0,0,0,0
+HTI,HAI,Haiti,2022,1,0,0,0,0
+HUN,HUN,Hungary,2022,14,1,0,2,3
+IND,IND,India,2022,1,0,0,0,0
+IRL,IRL,Ireland,2022,6,0,0,0,0
+IRN,IRI,Iran,2022,3,0,0,0,0
+ISL,ISL,Iceland,2022,5,0,0,0,0
+ISR,ISR,Israel,2022,6,0,0,0,0
+ITA,ITA,Italy,2022,118,2,7,8,17
+JAM,JAM,Jamaica,2022,7,0,0,0,0
+JPN,JPN,Japan,2022,124,3,7,8,18
+KAZ,KAZ,Kazakhstan,2022,34,0,0,0,0
+KGZ,KGZ,Kyrgyzstan,2022,1,0,0,0,0
+KOR,KOR,South Korea,2022,64,2,5,2,9
+KOS,KOS,Kosovo,2022,2,0,0,0,0
+KSA,KSA,Saudi Arabia,2022,1,0,0,0,0
+LIB,LIB,Lebanon,2022,3,0,0,0,0
+LIE,LIE,Liechtenstein,2022,2,0,0,0,0
+LTU,LTU,Lithuania,2022,13,0,0,0,0
+LUX,LUX,Luxembourg,2022,2,0,0,0,0
+LVA,LAT,Latvia,2022,60,0,0,1,1
+MAD,MAD,Madagascar,2022,2,0,0,0,0
+MAR,MAR,Morocco,2022,1,0,0,0,0
+MDA,MDA,Moldova,2022,5,0,0,0,0
+MEX,MEX,Mexico,2022,4,0,0,0,0
+MKD,MKD,North Macedonia,2022,3,0,0,0,0
+MLT,MLT,Malta,2022,1,0,0,0,0
+MNE,MNE,Montenegro,2022,3,0,0,0,0
+MNG,MGL,Mongolia,2022,2,0,0,0,0
+MON,MON,Monaco,2022,3,0,0,0,0
+MYS,MAS,Malaysia,2022,2,0,0,0,0
+NGR,NGR,Nigeria,2022,1,0,0,0,0
+NLD,NED,Netherlands,2022,41,8,5,4,17
+NOR,NOR,Norway,2022,84,16,8,13,37
+NZL,NZL,New Zealand,2022,15,2,1,0,3
+PAK,PAK,Pakistan,2022,1,0,0,0,0
+PER,PER,Peru,2022,1,0,0,0,0
+PHL,PHI,Philippines,2022,1,0,0,0,0
+POL,POL,Poland,2022,57,0,0,1,1
+PRI,PUR,Puerto Rico,2022,2,0,0,0,0
+PRT,POR,Portugal,2022,3,0,0,0,0
+ROC,ROC,ROC,2022,212,5,12,15,32
+ROU,ROU,Romania,2022,21,0,0,0,0
+SMR,SMR,San Marino,2022,2,0,0,0,0
+SRB,SRB,Serbia,2022,2,0,0,0,0
+SVK,SVK,Slovakia,2022,50,1,0,1,2
+SVN,SLO,Slovenia,2022,42,2,3,2,7
+SWE,SWE,Sweden,2022,116,8,5,5,18
+THA,THA,Thailand,2022,4,0,0,0,0
+TLS,TLS,Timor-Leste,2022,1,0,0,0,0
+TTO,TTO,Trinidad and Tobago,2022,2,0,0,0,0
+TUR,TUR,Turkey,2022,7,0,0,0,0
+TWN,TPE,Chinese Taipei,2022,4,0,0,0,0
+UKR,UKR,Ukraine,2022,45,0,1,0,1
+USA,USA,United States,2022,224,9,9,7,25
+UZB,UZB,Uzbekistan,2022,1,0,0,0,0
+VIR,ISV,Virgin Islands,2022,1,0,0,0,0
