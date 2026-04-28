@@ -1,277 +1,184 @@
-noc_code,year,team_name,n_athletes,iso3,host_flag
-ALB,2018,Albania,2,ALB,0
-AND,2018,Andorra,5,AND,0
-ARG,2018,Argentina,7,ARG,0
-ARM,2018,Armenia,3,ARM,0
-AUS,2018,Australia,50,AUS,0
-AUT,2018,Austria,105,AUT,0
-AZE,2018,Azerbaijan,1,AZE,0
-BEL,2018,Belgium,22,BEL,0
-BER,2018,Bermuda,1,BER,0
-BIH,2018,Bosnia and Herzegovina,4,BIH,0
-BLR,2018,Belarus,33,BLR,0
-BOL,2018,Bolivia,2,BOL,0
-BRA,2018,Brazil,9,BRA,0
-BUL,2018,Bulgaria,21,BGR,0
-CAN,2018,Canada,225,CAN,0
-CHI,2018,Chile,7,CHI,0
-CHN,2018,China,80,CHN,0
-COL,2018,Colombia,4,COL,0
-CRO,2018,Croatia,19,HRV,0
-CYP,2018,Cyprus,1,CYP,0
-CZE,2018,Czech Republic,93,CZE,0
-DEN,2018,Denmark,17,DNK,0
-ECU,2018,Ecuador,1,ECU,0
-ERI,2018,Eritrea,1,ERI,0
-ESP,2018,Spain,13,ESP,0
-EST,2018,Estonia,22,EST,0
-FIN,2018,Finland,100,FIN,0
-FRA,2018,France,106,FRA,0
-GBR,2018,Great Britain,58,GBR,0
-GEO,2018,Georgia,4,GEO,0
-GER,2018,Germany,153,DEU,0
-GHA,2018,Ghana,1,GHA,0
-GRE,2018,Greece,4,GRC,0
-HKG,2018,Hong Kong,1,HKG,0
-HUN,2018,Hungary,19,HUN,0
-IND,2018,India,2,IND,0
-IRI,2018,Iran,4,IRI,0
-IRL,2018,Ireland,5,IRL,0
-ISL,2018,Iceland,5,ISL,0
-ISR,2018,Israel,10,ISR,0
-ITA,2018,Italy,120,ITA,0
-JAM,2018,Jamaica,3,JAM,0
-JPN,2018,Japan,124,JPN,0
-KAZ,2018,Kazakhstan,46,KAZ,0
-KEN,2018,Kenya,1,KEN,0
-KGZ,2018,Kyrgyzstan,2,KGZ,0
-KOR,2018,South Korea,122,KOR,1
-KOS,2018,Kosovo,1,KOS,0
-LAT,2018,Latvia,34,LVA,0
-LIB,2018,Lebanon,3,LIB,0
-LIE,2018,Liechtenstein,3,LIE,0
-LTU,2018,Lithuania,9,LTU,0
-LUX,2018,Luxembourg,1,LUX,0
-MAD,2018,Madagascar,1,MAD,0
-MAR,2018,Morocco,2,MAR,0
-MAS,2018,Malaysia,2,MAS,0
-MDA,2018,Moldova,2,MDA,0
-MEX,2018,Mexico,4,MEX,0
-MGL,2018,Mongolia,2,MGL,0
-MKD,2018,Macedonia,3,MKD,0
-MLT,2018,Malta,1,MLT,0
-MNE,2018,Montenegro,3,MNE,0
-MON,2018,Monaco,4,MON,0
-NED,2018,Netherlands,33,NLD,0
-NGR,2018,Nigeria,3,NGR,0
-NOR,2018,Norway,109,NOR,0
-NZL,2018,New Zealand,21,NZL,0
-OAR,2018,Olympic Athletes from Russia,168,RUS,0
-PAK,2018,Pakistan,2,PAK,0
-PHI,2018,Philippines,2,PHI,0
-POL,2018,Poland,62,POL,0
-POR,2018,Portugal,2,PRT,0
-PRK,2018,North Korea,10,PRK,0
-PUR,2018,Puerto Rico,1,PUR,0
-ROU,2018,Romania,27,ROU,0
-RSA,2018,South Africa,1,ZAF,0
-SGP,2018,Singapore,1,SGP,0
-SLO,2018,Slovenia,71,SVN,0
-SMR,2018,San Marino,1,SMR,0
-SRB,2018,Serbia,4,SRB,0
-SUI,2018,Switzerland,166,CHE,0
-SVK,2018,Slovakia,56,SVK,0
-SWE,2018,Sweden,116,SWE,0
-TGA,2018,Tonga,1,TGA,0
-THA,2018,Thailand,4,THA,0
-TLS,2018,Timor-Leste,1,TLS,0
-TOG,2018,Togo,1,TOG,0
-TPE,2018,Chinese Taipei,4,TPE,0
-TUR,2018,Turkey,8,TUR,0
-UKR,2018,Ukraine,33,UKR,0
-USA,2018,United States,241,USA,0
-UZB,2018,Uzbekistan,2,UZB,0
-ALB,2022,Albania,1,ALB,0
-AND,2022,Andorra,5,AND,0
-ARG,2022,Argentina,6,ARG,0
-ARM,2022,Armenia,6,ARM,0
-ASA,2022,American Samoa,1,ASA,0
-AUS,2022,Australia,43,AUS,0
-AUT,2022,Austria,106,AUT,0
-AZE,2022,Azerbaijan,2,AZE,0
-BEL,2022,Belgium,19,BEL,0
-BIH,2022,Bosnia and Herzegovina,6,BIH,0
-BLR,2022,Belarus,26,BLR,0
-BOL,2022,Bolivia,2,BOL,0
-BRA,2022,Brazil,10,BRA,0
-BUL,2022,Bulgaria,15,BGR,0
-CAN,2022,Canada,215,CAN,0
-CHI,2022,Chile,4,CHI,0
-CHN,2022,China,182,CHN,1
-COL,2022,Colombia,3,COL,0
-CRO,2022,Croatia,11,HRV,0
-CYP,2022,Cyprus,1,CYP,0
-CZE,2022,Czech Republic,114,CZE,0
-DEN,2022,Denmark,62,DNK,0
-ECU,2022,Ecuador,1,ECU,0
-ERI,2022,Eritrea,1,ERI,0
-ESP,2022,Spain,14,ESP,0
-EST,2022,Estonia,26,EST,0
-FIN,2022,Finland,95,FIN,0
-FRA,2022,France,86,FRA,0
-GBR,2022,Great Britain,50,GBR,0
-GEO,2022,Georgia,9,GEO,0
-GER,2022,Germany,149,DEU,0
-GHA,2022,Ghana,1,GHA,0
-GRE,2022,Greece,5,GRC,0
-HAI,2022,Haiti,1,HAI,0
-HKG,2022,Hong Kong,3,HKG,0
-HUN,2022,Hungary,14,HUN,0
-IND,2022,India,1,IND,0
-IRI,2022,Iran,3,IRI,0
-IRL,2022,Ireland,6,IRL,0
-ISL,2022,Iceland,5,ISL,0
-ISR,2022,Israel,6,ISR,0
-ISV,2022,Virgin Islands,1,ISV,0
-ITA,2022,Italy,118,ITA,0
-JAM,2022,Jamaica,7,JAM,0
-JPN,2022,Japan,124,JPN,0
-KAZ,2022,Kazakhstan,34,KAZ,0
-KGZ,2022,Kyrgyzstan,1,KGZ,0
-KOR,2022,South Korea,64,KOR,0
-KOS,2022,Kosovo,2,KOS,0
-KSA,2022,Saudi Arabia,1,KSA,0
-LAT,2022,Latvia,60,LVA,0
-LIB,2022,Lebanon,3,LIB,0
-LIE,2022,Liechtenstein,2,LIE,0
-LTU,2022,Lithuania,13,LTU,0
-LUX,2022,Luxembourg,2,LUX,0
-MAD,2022,Madagascar,2,MAD,0
-MAR,2022,Morocco,1,MAR,0
-MAS,2022,Malaysia,2,MAS,0
-MDA,2022,Moldova,5,MDA,0
-MEX,2022,Mexico,4,MEX,0
-MGL,2022,Mongolia,2,MGL,0
-MKD,2022,North Macedonia,3,MKD,0
-MLT,2022,Malta,1,MLT,0
-MNE,2022,Montenegro,3,MNE,0
-MON,2022,Monaco,3,MON,0
-NED,2022,Netherlands,41,NLD,0
-NGR,2022,Nigeria,1,NGR,0
-NOR,2022,Norway,84,NOR,0
-NZL,2022,New Zealand,15,NZL,0
-PAK,2022,Pakistan,1,PAK,0
-PER,2022,Peru,1,PER,0
-PHI,2022,Philippines,1,PHI,0
-POL,2022,Poland,57,POL,0
-POR,2022,Portugal,3,PRT,0
-PUR,2022,Puerto Rico,2,PUR,0
-ROC,2022,ROC,212,RUS,0
-ROU,2022,Romania,21,ROU,0
-SLO,2022,Slovenia,42,SVN,0
-SMR,2022,San Marino,2,SMR,0
-SRB,2022,Serbia,2,SRB,0
-SUI,2022,Switzerland,167,CHE,0
-SVK,2022,Slovakia,50,SVK,0
-SWE,2022,Sweden,116,SWE,0
-THA,2022,Thailand,4,THA,0
-TLS,2022,Timor-Leste,1,TLS,0
-TPE,2022,Chinese Taipei,4,TPE,0
-TTO,2022,Trinidad and Tobago,2,TTO,0
-TUR,2022,Turkey,7,TUR,0
-UKR,2022,Ukraine,45,UKR,0
-USA,2022,United States,224,USA,0
-UZB,2022,Uzbekistan,1,UZB,0
-AIN,2026,Individual Neutral Athletes,20,RUS,0
-ALB,2026,Albania,4,ALB,0
-AND,2026,Andorra,7,AND,0
-ARG,2026,Argentina,8,ARG,0
-ARM,2026,Armenia,5,ARM,0
-AUS,2026,Australia,51,AUS,0
-AUT,2026,Austria,115,AUT,0
-AZE,2026,Azerbaijan,2,AZE,0
-BEL,2026,Belgium,30,BEL,0
-BEN,2026,Benin,1,BEN,0
-BIH,2026,Bosnia and Herzegovina,5,BIH,0
-BOL,2026,Bolivia,1,BOL,0
-BRA,2026,Brazil,14,BRA,0
-BUL,2026,Bulgaria,20,BGR,0
-CAN,2026,Canada,205,CAN,0
-CHI,2026,Chile,4,CHI,0
-CHN,2026,China,125,CHN,0
-COL,2026,Colombia,1,COL,0
-CRO,2026,Croatia,14,HRV,0
-CYP,2026,Cyprus,2,CYP,0
-CZE,2026,Czech Republic,115,CZE,0
-DEN,2026,Denmark,39,DNK,0
-ECU,2026,Ecuador,1,ECU,0
-ERI,2026,Eritrea,1,ERI,0
-ESP,2026,Spain,20,ESP,0
-EST,2026,Estonia,31,EST,0
-FIN,2026,Finland,103,FIN,0
-FRA,2026,France,160,FRA,0
-GBR,2026,Great Britain,53,GBR,0
-GBS,2026,Guinea-Bissau,1,GBS,0
-GEO,2026,Georgia,8,GEO,0
-GER,2026,Germany,185,DEU,0
-GRE,2026,Greece,5,GRC,0
-HAI,2026,Haiti,2,HAI,0
-HKG,2026,Hong Kong,4,HKG,0
-HUN,2026,Hungary,16,HUN,0
-IND,2026,India,2,IND,0
-IRI,2026,Iran,4,IRI,0
-IRL,2026,Ireland,4,IRL,0
-ISL,2026,Iceland,5,ISL,0
-ISR,2026,Israel,9,ISR,0
-ITA,2026,Italy,196,ITA,1
-JAM,2026,Jamaica,6,JAM,0
-JPN,2026,Japan,121,JPN,0
-KAZ,2026,Kazakhstan,36,KAZ,0
-KEN,2026,Kenya,1,KEN,0
-KGZ,2026,Kyrgyzstan,2,KGZ,0
-KOR,2026,South Korea,71,KOR,0
-KOS,2026,Kosovo,2,KOS,0
-KSA,2026,Saudi Arabia,2,KSA,0
-LAT,2026,Latvia,67,LVA,0
-LIB,2026,Lebanon,2,LIB,0
-LIE,2026,Liechtenstein,7,LIE,0
-LTU,2026,Lithuania,17,LTU,0
-LUX,2026,Luxembourg,2,LUX,0
-MAD,2026,Madagascar,2,MAD,0
-MAR,2026,Morocco,2,MAR,0
-MAS,2026,Malaysia,1,MAS,0
-MDA,2026,Moldova,5,MDA,0
-MEX,2026,Mexico,5,MEX,0
-MGL,2026,Mongolia,3,MGL,0
-MKD,2026,North Macedonia,4,MKD,0
-MLT,2026,Malta,1,MLT,0
-MNE,2026,Montenegro,2,MNE,0
-MON,2026,Monaco,1,MON,0
-NED,2026,Netherlands,38,NLD,0
-NGR,2026,Nigeria,1,NGR,0
-NOR,2026,Norway,80,NOR,0
-NZL,2026,New Zealand,17,NZL,0
-PAK,2026,Pakistan,1,PAK,0
-PHI,2026,Philippines,2,PHI,0
-POL,2026,Poland,59,POL,0
-POR,2026,Portugal,3,PRT,0
-PUR,2026,Puerto Rico,1,PUR,0
-ROU,2026,Romania,28,ROU,0
-RSA,2026,South Africa,5,ZAF,0
-SGP,2026,Singapore,1,SGP,0
-SLO,2026,Slovenia,37,SVN,0
-SMR,2026,San Marino,1,SMR,0
-SRB,2026,Serbia,3,SRB,0
-SUI,2026,Switzerland,175,CHE,0
-SVK,2026,Slovakia,53,SVK,0
-SWE,2026,Sweden,110,SWE,0
-THA,2026,Thailand,3,THA,0
-TPE,2026,Chinese Taipei,9,TPE,0
-TTO,2026,Trinidad and Tobago,6,TTO,0
-TUR,2026,Turkey,8,TUR,0
-UAE,2026,United Arab Emirates,2,UAE,0
-UKR,2026,Ukraine,46,UKR,0
-URU,2026,Uruguay,1,URU,0
-USA,2026,United States,232,USA,0
-UZB,2026,Uzbekistan,2,UZB,0
-VEN,2026,Venezuela,1,VEN,0
+noc_code,year,team_name,n_athletes,iso3
+ALB,2018,Albania,2,ALB
+AND,2018,Andorra,5,AND
+ARG,2018,Argentina,7,ARG
+ARM,2018,Armenia,3,ARM
+AUS,2018,Australia,50,AUS
+AUT,2018,Austria,105,AUT
+AZE,2018,Azerbaijan,1,AZE
+BEL,2018,Belgium,22,BEL
+BER,2018,Bermuda,1,BER
+BIH,2018,Bosnia and Herzegovina,4,BIH
+BLR,2018,Belarus,33,BLR
+BOL,2018,Bolivia,2,BOL
+BRA,2018,Brazil,9,BRA
+BUL,2018,Bulgaria,21,BGR
+CAN,2018,Canada,225,CAN
+CHI,2018,Chile,7,CHI
+CHN,2018,China,80,CHN
+COL,2018,Colombia,4,COL
+CRO,2018,Croatia,19,HRV
+CYP,2018,Cyprus,1,CYP
+CZE,2018,Czech Republic,93,CZE
+DEN,2018,Denmark,17,DNK
+ECU,2018,Ecuador,1,ECU
+ERI,2018,Eritrea,1,ERI
+ESP,2018,Spain,13,ESP
+EST,2018,Estonia,22,EST
+FIN,2018,Finland,100,FIN
+FRA,2018,France,106,FRA
+GBR,2018,Great Britain,58,GBR
+GEO,2018,Georgia,4,GEO
+GER,2018,Germany,153,DEU
+GHA,2018,Ghana,1,GHA
+GRE,2018,Greece,4,GRC
+HKG,2018,Hong Kong,1,HKG
+HUN,2018,Hungary,19,HUN
+IND,2018,India,2,IND
+IRI,2018,Iran,4,IRI
+IRL,2018,Ireland,5,IRL
+ISL,2018,Iceland,5,ISL
+ISR,2018,Israel,10,ISR
+ITA,2018,Italy,120,ITA
+JAM,2018,Jamaica,3,JAM
+JPN,2018,Japan,124,JPN
+KAZ,2018,Kazakhstan,46,KAZ
+KEN,2018,Kenya,1,KEN
+KGZ,2018,Kyrgyzstan,2,KGZ
+KOR,2018,South Korea,122,KOR
+KOS,2018,Kosovo,1,KOS
+LAT,2018,Latvia,34,LVA
+LIB,2018,Lebanon,3,LIB
+LIE,2018,Liechtenstein,3,LIE
+LTU,2018,Lithuania,9,LTU
+LUX,2018,Luxembourg,1,LUX
+MAD,2018,Madagascar,1,MAD
+MAR,2018,Morocco,2,MAR
+MAS,2018,Malaysia,2,MAS
+MDA,2018,Moldova,2,MDA
+MEX,2018,Mexico,4,MEX
+MGL,2018,Mongolia,2,MGL
+MKD,2018,Macedonia,3,MKD
+MLT,2018,Malta,1,MLT
+MNE,2018,Montenegro,3,MNE
+MON,2018,Monaco,4,MON
+NED,2018,Netherlands,33,NLD
+NGR,2018,Nigeria,3,NGR
+NOR,2018,Norway,109,NOR
+NZL,2018,New Zealand,21,NZL
+OAR,2018,Olympic Athletes from Russia,168,RUS
+PAK,2018,Pakistan,2,PAK
+PHI,2018,Philippines,2,PHI
+POL,2018,Poland,62,POL
+POR,2018,Portugal,2,PRT
+PRK,2018,North Korea,10,PRK
+PUR,2018,Puerto Rico,1,PUR
+ROU,2018,Romania,27,ROU
+RSA,2018,South Africa,1,ZAF
+SGP,2018,Singapore,1,SGP
+SLO,2018,Slovenia,71,SVN
+SMR,2018,San Marino,1,SMR
+SRB,2018,Serbia,4,SRB
+SUI,2018,Switzerland,166,CHE
+SVK,2018,Slovakia,56,SVK
+SWE,2018,Sweden,116,SWE
+TGA,2018,Tonga,1,TGA
+THA,2018,Thailand,4,THA
+TLS,2018,Timor-Leste,1,TLS
+TOG,2018,Togo,1,TOG
+TPE,2018,Chinese Taipei,4,TPE
+TUR,2018,Turkey,8,TUR
+UKR,2018,Ukraine,33,UKR
+USA,2018,United States,241,USA
+UZB,2018,Uzbekistan,2,UZB
+ALB,2022,Albania,1,ALB
+AND,2022,Andorra,5,AND
+ARG,2022,Argentina,6,ARG
+ARM,2022,Armenia,6,ARM
+ASA,2022,American Samoa,1,ASA
+AUS,2022,Australia,43,AUS
+AUT,2022,Austria,106,AUT
+AZE,2022,Azerbaijan,2,AZE
+BEL,2022,Belgium,19,BEL
+BIH,2022,Bosnia and Herzegovina,6,BIH
+BLR,2022,Belarus,26,BLR
+BOL,2022,Bolivia,2,BOL
+BRA,2022,Brazil,10,BRA
+BUL,2022,Bulgaria,15,BGR
+CAN,2022,Canada,215,CAN
+CHI,2022,Chile,4,CHI
+CHN,2022,China,182,CHN
+COL,2022,Colombia,3,COL
+CRO,2022,Croatia,11,HRV
+CYP,2022,Cyprus,1,CYP
+CZE,2022,Czech Republic,114,CZE
+DEN,2022,Denmark,62,DNK
+ECU,2022,Ecuador,1,ECU
+ERI,2022,Eritrea,1,ERI
+ESP,2022,Spain,14,ESP
+EST,2022,Estonia,26,EST
+FIN,2022,Finland,95,FIN
+FRA,2022,France,86,FRA
+GBR,2022,Great Britain,50,GBR
+GEO,2022,Georgia,9,GEO
+GER,2022,Germany,149,DEU
+GHA,2022,Ghana,1,GHA
+GRE,2022,Greece,5,GRC
+HAI,2022,Haiti,1,HAI
+HKG,2022,Hong Kong,3,HKG
+HUN,2022,Hungary,14,HUN
+IND,2022,India,1,IND
+IRI,2022,Iran,3,IRI
+IRL,2022,Ireland,6,IRL
+ISL,2022,Iceland,5,ISL
+ISR,2022,Israel,6,ISR
+ISV,2022,Virgin Islands,1,ISV
+ITA,2022,Italy,118,ITA
+JAM,2022,Jamaica,7,JAM
+JPN,2022,Japan,124,JPN
+KAZ,2022,Kazakhstan,34,KAZ
+KGZ,2022,Kyrgyzstan,1,KGZ
+KOR,2022,South Korea,64,KOR
+KOS,2022,Kosovo,2,KOS
+KSA,2022,Saudi Arabia,1,KSA
+LAT,2022,Latvia,60,LVA
+LIB,2022,Lebanon,3,LIB
+LIE,2022,Liechtenstein,2,LIE
+LTU,2022,Lithuania,13,LTU
+LUX,2022,Luxembourg,2,LUX
+MAD,2022,Madagascar,2,MAD
+MAR,2022,Morocco,1,MAR
+MAS,2022,Malaysia,2,MAS
+MDA,2022,Moldova,5,MDA
+MEX,2022,Mexico,4,MEX
+MGL,2022,Mongolia,2,MGL
+MKD,2022,North Macedonia,3,MKD
+MLT,2022,Malta,1,MLT
+MNE,2022,Montenegro,3,MNE
+MON,2022,Monaco,3,MON
+NED,2022,Netherlands,41,NLD
+NGR,2022,Nigeria,1,NGR
+NOR,2022,Norway,84,NOR
+NZL,2022,New Zealand,15,NZL
+PAK,2022,Pakistan,1,PAK
+PER,2022,Peru,1,PER
+PHI,2022,Philippines,1,PHI
+POL,2022,Poland,57,POL
+POR,2022,Portugal,3,PRT
+PUR,2022,Puerto Rico,2,PUR
+ROC,2022,ROC,212,RUS
+ROU,2022,Romania,21,ROU
+SLO,2022,Slovenia,42,SVN
+SMR,2022,San Marino,2,SMR
+SRB,2022,Serbia,2,SRB
+SUI,2022,Switzerland,167,CHE
+SVK,2022,Slovakia,50,SVK
+SWE,2022,Sweden,116,SWE
+THA,2022,Thailand,4,THA
+TLS,2022,Timor-Leste,1,TLS
+TPE,2022,Chinese Taipei,4,TPE
+TTO,2022,Trinidad and Tobago,2,TTO
+TUR,2022,Turkey,7,TUR
+UKR,2022,Ukraine,45,UKR
+USA,2022,United States,224,USA
+UZB,2022,Uzbekistan,1,UZB

@@ -1,13 +1,12 @@
 """
-Collection Pipeline — Raw Data Only
+Collection Pipeline — Raw Data
 =====================================
-Fetches raw data from all sources. No filtering, no cleaning, no merging.
-All refinement happens in clean.py.
+Fetches raw data from all sources. No filtering, no cleaning, no merging. ALl refinements happens in clean.py.
 
 Output files in data/raw/:
   worldbank_gdp.csv            — GDP + GDP per capita, ALL countries, 1992–2024
   worldbank_population.csv     — Population total, ALL countries, 1992–2024
-  snowfall_raw.csv             — Snowfall, ALL countries, 1992–2025
+  snowfall_raw.csv             — Snowfall, ALL countries, 1992–2026
   olympics_participants.csv    — All Winter Olympic participants (NOC x Year), no filtering
   olympics_medals.csv          — All NOC x Year combinations, medals = 0 if none won
 
@@ -98,7 +97,7 @@ def fetch_wb_indicator(code: str) -> pd.DataFrame:
     up to 3 times with exponential back-off on timeout or server errors.
     """
     url    = f"https://api.worldbank.org/v2/country/all/indicator/{code}"
-    params = {"format": "json", "per_page": 32767, "date": f"{START_YEAR}:2024"}
+    params = {"format": "json", "per_page": 32767, "date": f"{START_YEAR}:2026"}
     rows, page, total_pages = [], 1, None
 
     def _get_page(p: int) -> list:
