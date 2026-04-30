@@ -45,16 +45,14 @@ Master analytical table:
 # =============================================================================
 # 0. IMPORTS
 # =============================================================================
-
 from pathlib import Path
 import numpy as np
 import pandas as pd
-from Country_mapping import NOC_TO_ISO3
+from country_mapping import NOC_TO_ISO3
 
 # =============================================================================
 # 1. CONFIGURATION
 # =============================================================================
-
 RAW_DIR   = Path("data/raw")
 CLEAN_DIR = Path("data/clean")
 
@@ -65,7 +63,6 @@ OLYMPIC_YEARS = [1992, 1994, 1998, 2002, 2006, 2010, 2014, 2018, 2022]
 # =============================================================================
 # 2. REFERENCE DATA: COUNTRY IDENTIFIER CROSSWALKS
 # =============================================================================
-
 # --- World Bank aggregate row filter -------------------------------------------
 # The World Bank API returns aggregate entries alongside country rows — things like "World", "High income", "OECD members", "Euro area".
 # These are NOT countries and must be excluded before any analysis.
@@ -98,7 +95,7 @@ AGGREGATE_NAME_KEYWORDS = {
     "advanced economies",
 }
 # --- NOC → ISO3 crosswalk -------------------------------------------------------
-# NOC_TO_ISO3 is defined in Country_mapping.py (the single source of truth) and imported above. See that module for the full rationale and per-entry comments.
+# NOC_TO_ISO3 is defined in country_mapping.py (the single source of truth) and imported above. See that module for the full rationale and per-entry comments.
 
 # =============================================================================
 # 3. HELPER FUNCTIONS

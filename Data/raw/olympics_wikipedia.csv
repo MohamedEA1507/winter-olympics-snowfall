@@ -1,0 +1,184 @@
+noc_code,year,team_name,n_athletes,gold,silver,bronze,total_medals
+ALB,2018,Albania,2,0,0,0,0
+AND,2018,Andorra,5,0,0,0,0
+ARG,2018,Argentina,7,0,0,0,0
+ARM,2018,Armenia,3,0,0,0,0
+AUS,2018,Australia,50,0,2,1,3
+AUT,2018,Austria,105,5,3,6,14
+AZE,2018,Azerbaijan,1,0,0,0,0
+BEL,2018,Belgium,22,0,1,0,1
+BER,2018,Bermuda,1,0,0,0,0
+BIH,2018,Bosnia and Herzegovina,4,0,0,0,0
+BLR,2018,Belarus,33,2,1,0,3
+BOL,2018,Bolivia,2,0,0,0,0
+BRA,2018,Brazil,9,0,0,0,0
+BUL,2018,Bulgaria,21,0,0,0,0
+CAN,2018,Canada,225,11,8,10,29
+CHI,2018,Chile,7,0,0,0,0
+CHN,2018,China,80,1,6,2,9
+COL,2018,Colombia,4,0,0,0,0
+CRO,2018,Croatia,19,0,0,0,0
+CYP,2018,Cyprus,1,0,0,0,0
+CZE,2018,Czech Republic,93,2,2,3,7
+DEN,2018,Denmark,17,0,0,0,0
+ECU,2018,Ecuador,1,0,0,0,0
+ERI,2018,Eritrea,1,0,0,0,0
+ESP,2018,Spain,13,0,0,2,2
+EST,2018,Estonia,22,0,0,0,0
+FIN,2018,Finland,100,1,1,4,6
+FRA,2018,France,106,5,4,6,15
+GBR,2018,Great Britain,58,1,0,4,5
+GEO,2018,Georgia,4,0,0,0,0
+GER,2018,Germany,153,14,10,7,31
+GHA,2018,Ghana,1,0,0,0,0
+GRE,2018,Greece,4,0,0,0,0
+HKG,2018,Hong Kong,1,0,0,0,0
+HUN,2018,Hungary,19,1,0,0,1
+IND,2018,India,2,0,0,0,0
+IRI,2018,Iran,4,0,0,0,0
+IRL,2018,Ireland,5,0,0,0,0
+ISL,2018,Iceland,5,0,0,0,0
+ISR,2018,Israel,10,0,0,0,0
+ITA,2018,Italy,120,3,2,5,10
+JAM,2018,Jamaica,3,0,0,0,0
+JPN,2018,Japan,124,4,5,4,13
+KAZ,2018,Kazakhstan,46,0,0,1,1
+KEN,2018,Kenya,1,0,0,0,0
+KGZ,2018,Kyrgyzstan,2,0,0,0,0
+KOR,2018,South Korea,122,5,8,4,17
+KOS,2018,Kosovo,1,0,0,0,0
+LAT,2018,Latvia,34,0,0,1,1
+LIB,2018,Lebanon,3,0,0,0,0
+LIE,2018,Liechtenstein,3,0,0,1,1
+LTU,2018,Lithuania,9,0,0,0,0
+LUX,2018,Luxembourg,1,0,0,0,0
+MAD,2018,Madagascar,1,0,0,0,0
+MAR,2018,Morocco,2,0,0,0,0
+MAS,2018,Malaysia,2,0,0,0,0
+MDA,2018,Moldova,2,0,0,0,0
+MEX,2018,Mexico,4,0,0,0,0
+MGL,2018,Mongolia,2,0,0,0,0
+MKD,2018,Macedonia,3,0,0,0,0
+MLT,2018,Malta,1,0,0,0,0
+MNE,2018,Montenegro,3,0,0,0,0
+MON,2018,Monaco,4,0,0,0,0
+NED,2018,Netherlands,33,8,6,6,20
+NGR,2018,Nigeria,3,0,0,0,0
+NOR,2018,Norway,109,14,14,11,39
+NZL,2018,New Zealand,21,0,0,2,2
+OAR,2018,Olympic Athletes from Russia,168,2,6,9,17
+PAK,2018,Pakistan,2,0,0,0,0
+PHI,2018,Philippines,2,0,0,0,0
+POL,2018,Poland,62,1,0,1,2
+POR,2018,Portugal,2,0,0,0,0
+PRK,2018,North Korea,10,0,0,0,0
+PUR,2018,Puerto Rico,1,0,0,0,0
+ROU,2018,Romania,27,0,0,0,0
+RSA,2018,South Africa,1,0,0,0,0
+SGP,2018,Singapore,1,0,0,0,0
+SLO,2018,Slovenia,71,0,1,1,2
+SMR,2018,San Marino,1,0,0,0,0
+SRB,2018,Serbia,4,0,0,0,0
+SUI,2018,Switzerland,166,5,6,4,15
+SVK,2018,Slovakia,56,1,2,0,3
+SWE,2018,Sweden,116,7,6,1,14
+TGA,2018,Tonga,1,0,0,0,0
+THA,2018,Thailand,4,0,0,0,0
+TLS,2018,Timor-Leste,1,0,0,0,0
+TOG,2018,Togo,1,0,0,0,0
+TPE,2018,Chinese Taipei,4,0,0,0,0
+TUR,2018,Turkey,8,0,0,0,0
+UKR,2018,Ukraine,33,1,0,0,1
+USA,2018,United States,241,9,8,6,23
+UZB,2018,Uzbekistan,2,0,0,0,0
+ALB,2022,Albania,1,0,0,0,0
+AND,2022,Andorra,5,0,0,0,0
+ARG,2022,Argentina,6,0,0,0,0
+ARM,2022,Armenia,6,0,0,0,0
+ASA,2022,American Samoa,1,0,0,0,0
+AUS,2022,Australia,43,1,2,1,4
+AUT,2022,Austria,106,7,7,4,18
+AZE,2022,Azerbaijan,2,0,0,0,0
+BEL,2022,Belgium,19,1,0,1,2
+BIH,2022,Bosnia and Herzegovina,6,0,0,0,0
+BLR,2022,Belarus,26,0,2,0,2
+BOL,2022,Bolivia,2,0,0,0,0
+BRA,2022,Brazil,10,0,0,0,0
+BUL,2022,Bulgaria,15,0,0,0,0
+CAN,2022,Canada,215,4,8,14,26
+CHI,2022,Chile,4,0,0,0,0
+CHN,2022,China,182,9,4,2,15
+COL,2022,Colombia,3,0,0,0,0
+CRO,2022,Croatia,11,0,0,0,0
+CYP,2022,Cyprus,1,0,0,0,0
+CZE,2022,Czech Republic,114,1,0,1,2
+DEN,2022,Denmark,62,0,0,0,0
+ECU,2022,Ecuador,1,0,0,0,0
+ERI,2022,Eritrea,1,0,0,0,0
+ESP,2022,Spain,14,0,1,0,1
+EST,2022,Estonia,26,0,0,1,1
+FIN,2022,Finland,95,2,2,4,8
+FRA,2022,France,86,5,7,2,14
+GBR,2022,Great Britain,50,1,1,0,2
+GEO,2022,Georgia,9,0,0,0,0
+GER,2022,Germany,149,12,10,5,27
+GHA,2022,Ghana,1,0,0,0,0
+GRE,2022,Greece,5,0,0,0,0
+HAI,2022,Haiti,1,0,0,0,0
+HKG,2022,Hong Kong,3,0,0,0,0
+HUN,2022,Hungary,14,1,0,2,3
+IND,2022,India,1,0,0,0,0
+IRI,2022,Iran,3,0,0,0,0
+IRL,2022,Ireland,6,0,0,0,0
+ISL,2022,Iceland,5,0,0,0,0
+ISR,2022,Israel,6,0,0,0,0
+ISV,2022,Virgin Islands,1,0,0,0,0
+ITA,2022,Italy,118,2,7,8,17
+JAM,2022,Jamaica,7,0,0,0,0
+JPN,2022,Japan,124,3,7,8,18
+KAZ,2022,Kazakhstan,34,0,0,0,0
+KGZ,2022,Kyrgyzstan,1,0,0,0,0
+KOR,2022,South Korea,64,2,5,2,9
+KOS,2022,Kosovo,2,0,0,0,0
+KSA,2022,Saudi Arabia,1,0,0,0,0
+LAT,2022,Latvia,60,0,0,1,1
+LIB,2022,Lebanon,3,0,0,0,0
+LIE,2022,Liechtenstein,2,0,0,0,0
+LTU,2022,Lithuania,13,0,0,0,0
+LUX,2022,Luxembourg,2,0,0,0,0
+MAD,2022,Madagascar,2,0,0,0,0
+MAR,2022,Morocco,1,0,0,0,0
+MAS,2022,Malaysia,2,0,0,0,0
+MDA,2022,Moldova,5,0,0,0,0
+MEX,2022,Mexico,4,0,0,0,0
+MGL,2022,Mongolia,2,0,0,0,0
+MKD,2022,North Macedonia,3,0,0,0,0
+MLT,2022,Malta,1,0,0,0,0
+MNE,2022,Montenegro,3,0,0,0,0
+MON,2022,Monaco,3,0,0,0,0
+NED,2022,Netherlands,41,8,5,4,17
+NGR,2022,Nigeria,1,0,0,0,0
+NOR,2022,Norway,84,16,8,13,37
+NZL,2022,New Zealand,15,2,1,0,3
+PAK,2022,Pakistan,1,0,0,0,0
+PER,2022,Peru,1,0,0,0,0
+PHI,2022,Philippines,1,0,0,0,0
+POL,2022,Poland,57,0,0,1,1
+POR,2022,Portugal,3,0,0,0,0
+PUR,2022,Puerto Rico,2,0,0,0,0
+ROC,2022,ROC,212,5,12,15,32
+ROU,2022,Romania,21,0,0,0,0
+SLO,2022,Slovenia,42,2,3,2,7
+SMR,2022,San Marino,2,0,0,0,0
+SRB,2022,Serbia,2,0,0,0,0
+SUI,2022,Switzerland,167,7,2,6,15
+SVK,2022,Slovakia,50,1,0,1,2
+SWE,2022,Sweden,116,8,5,5,18
+THA,2022,Thailand,4,0,0,0,0
+TLS,2022,Timor-Leste,1,0,0,0,0
+TPE,2022,Chinese Taipei,4,0,0,0,0
+TTO,2022,Trinidad and Tobago,2,0,0,0,0
+TUR,2022,Turkey,7,0,0,0,0
+UKR,2022,Ukraine,45,0,1,0,1
+USA,2022,United States,224,9,9,7,25
+UZB,2022,Uzbekistan,1,0,0,0,0

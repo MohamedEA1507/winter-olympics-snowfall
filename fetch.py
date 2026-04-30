@@ -13,10 +13,8 @@ Output files in data/raw/:
   worldbank_gdp.csv               — GDP + GDP per capita, ALL countries, 1992–2024
   worldbank_population.csv        — Population total, ALL countries, 1992–2024
   snowfall_raw.csv                — Snowfall, ALL countries, 1992–2026
-  olympics_participants.csv       — All Winter Olympic participants from 1992-2014
-  olympics_medals.csv             — All NOC x Year combinations, medals = 0 if none won, from 1992-2014
-  olympics_participants_wikipedia — Webscraped Wikipedia of all winter Olympics participants 2018–2022
-  olympics_medals_wikipedia       — Webscraped Wikipedia of all winter Olympics medal winners 2018–2022
+  olympics.csv                    — All NOC x Year combinations, total medals = 0 if none won, from 1992-2014
+  olympics_wikipedia.csv          — Webscraped Wikipedia of all winter Olympics medal winners 2018–2022
 
 Usage - inside terminal :
   python fetch.py               # fetch all
@@ -35,7 +33,7 @@ import regionmask   # Provides country polygon masks aligned to grid coordinates
 import requests
 import xarray as xr   # Used to open and process the ERA5 NetCDF climate dataset
 from bs4 import BeautifulSoup  # HTML parser for Wikipedia scraping
-from Country_mapping import ENGLISH_NAME_TO_NOC
+from country_mapping import ENGLISH_NAME_TO_NOC
 import pycountry
 
 START_YEAR    = 1992 # Earliest year of data we want across all data sources
@@ -58,8 +56,7 @@ GDP_INDICATORS = { # World Bank API indicator codes for the two GDP metrics we w
 def to_iso3(name: str) -> str:
     """
     Convert a regionmask country name to an ISO 3166-1 alpha-3 code.
-    Uses pycountry fuzzy search, with a small manual table for the
-    abbreviated names that regionmask uses which pycountry can't resolve.
+    Uses pycountry fuzzy search, with a small manual table for the abbreviated names that regionmask uses which pycountry can't resolve.
     """
     MANUAL = {
         "Bosnia and Herz.": "BIH",
@@ -95,13 +92,6 @@ def fetch_wb_indicator(code: str) -> pd.DataFrame:
 
     Retries up to 3 times with increasing wait times on timeout or connection errors.
     This is important because the World Bank API can be slow and occasionally drops requests.
-
-    Args:
-        code: World Bank indicator code (e.g. "NY.GDP.MKTP.CD" for total GDP)
-
-    Returns:
-        DataFrame with columns: iso3, country_name, year, value
-        One row per (country, year) combination. Value is None if data is missing.
     """
     url    = f"https://api.worldbank.org/v2/country/all/indicator/{code}"
     params = {"format": "json", "per_page": 32767, "date": f"{START_YEAR}:2024"}
@@ -186,17 +176,12 @@ def fetch_gdp(refresh: bool = False) -> None: # Fetch total GDP and GDP per capi
             frames[col_name] = future.result().rename(columns={"value": col_name})
 
     # Outer merge so we keep rows even if one indicator is missing for a country/year
-    df = frames["gdp_usd"].merge(
-        frames["gdp_per_capita_usd"][["iso3", "year", "gdp_per_capita_usd"]],
-        on=["iso3", "year"],
-        how="outer",
-    )
+    df = frames["gdp_usd"].merge(frames["gdp_per_capita_usd"][["iso3", "year", "gdp_per_capita_usd"]], on=["iso3", "year"], how="outer")
     save(df, out_path)
 
 # ---------------------------------------------------------------------------
 # 2. World Bank Population  (all countries, total only)
 # ---------------------------------------------------------------------------
-
 def fetch_population(refresh: bool = False) -> None: # Fetch total population for all countries (1992–2024) from the World Bank API.
     out_path = RAW_DIR / "worldbank_population.csv"
     if out_path.exists() and not refresh:
@@ -260,8 +245,7 @@ def fetch_snowfall(refresh: bool = False) -> None:
 
     print("  Computing cell areas…")
     # compute_cell_area_km2 returns an xr.DataArray with a latitude coordinate.
-    # When multiplied against sf_yearly (which has lat + lon + time dims), xarray automatically broadcasts the 1D latitude array
-    # across longitude and time, so every cell gets the correct area for its latitude row.
+    # When multiplied against sf_yearly (which has lat + lon + time dims), xarray automatically broadcasts the 1D latitude array across longitude and time, so every cell gets the correct area for its latitude row.
     cell_area_da = compute_cell_area_km2(sf.latitude.values)
 
     sf_volume = sf_yearly * cell_area_da / 1000.0     # Convert depth (m water equivalent) × area (km²) / 1000 → volume in km³ water equivalent
@@ -277,12 +261,10 @@ def fetch_snowfall(refresh: bool = False) -> None:
         # Use Dask's ProgressBar if available for a visual progress indicator during compute()
         from dask.diagnostics import ProgressBar
         with ProgressBar():
-            # Total annual snowfall volume per country per year (km³)
-            result_sum = sf_volume.groupby(mask).sum().compute()
+            result_sum = sf_volume.groupby(mask).sum().compute()      # Total annual snowfall volume per country per year (km³)
 
             # Total land area per country according to the mask (km²).
-            # broadcast_like expands the 1D (latitude-only) cell_area_da into a full
-            # 2D (lat × lon) grid matching a single timestep, so the groupby over the
+            # broadcast_like expands the 1D (latitude-only) cell_area_da into a full 2D (lat × lon) grid matching a single timestep, so the groupby over the
             # 2D mask can correctly sum all cell areas belonging to each country.
             # This is the denominator used to convert volume → area-weighted depth.
             country_area = (
@@ -338,20 +320,14 @@ def fetch_olympics(refresh: bool = False) -> None:
     """
     Build a unified Winter Olympics table from the Kaggle athlete dataset.
 
-    The raw Kaggle file has one row per athlete per event. We aggregate into
-    one row per (NOC, year) containing team_name, n_athletes, and medal counts.
-    Countries that won zero medals are explicitly included with medal counts of 0
-    — a missing row is ambiguous, a 0 is an explicit fact.
+    The raw Kaggle file has one row per athlete per event. We aggregate into one row per (NOC, year) containing team_name, n_athletes, and medal counts.
+    Countries that won zero medals are explicitly included with medal counts of 0 — a missing row is ambiguous, a 0 is an explicit fact.
 
     Non-country NOC codes (IOA, AHO) are dropped here before aggregation:
       IOA = Individual Olympic Athletes (stateless, no ISO3 successor)
       AHO = Netherlands Antilles (dissolved 2010, no meaningful successor)
 
     Data coverage: 1992–2014. Wikipedia scraping (fetch_wikipedia) covers 2018+.
-
-    Output: data/raw/olympics.csv
-      Columns: noc_code, year, team_name, n_athletes,
-               gold, silver, bronze, total_medals
     """
     out_path = RAW_DIR / "olympics.csv"
     if out_path.exists() and not refresh:
@@ -579,10 +555,6 @@ def fetch_wikipedia(refresh: bool = False) -> None:
 
     Non-medal countries are included with medal counts of 0.
     Non-country NOC codes (IOA, AHO) are dropped here before saving.
-
-    Output: data/raw/olympics_wikipedia.csv
-      Columns: noc_code, year, team_name, n_athletes,
-               gold, silver, bronze, total_medals
     """
     DROP_NOC = {"IOA", "AHO"}
 
@@ -646,7 +618,6 @@ def fetch_wikipedia(refresh: bool = False) -> None:
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
-
 def main():
     """
         Parse command-line arguments and run each data fetch step in order.
