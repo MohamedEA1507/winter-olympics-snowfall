@@ -2,12 +2,9 @@
 Interactive World Map — Winter Olympics Snowfall & Medals
 ==========================================================
 Creates a choropleth world map where:
-  - Colour intensity = mean annual snowfall depth (white → deep blue)
-  - Hover tooltip    = country name, snowfall, medals breakdown,
-                       GDP, population, medals per million
+  - Colour intensity = total snowfall volume across all editions attended (white → deep blue)
+  - Hover tooltip    = country name, snowfall, medals breakdown, GDP, population, medals per million
 
-This is the visualisation layer of the pipeline:
-  fetch.py → clean.py → analyse.py / graph_analytics.py → visualise.py (here)
 
 Column names used here match master.csv exactly as produced by clean.py:
   country               — ISO3 code (e.g. NOR, DEU) — used to join the shapefile
@@ -20,24 +17,6 @@ Column names used here match master.csv exactly as produced by clean.py:
   gdp                   — total GDP in current USD (NOT per capita; see below)
   population             — total population
   medals_per_million    — total_medals / population * 1e6 (size-normalised outcome)
-
-Why total GDP and not GDP per capita?
-  The research question controls for total national economic capacity (total GDP)
-  and country size (population) separately. Using total GDP + population is the
-  correct specification because Olympic medal production depends on a country's
-  total resource pool (funding, facilities, athlete pipelines), not on average
-  citizen wealth. GDP per capita is excluded to avoid the near-collinearity with
-  total GDP and population (GDP per capita ≈ GDP / population). This is
-  consistent with the modelling choices in analyse.py.
-
-Output:
-  data/figures/snowfall_medals_map.html  ← open in any browser
-
-Dependencies:
-  pip install folium geopandas requests
-
-Usage:
-  python visualise.py
 """
 
 from pathlib import Path
@@ -115,7 +94,6 @@ def ensure_shapefile() -> Path:
 # ---------------------------------------------------------------------------
 # Load and aggregate per country
 # ---------------------------------------------------------------------------
-
 def load() -> pd.DataFrame:
     """
     Read master.csv and collapse from country-year rows to one row per country.
@@ -127,9 +105,13 @@ def load() -> pd.DataFrame:
         → sum across all editions.  A country that competed 9 times accumulates
           medals from all 9 Games.
 
-      Snowfall (snowfall_mean_gridcell, snowfall_total)
+      Snowfall (snowfall_mean_gridcell)
         → mean across editions.  Climate is broadly stable over the ~30-year
-          window, so the average is a good representative value.
+          window, so the average depth is a good representative value.
+
+      Snowfall (snowfall_total)
+        → sum across editions.  Accumulates total snowfall volume over all
+          Games attended; used as the choropleth colour variable.
 
       Economic / demographic (gdp, population)
         → mean across editions.  These change year to year; the average over
@@ -163,9 +145,10 @@ def load() -> pd.DataFrame:
             bronze              = ("bronze",                 "sum"),
             # Number of distinct Olympic Games attended
             editions_attended   = ("year",                   "nunique"),
-            # Snowfall: averaged across editions (stable climate variable)
-            snowfall_mm_mean    = ("snowfall_mean_gridcell", "mean"),
-            snowfall_total_mean = ("snowfall_total",         "mean"),
+            # Snowfall: mean depth averaged across editions (stable climate variable);
+            # total volume summed across all editions attended.
+            snowfall_mm_mean  = ("snowfall_mean_gridcell", "mean"),
+            snowfall_total_sum = ("snowfall_total",        "sum"),
             # Total GDP (not per capita): averaged across editions.
             # Used to represent national economic capacity, consistent
             # with the main regression models in analyse.py.
@@ -181,8 +164,8 @@ def load() -> pd.DataFrame:
     # Countries with no snowfall data (e.g. tiny island nations not covered
     # by ERA5) are treated as zero-snowfall for choropleth colouring.
     agg["country_name"]        = agg["country_name"].fillna(agg["country"])
-    agg["snowfall_mm_mean"]    = agg["snowfall_mm_mean"].fillna(0).round(2)
-    agg["snowfall_total_mean"] = agg["snowfall_total_mean"].fillna(0).round(2)
+    agg["snowfall_mm_mean"]   = agg["snowfall_mm_mean"].fillna(0).round(2)
+    agg["snowfall_total_sum"] = agg["snowfall_total_sum"].fillna(0).round(2)
     agg["medals_per_million"]  = agg["medals_per_million"].fillna(0).round(3)
 
     # Convert to human-readable units for tooltip display.
@@ -197,7 +180,6 @@ def load() -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # Build map
 # ---------------------------------------------------------------------------
-
 def build_map(agg: pd.DataFrame) -> folium.Map:
     """
     Build the interactive folium choropleth map.
@@ -291,8 +273,8 @@ def build_map(agg: pd.DataFrame) -> folium.Map:
     )
 
     # Fill missing values for countries not in our Olympic dataset.
-    world["snowfall_mm_mean"]    = world["snowfall_mm_mean"].fillna(0)
-    world["snowfall_total_mean"] = world["snowfall_total_mean"].fillna(0)
+    world["snowfall_mm_mean"]   = world["snowfall_mm_mean"].fillna(0)
+    world["snowfall_total_sum"] = world["snowfall_total_sum"].fillna(0)
     world["total_medals"]        = world["total_medals"].fillna(0).astype(int)
     world["gold"]                = world["gold"].fillna(0).astype(int)
     world["silver"]              = world["silver"].fillna(0).astype(int)
@@ -320,13 +302,33 @@ def build_map(agg: pd.DataFrame) -> folium.Map:
     )
 
     # ── Layer 1: Choropleth (snowfall → blue colour ramp) ─────────────────
+    # Log-scale transform: total snowfall is heavily right-skewed — Russia's
+    # continental landmass produces values so large that a linear scale renders
+    # almost every other country white.  log1p (log(1 + x)) compresses the
+    # upper tail while mapping zero exactly to zero, giving meaningful colour
+    # differentiation across the full range of countries.
+    world["snowfall_log"] = np.log1p(world["snowfall_total_sum"])
+
+    # Use quantile bins so colour steps are spread evenly across countries
+    # rather than being dominated by the raw value range.
+    nonzero = world.loc[world["snowfall_log"] > 0, "snowfall_log"]
+    # 8 quantile breakpoints across the full log range gives a smooth gradient.
+    # Using the global min/max (not just nonzero) as outer edges ensures every
+    # value — including zeros — falls within the bin range.
+    q_breaks = list(nonzero.quantile([0.1, 0.2, 0.35, 0.5, 0.65, 0.8, 0.92]))
+    bins = (
+        [float(world["snowfall_log"].min())]
+        + [round(b, 6) for b in q_breaks]
+        + [float(world["snowfall_log"].max()) + 1e-6]
+    )
+    bins = sorted(set(bins))  # deduplicate if any quantiles collapse
+
     # fill_color="Blues" is a Colorbrewer sequential palette: white (low)
-    # to deep blue (high). Sequential palettes are appropriate for a single
-    # ordered quantitative variable like snowfall depth.
+    # to deep blue (high).
     folium.Choropleth(
         geo_data=geojson,
-        data=world[[iso_col, "snowfall_mm_mean"]],
-        columns=[iso_col, "snowfall_mm_mean"],
+        data=world[[iso_col, "snowfall_log"]],
+        columns=[iso_col, "snowfall_log"],
         key_on=f"feature.properties.{iso_col}",
         fill_color="Blues",
         fill_opacity=0.75,
@@ -334,10 +336,33 @@ def build_map(agg: pd.DataFrame) -> folium.Map:
         line_color="white",
         nan_fill_color="#eeeeee",    # light grey for countries with no snowfall data
         nan_fill_opacity=0.4,
+        bins=bins,
         legend_name=(
-            "Mean annual snowfall depth (mm water equivalent per Olympic edition)"
+            "Total snowfall volume — log scale (km³, summed across all Olympic editions attended)"
         ),
         name="Snowfall intensity",
+    ).add_to(m)
+
+    # ── Layer 1b: Black fill for non-participating countries ─────────────────
+    # Countries that have never attended a Winter Games are filled black so
+    # they are immediately distinguishable from participating nations.
+    non_participating_geojson = {
+        "type": "FeatureCollection",
+        "features": [
+            f for f in geojson["features"]
+            if f["properties"].get("editions_attended", 0) == 0
+        ],
+    }
+    folium.GeoJson(
+        non_participating_geojson,
+        style_function=lambda _: {
+            "fillColor":   "#111111",
+            "color":       "#333333",
+            "weight":      0.5,
+            "fillOpacity": 0.7,
+        },
+        name="Non-participating countries",
+        show=True,
     ).add_to(m)
 
     # ── Layer 2: Transparent GeoJson overlay (tooltip) ────────────────────
@@ -363,7 +388,7 @@ def build_map(agg: pd.DataFrame) -> folium.Map:
                 "country_name",
                 "noc_code",
                 "snowfall_mm_mean",
-                "snowfall_total_mean",
+                "snowfall_total_sum",
                 "total_medals",
                 "gold",
                 "silver",
@@ -377,7 +402,7 @@ def build_map(agg: pd.DataFrame) -> folium.Map:
                 "Country",
                 "NOC code",
                 "Avg snowfall depth (mm / edition)",
-                "Avg snowfall volume (km³ / edition)",
+                "Total snowfall volume (km³, all editions)",
                 "Total medals (all editions)",
                 "Gold 🥇",
                 "Silver 🥈",
